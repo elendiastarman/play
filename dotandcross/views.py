@@ -7,6 +7,6 @@ from django.template import Context, RequestContext
 
 # Create your views here.
 def home_view(request, **kwargs):
-    pass
+    context = RequestContext(request)
 
     return render(request, 'dotandcross/home.html', context_instance=context)
