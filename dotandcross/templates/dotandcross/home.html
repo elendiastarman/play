@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
-"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+<!-- <!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli"> -->
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html><!--  xmlns="http://www.w3.org/1999/xhtml"> -->
 	<head>
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 		
@@ -11,10 +12,52 @@
 	
 	<body>
 	
-		<h1>Nothing here!</h1>
+		<h1>Dot and cross product demonstration</h1>
+		<p>Click and drag the circles!</p>
+		
+		<center>
+		<div><!--  style="background-color:white"> -->
+		<svg width="400" height="400" style="background-color:white">
+			<text x="5" y="15">dot</text>
+			<text x="5" y="30">cross</text>
+			<text x="50" y="15" id="dot"></text>
+			<text x="50" y="30" id="cross"></text>
+			<line x1="200" y1="200" x2="220" y2="140" stroke="red" stroke-width="1.5px" name="red"></line>
+			<line x1="200" y1="200" x2="260" y2="180" stroke="blue" stroke-width="1.5px" name="blue"></line>
+			<circle cx="220" cy="140" r="5" style="fill:red" id="red"></circle>
+			<circle cx="260" cy="180" r="5" style="fill:blue" id="blue"></circle>
+			<circle cx="200" cy="200" r="5" style="fill:black" id="origin"></circle>
+		</svg>
+		</div>
+		</center>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 		<script src="{% static 'dotandcross/home.js' %}"></script>
+		
+		<script>
+			var drag = d3.behavior.drag()
+				.on('drag', function(d){
+					var c = d3.select(this)
+					c.attr("cx", d3.event.x).attr("cy", d3.event.y);
+					if (c.attr("id") == "origin") {
+						d3.selectAll("line").attr("x1", d3.event.x).attr("y1", d3.event.y);
+					} else {
+						d3.select("[name="+c.attr("id")+"]").attr("x2", d3.event.x).attr("y2", d3.event.y);
+					}
+					
+					var rc = d3.select("#red");
+					var bc = d3.select("#blue");
+					var oc = d3.select("#origin");
+					var dotproduct = (rc.attr("cx")-oc.attr("cx"))*(bc.attr("cx")-oc.attr("cx"))
+									+(rc.attr("cy")-oc.attr("cy"))*(bc.attr("cy")-oc.attr("cy"));
+					d3.select('#dot').text(Math.round(dotproduct));
+					var crossproduct = (rc.attr("cx")-oc.attr("cx"))*(bc.attr("cy")-oc.attr("cy"))
+									  -(rc.attr("cy")-oc.attr("cy"))*(bc.attr("cx")-oc.attr("cx"));
+					d3.select('#cross').text(Math.round(crossproduct));
+				});
+			d3.select('svg').selectAll('circle').call(drag);
+		</script>
 		
 	</body>
 </html>
