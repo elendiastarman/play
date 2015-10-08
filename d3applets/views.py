@@ -9,4 +9,9 @@ from django.template import Context, RequestContext
 def home_view(request, **kwargs):
     context = RequestContext(request)
 
-    return render(request, 'dotandcross/home.html', context_instance=context)
+    return render(request, 'd3applets/home.html', context_instance=context)
+
+def dotandcross_view(request, **kwargs):
+    context = RequestContext(request)
+
+    return render(request, 'd3applets/dotandcross.html', context_instance=context)
