@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" />
+	</head>
+	
+	<body>
+	
+		<h1>Dot and cross product demonstration</h1>
+		<p>Click and drag the circles!</p>
+		
+		<center>
+			<svg width="400" height="400" style="background-color:white">
+				<text x="5" y="15">dot</text>
+				<text x="5" y="30">cross</text>
+				<text x="50" y="15" id="dot"></text>
+				<text x="50" y="30" id="cross"></text>
+				<line x1="200" y1="200" x2="220" y2="140" stroke="red" stroke-width="1.5px" name="red"></line>
+				<line x1="200" y1="200" x2="260" y2="180" stroke="blue" stroke-width="1.5px" name="blue"></line>
+				<circle cx="220" cy="140" r="5" style="fill:red" id="red"></circle>
+				<circle cx="260" cy="180" r="5" style="fill:blue" id="blue"></circle>
+				<circle cx="200" cy="200" r="5" style="fill:black" id="origin"></circle>
+			</svg>
+		</center>
+	
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script src="{% static 'd3applets/dotandcross.js' %}"></script>
+		
+	</body>
+</html>
