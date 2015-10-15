@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+		<title>Minkolang</title>
+		
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'minkolang/main.css' %}" />
+	</head>
+	
+	<body>
+	
+		<h1>Official Minkolang Online Interpreter</h1>
+		
+		<button onclick="sendcode()">Set code</button> <br/><br/>
+		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
+		<br/>
+		<label for="input-text">Input:</label>
+		<input type="text" id="input-text"/>
+		<br/>
+		<button onclick="stepcode(-1)">Run</button> <button onclick="stepcode(1)">Step</button>
+		
+		<br/><br/>
+		<div id="code-table">
+		{% if code_lines %}
+		<table>
+			{% for line in code_lines %}
+			<tr>
+				{% for char in line %}
+				<td>{{char}}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+		</div>
+		<br/>
+		
+		<label for="output-text">Output:</label>
+		<p id="output-text" style="border: 1px solid gray; min-height: 1em;"></p>
+
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script src="{% static 'minkolang/main.js' %}"></script>
+	</body>
+</html>

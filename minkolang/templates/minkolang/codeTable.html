@@ -1,0 +1,11 @@
+{% if code_lines %}
+<table>
+	{% for line in code_lines %}
+	<tr>
+		{% for char in line %}
+		<td>{{char}}</td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+</table>
+{% endif %}
