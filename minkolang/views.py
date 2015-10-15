@@ -18,21 +18,21 @@ global prgmT
 prgm = None
 prgmT = None
 
-##global proxy
+##global proxy_prgm
 ##
 ##manager = None
 ##
 ##if not manager:
 ##    try:
 ##        manager = multiprocessing.Manager()
-##        proxy = manager.Namespace()
-##        proxy.prgm = None
+##        proxy_prgm = manager.Namespace()
+##        proxy_prgm.prgm = None
 ##    except Exception as e:
 ##        traceback.print_exc(file=sys.stdout)
 ##        raise e
 
-global proxy
-proxy = None
+global proxy_prgm
+proxy_prgm = None
 global manager
 manager = None
 
@@ -45,7 +45,7 @@ MyManager.register('Program', Program)
 
 # Create your views here.
 def main_view(request, **kwargs):
-    global proxy
+    global proxy_prgm
     global manager
     global prgm
     global prgmT
@@ -75,9 +75,9 @@ def main_view(request, **kwargs):
 ##                    prgm = Program(code, inputStr=request.GET["input"], debugFlag=1)
                     manager = MyManager()
                     manager.start()
-                    proxy = manager.Program(code, inputStr=request.GET["input"], debugFlag=0)
-##                    print(dir(proxy))
-                    context['code_lines'] = proxy.getCode()[0]
+                    proxy_prgm = manager.Program(code, inputStr=request.GET["input"], debugFlag=0)
+##                    print(dir(proxy_prgm))
+                    context['code_lines'] = proxy_prgm.getCode()[0]
                     return render(request, 'minkolang/codeTable.html', context_instance=context)
                 except Exception as e:
                     traceback.print_exc(file=sys.stdout)
@@ -87,17 +87,17 @@ def main_view(request, **kwargs):
 ##                print("Taking %s steps." % request.GET["steps"])
 
                 try:
-                    prgm = proxy
+                    prgm = proxy_prgm
 ##                    manager = MyManager()
 ##                    manager.register("ML_prgm", Program)
                     
-##                    proxy.prgm = prgm
+##                    proxy_prgm.prgm = prgm
                     
                     steps = int(request.GET["steps"])
                     #prgm.run(steps-(steps>0))
 ##                    print("prgm:",prgm)
 
-                    prgmT = multiprocessing.Process(target = proxy.run,
+                    prgmT = multiprocessing.Process(target = proxy_prgm.run,
                                                     args = (steps,),
                                                     name="program run")
                     prgmT.start()
@@ -115,16 +115,16 @@ def main_view(request, **kwargs):
                     prgmT = None
 ##                    print("prgm:",prgm)
 
-                    oldpos = proxy.getOldPosition()
+                    oldpos = proxy_prgm.getOldPosition()
                     data = {'x':oldpos[0], 'y':oldpos[1]}
-                    print(proxy.getOutput(), data)
+                    print(proxy_prgm.getOutput(), data)
 ##                    print(prgm.position)
 ##                    print(threading.enumerate())
                 except Exception as e:
                     traceback.print_exc(file=sys.stdout)
                     raise e
                 
-                data['output'] = proxy.getOutput()
+                data['output'] = proxy_prgm.getOutput()
                 return HttpResponse(json.dumps(data), content_type="application/json")
 
         else:
