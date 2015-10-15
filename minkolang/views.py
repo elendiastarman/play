@@ -43,8 +43,6 @@ def foo(p, s):
 class MyManager(BaseManager): pass
 MyManager.register('Program', Program)
 
-print("blah")
-
 # Create your views here.
 def main_view(request, **kwargs):
     global proxy
@@ -69,8 +67,6 @@ def main_view(request, **kwargs):
             print(request.GET['input'])
             context['code'] = code
             context['code_lines'] = code.split('\n')
-
-            if prgmT: prgmT.terminate()
 
         if request.is_ajax():
             if request.GET["action"] == "start":

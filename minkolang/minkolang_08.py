@@ -7,13 +7,13 @@ if "idlelib" in sys.modules:
     debug = 1
     numSteps = 100
 
-if len(sys.argv) < 2: raise ValueError("Need at least one file name!")
-if len(sys.argv) == 2: sys.argv.append("")
+##if len(sys.argv) < 2: raise ValueError("Need at least one file name!")
+##if len(sys.argv) == 2: sys.argv.append("")
 
 ##print(sys.argv)
 ##print(os.curdir, os.getcwd())
 
-if sys.argv[1][-4:] == ".mkl":
+if len(sys.argv) > 1 and sys.argv[1][-4:] == ".mkl":
     file = open(sys.argv[1]).read()
 else:
     file = None
