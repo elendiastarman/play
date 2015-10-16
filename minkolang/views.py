@@ -65,7 +65,7 @@ def main_view(request, **kwargs):
             uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
             context['uid'] = uid
         else:
-            uid = request.GET['uid']
+            uid = request.GET['uid'].lstrip(" ")
 
         print(uid)
         if uid in prgmT and prgmT[uid].is_alive():
