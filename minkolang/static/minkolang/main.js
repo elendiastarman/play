@@ -2,6 +2,8 @@ function sendcode() {
 	var code = $('#code-input').val();
 	var input = $('#input-text').val();
 	$('#output-text').text("");
+	$('#stack-text').text("");
+	$('#loops-text').text("");
 	
 	$.ajax({
 		url: window.location,
@@ -29,6 +31,8 @@ function stepcode(steps) {
 		success: function(response) {
 			$('.cell_highlight').removeClass('cell_highlight');
 			$('#output-text').text(response['output']);
+			$('#stack-text').text(response['stack']);
+			$('#loops-text').text(response['loops']);
 			$('#code-table > table').find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 			
 			if (steps == -1) {

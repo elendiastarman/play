@@ -125,6 +125,8 @@ def main_view(request, **kwargs):
 
                     oldpos = proxy_prgm.getOldPosition()
                     data = {'x':oldpos[0], 'y':oldpos[1]}
+                    data['stack'] = proxy_prgm.getStack()
+                    data['loops'] = proxy_prgm.getLoops()
 
 ##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:
