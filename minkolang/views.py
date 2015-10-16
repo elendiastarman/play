@@ -43,6 +43,10 @@ def foo(p, s):
 class MyManager(BaseManager): pass
 MyManager.register('Program', Program)
 
+if not manager:
+    manager = MyManager()
+    manager.start()
+
 # Create your views here.
 def main_view(request, **kwargs):
     global proxy_prgm
@@ -73,8 +77,6 @@ def main_view(request, **kwargs):
 
                 try:
 ##                    prgm = Program(code, inputStr=request.GET["input"], debugFlag=1)
-                    manager = MyManager()
-                    manager.start()
                     proxy_prgm = manager.Program(code, inputStr=request.GET["input"], debugFlag=0)
 ##                    print(dir(proxy_prgm))
                     context['code_lines'] = proxy_prgm.getCode()[0]
