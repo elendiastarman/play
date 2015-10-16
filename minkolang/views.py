@@ -115,7 +115,7 @@ def main_view(request, **kwargs):
                         name="program run")
                     
                     prgmT[uid].start()
-                    prgmT[uid].join(5)
+                    prgmT[uid].join(60) #time limit of 1 minute
 
                     if prgmT[uid].is_alive():
                         prgmT[uid].terminate()
