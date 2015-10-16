@@ -20,8 +20,11 @@
 		<br/>
 		<label for="input-text">Input:</label>
 		<input type="text" id="input-text"/>
-		<br/>
-		<button onclick="stepcode(-1)">Run</button> <button onclick="stepcode(1)">Step</button>
+		<br/><br/>
+		<button id="run-button" onclick="stepcode(-1)">Run</button>
+		<button id="stop-button" onclick="stepcode(0)" style="display:none;">Stop</button>
+		<button id="step-button" onclick="stepcode(1)">Step</button>
+		<p>Note: <kbd>Run</kbd> is limited to 1 minute at a time.</p>
 		
 		<br/><br/>
 		<div id="code-table">

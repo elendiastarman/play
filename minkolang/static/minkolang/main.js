@@ -16,6 +16,11 @@ function sendcode() {
 };
 
 function stepcode(steps) {
+	if (steps == -1) {
+		$('#run-button').toggle();
+		$('#stop-button').toggle();
+	}
+	
 	$.ajax({
 		url: window.location,
 		type: 'get',
@@ -25,6 +30,24 @@ function stepcode(steps) {
 			$('.cell_highlight').removeClass('cell_highlight');
 			$('#output-text').text(response['output']);
 			$('#code-table > table').find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
+			
+			if (steps == -1) {
+				$('#run-button').toggle();
+				$('#stop-button').toggle();
+			}
+		}
+	});
+};
+
+function stopcode() {
+	$.ajax({
+		url: window.location,
+		type: 'get',
+		data: {'action':'stop'},
+		dataType: 'json',
+		success: function(response) {
+			$('#run-button').toggle();
+			$('#stop-button').toggle();
 		}
 	});
 };
