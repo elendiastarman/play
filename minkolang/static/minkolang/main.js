@@ -11,7 +11,7 @@ function sendcode() {
 		data: {'code':code, 'action':'start', 'input':input, 'uid':$('#uid').text()},
 		dataType: 'html',
 		success: function(response) {
-			$('#code-table').children('table').remove();
+			$('#code-table').children().remove();
 			$('#code-table').append(response);
 		}
 	});
@@ -32,8 +32,8 @@ function stepcode(steps) {
 			$('.cell_highlight').removeClass('cell_highlight');
 			$('#output-text').text(response['output']);
 			$('#stack-text').text(response['stack']);
-			$('#loops-text').text(response['loops']);
-			$('#code-table > table').find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
+			$('#loops-text').html(response['loops']);
+			$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 			
 			if (steps == -1) {
 				$('#run-button').toggle();

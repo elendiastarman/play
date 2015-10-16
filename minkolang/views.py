@@ -77,7 +77,7 @@ def main_view(request, **kwargs):
 ##            print(code)
 ##            print(request.GET['input'])
             context['code'] = code
-            context['code_lines'] = code.split('\n')
+##            context['code_lines'] = code.split('\n')
 
         if request.is_ajax():
             if request.GET["action"] == "start":
@@ -88,7 +88,7 @@ def main_view(request, **kwargs):
                         inputStr=request.GET["input"],
                         debugFlag=0,
                         outfile=None)
-                    context['code_lines'] = proxies[uid].getCode()[0]
+                    context['code_array'] = proxies[uid].getCode()
 ##                    request.session['proxy_prgm'] = proxy_prgm
 
 ##                    print(request.session.items())
@@ -124,9 +124,10 @@ def main_view(request, **kwargs):
 ##                    prgmT[uid] = None
 
                     oldpos = proxy_prgm.getOldPosition()
-                    data = {'x':oldpos[0], 'y':oldpos[1]}
+                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
                     data['stack'] = proxy_prgm.getStack()
-                    data['loops'] = proxy_prgm.getLoops()
+                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+                    data['loops'] = "<br/>".join(map(looptext, proxy_prgm.getLoops()))
 
 ##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:

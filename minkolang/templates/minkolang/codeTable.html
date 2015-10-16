@@ -1,11 +1,19 @@
-{% if code_lines %}
-<table>
-	{% for line in code_lines %}
-	<tr>
-		{% for char in line %}
-		<td>{{char}}</td>
+{% if code_array %}
+	{% for code_lines in code_array %}
+	
+	{% if code_array|length > 1 %}
+		<p>Layer {{forloop.counter}}:</p>
+	{% endif %}
+	
+	<table>
+		{% for line in code_lines %}
+		<tr>
+			{% for char in line %}
+			<td>{{char}}</td>
+			{% endfor %}
+		</tr>
 		{% endfor %}
-	</tr>
+	</table>
+
 	{% endfor %}
-</table>
 {% endif %}

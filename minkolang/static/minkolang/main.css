@@ -8,6 +8,7 @@ table, th, td {
 }
 td {
 	width: 1em;
+	height: 1em;
 	text-align: center;
 }
 
