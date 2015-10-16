@@ -8,67 +8,74 @@ import json
 
 from minkolang.minkolang_08 import Program
 
+import os
 import sys
 import traceback
 import multiprocessing
 from multiprocessing.managers import BaseManager
 
-global prgm
+global stdnull
+stdnull = open(os.devnull, 'w')
+
+import random
+import string
+
+##global prgm
 global prgmT
-prgm = None
-prgmT = None
+##prgm = None
+prgmT = {}
 
-##global proxy_prgm
-##
-##manager = None
-##
-##if not manager:
-##    try:
-##        manager = multiprocessing.Manager()
-##        proxy_prgm = manager.Namespace()
-##        proxy_prgm.prgm = None
-##    except Exception as e:
-##        traceback.print_exc(file=sys.stdout)
-##        raise e
 
-global proxy_prgm
-proxy_prgm = None
+global proxies
+proxies = {}
+
 global manager
 manager = None
-
-def foo(p, s):
-    print(p.prgm)
-    p.prgm.run(s)
 
 class MyManager(BaseManager): pass
 MyManager.register('Program', Program)
 
-if not manager:
-    manager = MyManager()
-    manager.start()
-
 # Create your views here.
 def main_view(request, **kwargs):
-    global proxy_prgm
+##    global proxy_prgm
     global manager
-    global prgm
+##    global prgm
     global prgmT
+    global proxies
 
-    if prgmT: prgmT.terminate()
+    if not manager:
+        manager = MyManager()
+        manager.start()
     
     context = RequestContext(request)
     context['code'] = '"Hello world!"(O).'
     context['code_lines'] = []
 
+##    print("Request session stuff.")
+##    print(request.session)
+##    print(request.session.items())
+##    print()
+
     if request.method == 'GET':
         
-        print(request)
-        print(request.GET)
+##        print(request)
+##        print(request.GET)
+
+        if not request.is_ajax():
+            uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
+            context['uid'] = uid
+        else:
+            uid = request.GET['uid']
+
+        print(uid)
+        if uid in prgmT and prgmT[uid].is_alive():
+            prgmT[uid].terminate()
+            proxies[uid].stop()
         
         if 'code' in request.GET:
             code = request.GET['code']
-            print(code)
-            print(request.GET['input'])
+##            print(code)
+##            print(request.GET['input'])
             context['code'] = code
             context['code_lines'] = code.split('\n')
 
@@ -76,52 +83,50 @@ def main_view(request, **kwargs):
             if request.GET["action"] == "start":
 
                 try:
-##                    prgm = Program(code, inputStr=request.GET["input"], debugFlag=1)
-                    proxy_prgm = manager.Program(code, inputStr=request.GET["input"], debugFlag=0)
-##                    print(dir(proxy_prgm))
-                    context['code_lines'] = proxy_prgm.getCode()[0]
+                    proxies[uid] = manager.Program(
+                        code,
+                        inputStr=request.GET["input"],
+                        debugFlag=0,
+                        outfile=None)
+                    context['code_lines'] = proxies[uid].getCode()[0]
+##                    request.session['proxy_prgm'] = proxy_prgm
+
+##                    print(request.session.items())
+                    
                     return render(request, 'minkolang/codeTable.html', context_instance=context)
                 except Exception as e:
                     traceback.print_exc(file=sys.stdout)
                     raise e
                 
             elif request.GET["action"] == "step":
-##                print("Taking %s steps." % request.GET["steps"])
 
                 try:
-                    prgm = proxy_prgm
-##                    manager = MyManager()
-##                    manager.register("ML_prgm", Program)
+##                    print(request.session.items())
                     
-##                    proxy_prgm.prgm = prgm
+##                    proxy_prgm = request.session['proxy_prgm']
+
+                    proxy_prgm = proxies[uid]
                     
                     steps = int(request.GET["steps"])
-                    #prgm.run(steps-(steps>0))
-##                    print("prgm:",prgm)
 
-                    prgmT = multiprocessing.Process(target = proxy_prgm.run,
-                                                    args = (steps,),
-                                                    name="program run")
-                    prgmT.start()
-                    prgmT.join()
-##                    print(prgmT.is_alive())
-##                    print(threading.enumerate())
-##                    prgmT.join()
-##                    print(prgmT.exitcode)
-
-##                    manager.shutdown()
-
+                    prgmT[uid] = multiprocessing.Process(
+                        target = proxy_prgm.run,
+                        args = (steps,),
+                        name="program run")
                     
-##                    print("prgm:",prgm)
+                    prgmT[uid].start()
+                    prgmT[uid].join(5)
+
+                    if prgmT[uid].is_alive():
+                        prgmT[uid].terminate()
+                        proxy_prgm.stop()
                     
-                    prgmT = None
-##                    print("prgm:",prgm)
+##                    prgmT[uid] = None
 
                     oldpos = proxy_prgm.getOldPosition()
                     data = {'x':oldpos[0], 'y':oldpos[1]}
-                    print(proxy_prgm.getOutput(), data)
-##                    print(prgm.position)
-##                    print(threading.enumerate())
+
+##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:
                     traceback.print_exc(file=sys.stdout)
                     raise e
@@ -130,8 +135,9 @@ def main_view(request, **kwargs):
                 return HttpResponse(json.dumps(data), content_type="application/json")
 
         else:
-            pgrm = None
-            prgmT = None
+            pass
+##            pgrm = None
+##            prgmT = None
 
     return render(request, 'minkolang/main.html', context_instance=context)
 

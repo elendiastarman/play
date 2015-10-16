@@ -1,5 +1,6 @@
 import sys
 import os
+##import signal
 
 debug = 0
 if "idlelib" in sys.modules:
@@ -20,7 +21,7 @@ else:
 
 class Program:
     global debug
-    def __init__(self, code, inputStr="", debugFlag=0):
+    def __init__(self, code, inputStr="", debugFlag=0, outfile=sys.stdout):
         global debug
         debug = debugFlag
         
@@ -66,9 +67,15 @@ class Program:
             
         self.currChar = ""
         self.output = ""
+        if outfile == None:
+            self.outfile = open(os.devnull, 'w')
+
+        self.stopNow = False
 
     def run(self, steps=-1): #steps = -1 for run-until-halt
-        while steps != 0:
+        self.stopNow = False
+        
+        while steps != 0 and self.stopNow == False:
             steps -= 1
             self.getCurrent()
             movedir = ""
@@ -242,14 +249,14 @@ class Program:
                         tos = stack.pop() if stack else 0
                         
                         if self.currChar == "N":
-                            print(tos, end=' ', flush=True)
+                            print(tos, end=' ', flush=True, file=self.outfile)
                             self.output += str(tos) + ' '
                         elif self.currChar == "O":
                             try:
                                 c = chr(int(tos))
                             except ValueError:
                                 c = ""
-                            print(c, end='', flush=True)
+                            print(c, end='', flush=True, file=self.outfile)
                             self.output += c
 
                     elif self.currChar in "dD": #duplication
@@ -396,10 +403,10 @@ class Program:
                                 self.array[y][x] = k
 
                     elif self.currChar == "u":
-                        print(stack)
+                        print(stack, file=self.outfile)
                     elif self.currChar == "U":
-                        print(*self.code)
-                        print(*self.loops)
+                        print(*self.code, file=self.outfile)
+                        print(*self.loops, file=self.outfile)
                             
                     elif self.currChar in "()": #while loop
                         if self.currChar == "(":
@@ -575,6 +582,8 @@ class Program:
     def getPosition(self): return self.position
     def getvelocity(self): return self.velocity
     def getOldPosition(self): return self.oldposition
+
+    def stop(self): self.stopNow = True
 
 if file:
     if debug:

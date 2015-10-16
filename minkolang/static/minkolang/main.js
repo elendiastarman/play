@@ -6,7 +6,7 @@ function sendcode() {
 	$.ajax({
 		url: window.location,
 		type: 'get',
-		data: {'code':code, 'action':'start', 'input':input},
+		data: {'code':code, 'action':'start', 'input':input, 'uid':$('#uid').text()},
 		dataType: 'html',
 		success: function(response) {
 			$('#code-table').children('table').remove();
@@ -19,7 +19,7 @@ function stepcode(steps) {
 	$.ajax({
 		url: window.location,
 		type: 'get',
-		data: {'action':'step', 'steps':steps},
+		data: {'action':'step', 'steps':steps, 'uid':$('#uid').text()},
 		dataType: 'json',
 		success: function(response) {
 			$('.cell_highlight').removeClass('cell_highlight');
