@@ -31,6 +31,7 @@ function stepcode(steps) {
 		data: {'action':'step', 'steps':steps, 'uid':$('#uid').text()},
 		dataType: 'json',
 		success: function(response) {
+			console.log(response);
 			$('.cell_highlight').removeClass('cell_highlight');
 			$('#output-text').text(response['output']);
 			$('#stack-text').text(response['stack']);
@@ -41,7 +42,8 @@ function stepcode(steps) {
 				$('#run-button').toggle();
 				$('#stop-button').toggle();
 			}
-		}
+		},
+		failure: function(response) { console.log(response); }
 	});
 };
 

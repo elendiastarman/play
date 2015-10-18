@@ -123,16 +123,16 @@ def main_view(request, **kwargs):
                     
 ##                    prgmT[uid] = None
 
-                    oldpos = proxy_prgm.getOldPosition()
-                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
-                    data['stack'] = proxy_prgm.getStack()
-                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
-                    data['loops'] = "<br/>".join(map(looptext, proxy_prgm.getLoops()))
-
 ##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:
                     traceback.print_exc(file=sys.stdout)
                     raise e
+                
+                oldpos = proxy_prgm.getOldPosition()
+                data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
+                data['stack'] = proxy_prgm.getStack()
+                looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+                data['loops'] = "<br/>".join(map(looptext, proxy_prgm.getLoops()))
                 
                 data['output'] = proxy_prgm.getOutput()
                 return HttpResponse(json.dumps(data), content_type="application/json")
