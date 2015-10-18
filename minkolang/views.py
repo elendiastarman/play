@@ -95,7 +95,7 @@ def main_view(request, **kwargs):
                     
                     return render(request, 'minkolang/codeTable.html', context_instance=context)
                 except Exception as e:
-                    traceback.print_exc(file=sys.stdout)
+                    traceback.print_exc(file=sys.stderr)
                     raise e
                 
             elif request.GET["action"] == "step":
@@ -125,7 +125,7 @@ def main_view(request, **kwargs):
 
 ##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:
-                    traceback.print_exc(file=sys.stdout)
+                    traceback.print_exc(file=sys.stderr)
                     raise e
                 
                 oldpos = proxy_prgm.getOldPosition()
