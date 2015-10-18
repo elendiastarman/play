@@ -11,6 +11,7 @@ function sendcode() {
 		data: {'code':code, 'action':'start', 'input':input, 'uid':$('#uid').text()},
 		dataType: 'html',
 		success: function(response) {
+			console.log(response);
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
 		},
