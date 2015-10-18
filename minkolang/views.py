@@ -20,11 +20,8 @@ stdnull = open(os.devnull, 'w')
 import random
 import string
 
-##global prgm
 global prgmT
-##prgm = None
 prgmT = {}
-
 
 global proxies
 proxies = {}
@@ -37,9 +34,7 @@ MyManager.register('Program', Program)
 
 # Create your views here.
 def main_view(request, **kwargs):
-##    global proxy_prgm
     global manager
-##    global prgm
     global prgmT
     global proxies
 
@@ -51,21 +46,13 @@ def main_view(request, **kwargs):
     context['code'] = '"Hello world!"(O).'
     context['code_lines'] = []
 
-##    print("Request session stuff.")
-##    print(request.session)
-##    print(request.session.items())
-##    print()
-
     if request.method == 'GET':
-        
-##        print(request)
-##        print(request.GET)
 
         if not request.is_ajax():
             uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
             context['uid'] = uid
         else:
-            uid = request.GET['uid']#.lstrip(" ")
+            uid = request.GET['uid']
 
         print("UID:",uid)
         if uid in prgmT and prgmT[uid].is_alive():
@@ -74,10 +61,7 @@ def main_view(request, **kwargs):
         
         if 'code' in request.GET:
             code = request.GET['code']
-##            print(code)
-##            print(request.GET['input'])
             context['code'] = code
-##            context['code_lines'] = code.split('\n')
 
         if request.is_ajax():
             if request.GET["action"] == "start":
@@ -89,9 +73,6 @@ def main_view(request, **kwargs):
                         debugFlag=0,
                         outfile=None)
                     context['code_array'] = proxies[uid].getCode()
-##                    request.session['proxy_prgm'] = proxy_prgm
-
-##                    print(request.session.items())
                     
                     return render(request, 'minkolang/codeTable.html', context_instance=context)
                 except Exception as e:
@@ -101,10 +82,6 @@ def main_view(request, **kwargs):
             elif request.GET["action"] == "step":
 
                 try:
-##                    print(request.session.items())
-                    
-##                    proxy_prgm = request.session['proxy_prgm']
-
                     proxy_prgm = proxies[uid]
                     
                     steps = int(request.GET["steps"])
@@ -121,9 +98,6 @@ def main_view(request, **kwargs):
                         prgmT[uid].terminate()
                         proxy_prgm.stop()
                     
-##                    prgmT[uid] = None
-
-##                    print(proxy_prgm.getOutput(), data)
                 except Exception as e:
                     traceback.print_exc(file=sys.stderr)
                     raise e
@@ -136,11 +110,6 @@ def main_view(request, **kwargs):
                 
                 data['output'] = proxy_prgm.getOutput()
                 return HttpResponse(json.dumps(data), content_type="application/json")
-
-        else:
-            pass
-##            pgrm = None
-##            prgmT = None
 
     return render(request, 'minkolang/main.html', context_instance=context)
 
