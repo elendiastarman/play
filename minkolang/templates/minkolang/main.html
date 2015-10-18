@@ -15,15 +15,15 @@
 	
 		<h1>Official Minkolang Online Interpreter</h1>
 		
-		<button onclick="sendcode()">Set code</button> <br/><br/>
 		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
 		<br/>
 		<label for="input-text">Input:</label>
-		<input type="text" id="input-text"/>
+		<input type="text" id="input-text"/> <button onclick="sendcode()">Set code</button> 
 		<br/><br/>
 		<button id="run-button" onclick="stepcode(-1)">Run</button>
 		<button id="stop-button" onclick="stepcode(0)" style="display:none;">Stop</button>
-		<button id="step-button" onclick="stepcode(1)">Step</button>
+		<button id="step-button" onclick="stepcode($('#steps-input').val())">Step</button> <input type="text" id="steps-input" size="3" value="1"/>
+		<button id="slow-button" onclick="slowcode($('#steps-input').val())">Slow</button>
 		<p>Note: <kbd>Run</kbd> is limited to 1 minute at a time.</p>
 		
 		<!-- <br/><br/> -->
