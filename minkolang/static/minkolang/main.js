@@ -13,7 +13,8 @@ function sendcode() {
 		success: function(response) {
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
-		}
+		},
+		failure: function(response) { console.log(response); }
 	});
 };
 
