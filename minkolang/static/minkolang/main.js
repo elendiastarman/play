@@ -13,6 +13,9 @@ function sendcode() {
 		success: function(response) {
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
+			$('#permalink').attr('href', "?code=" + encodeURIComponent(code));
+			console.log(code);
+			console.log(encodeURI(code));
 		},
 		failure: function(response) { console.log(response); }
 	});
@@ -43,4 +46,27 @@ function stepcode(steps) {
 		},
 		failure: function(response) { console.log(response); }
 	});
+};
+
+function slowcode(steps) {
+	var stepLim = 100;
+	
+	while (stepLim > 0) {
+		$.ajax({
+			url: window.location,
+			type: 'get',
+			data: {'action':'step', 'steps':Math.min(steps, stepLim), 'uid':$('#uid').text()},
+			dataType: 'json',
+			success: function(response) {
+				$('.cell_highlight').removeClass('cell_highlight');
+				$('#output-text').text(response['output']);
+				$('#stack-text').text(response['stack']);
+				$('#loops-text').html(response['loops']);
+				$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
+				
+				stepLim -= steps;
+			},
+			failure: function(response) { console.log(response); stepLim = -1; }
+		});
+	}
 };

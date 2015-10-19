@@ -10,6 +10,7 @@ from minkolang.minkolang_08 import Program
 
 import os
 import sys
+import urllib
 import traceback
 import multiprocessing
 from multiprocessing.managers import BaseManager
@@ -45,6 +46,7 @@ def main_view(request, **kwargs):
     context = RequestContext(request)
     context['code'] = '"Hello world!"(O).'
     context['code_lines'] = []
+    context['permalink'] = '%22Hello+world%21%22%28O%29.'
 
     if request.method == 'GET':
 
@@ -62,6 +64,7 @@ def main_view(request, **kwargs):
         if 'code' in request.GET:
             code = request.GET['code']
             context['code'] = code
+            context['permalink'] = urllib.parse.quote_plus(code)
 
         if request.is_ajax():
             if request.GET["action"] == "start":

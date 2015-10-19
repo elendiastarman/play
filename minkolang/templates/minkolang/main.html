@@ -19,12 +19,13 @@
 		<br/>
 		<label for="input-text">Input:</label>
 		<input type="text" id="input-text"/> <button onclick="sendcode()">Set code</button> 
-		<br/><br/>
+		<!-- <br/><br/> -->
+		<p style="display:inline"> | </p>
 		<button id="run-button" onclick="stepcode(-1)">Run</button>
 		<button id="stop-button" onclick="stepcode(0)" style="display:none;">Stop</button>
 		<button id="step-button" onclick="stepcode($('#steps-input').val())">Step</button> <input type="text" id="steps-input" size="3" value="1"/>
-		<button id="slow-button" onclick="slowcode($('#steps-input').val())">Slow</button>
-		<p>Note: <kbd>Run</kbd> is limited to 1 minute at a time.</p>
+		<button id="slow-button" onclick="slowcode($('#steps-input').val())" disabled>Slow</button>
+		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 100 steps. <a id="permalink" href="{% url 'main' %}?code={{permalink}}">Permalink.</a></p>
 		
 		<!-- <br/><br/> -->
 		<div id="code-table">
