@@ -71,11 +71,12 @@ class Program:
             self.outfile = open(os.devnull, 'w')
 
         self.stopNow = False
+        self.isDone = False
 
     def run(self, steps=-1): #steps = -1 for run-until-halt
         self.stopNow = False
         
-        while steps != 0 and self.stopNow == False:
+        while steps != 0 and self.stopNow == False and not self.isDone:
             steps -= 1
             self.getCurrent()
             movedir = ""
@@ -107,6 +108,7 @@ class Program:
                     
                     if self.currChar == ".": #stop execution
                         self.oldposition = self.position
+                        self.isDone = True
                         return
                     elif self.currChar == "$": #toggle functionality
                         if self.stuckFlag:
@@ -195,19 +197,16 @@ class Program:
                             stack.append(int(not b if not self.toggleFlag else bool(b)))
 
                     elif self.currChar in "!?@&":
+                        movedir = "jump"
                         if self.currChar == "!":
-                            movedir = "jump"
                             arg2 = 1
                         else:
                             tos = stack.pop() if stack else 0
                             if self.currChar == "?" and tos:
-                                movedir = "jump"
                                 arg2 = 1
                             elif self.currChar == "@":
-                                movedir = "jump"
                                 arg2 = tos
                             elif self.currChar == "&" and (stack.pop() if stack else 0):
-                                movedir = "jump"
                                 arg2 = tos
 
                     elif self.currChar in "no": #input
@@ -519,6 +518,8 @@ class Program:
                         elif self.currChar.isdigit():
                             self.numLiteral = 10*self.numLiteral + int(self.currChar)
 
+            self.oldToggle = self.toggleFlag
+
             if self.toggleFlag and self.currChar != "$" and not self.stuckFlag: self.toggleFlag = 0
 
             if debug: print(stack)
@@ -578,9 +579,12 @@ class Program:
     def getArray(self): return self.array
     def getLoops(self): return self.loops
     def getStack(self): return self.stack
+    def getIsDone(self): return self.isDone
     def getOutput(self): return self.output
+    def getCurrChar(self): return self.currChar
     def getPosition(self): return self.position
-    def getvelocity(self): return self.velocity
+    def getVelocity(self): return self.velocity
+    def getOldToggle(self): return self.oldToggle
     def getOldPosition(self): return self.oldposition
 
     def stop(self): self.stopNow = True

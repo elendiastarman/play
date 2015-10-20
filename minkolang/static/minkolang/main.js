@@ -34,7 +34,7 @@ function stepcode(steps) {
 		dataType: 'json',
 		success: function(response) {
 			$('.cell_highlight').removeClass('cell_highlight');
-			$('#output-text').text(response['output']);
+			$('#output-text').html(response['output']);
 			$('#stack-text').text(response['stack']);
 			$('#loops-text').html(response['loops']);
 			$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');

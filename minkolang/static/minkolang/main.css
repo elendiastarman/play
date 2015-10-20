@@ -12,6 +12,11 @@ td {
 	text-align: center;
 }
 
+code, kbd {
+	background-color: #EEE;
+	padding: 0 5px;
+}
+
 .cell_highlight {
 	background-color: #FAA;
 }

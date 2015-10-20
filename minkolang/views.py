@@ -111,7 +111,7 @@ def main_view(request, **kwargs):
                 looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
                 data['loops'] = "<br/>".join(map(looptext, proxy_prgm.getLoops()))
                 
-                data['output'] = proxy_prgm.getOutput()
+                data['output'] = "<br/>".join(proxy_prgm.getOutput().split('\n'))
                 return HttpResponse(json.dumps(data), content_type="application/json")
 
     return render(request, 'minkolang/main.html', context_instance=context)
