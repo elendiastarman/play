@@ -20,3 +20,7 @@ code, kbd {
 .cell_highlight {
 	background-color: #FAA;
 }
+
+#instructions ul {
+	margin-top: -20px;
+}

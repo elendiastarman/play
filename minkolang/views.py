@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import Context, RequestContext
 import json
 
-from minkolang.minkolang_08 import Program
+from minkolang.minkolang_09 import Program
 
 import os
 import sys
@@ -100,18 +100,28 @@ def main_view(request, **kwargs):
                     if prgmT[uid].is_alive():
                         prgmT[uid].terminate()
                         proxy_prgm.stop()
+
+                    V = json.loads(proxy_prgm.getVarsJson())
+
+##                    print(V)
+                    
+                    oldpos = V['oldposition']
+                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
+                    data['stack'] = V['stack']
+                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
+                    
+                    data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
+
+                    data['currchar'] = V['oldToggle']*'$' + V['currChar']
+                    
+
+                    data['done'] = V['isDone']
                     
                 except Exception as e:
                     traceback.print_exc(file=sys.stderr)
                     raise e
-                
-                oldpos = proxy_prgm.getOldPosition()
-                data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
-                data['stack'] = proxy_prgm.getStack()
-                looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
-                data['loops'] = "<br/>".join(map(looptext, proxy_prgm.getLoops()))
-                
-                data['output'] = "<br/>".join(proxy_prgm.getOutput().split('\n'))
+
                 return HttpResponse(json.dumps(data), content_type="application/json")
 
     return render(request, 'minkolang/main.html', context_instance=context)

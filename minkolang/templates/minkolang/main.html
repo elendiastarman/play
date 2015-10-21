@@ -21,11 +21,16 @@
 		<input type="text" id="input-text"/> <button onclick="sendcode()">Set code</button> 
 		<!-- <br/><br/> -->
 		<p style="display:inline"> | </p>
-		<button id="run-button" onclick="stepcode(-1)">Run</button>
+		<button id="run-button" onclick="stepcode(-1)" disabled>Run</button>
 		<button id="stop-button" onclick="stepcode(0)" style="display:none;">Stop</button>
-		<button id="step-button" onclick="stepcode($('#steps-input').val())">Step</button> <input type="text" id="steps-input" size="3" value="1"/>
+		<button id="step-button" onclick="stepcode($('#steps-input').val())" disabled>Step</button> <input type="text" id="steps-input" size="3" value="1"/>
 		<button id="slow-button" onclick="slowcode($('#steps-input').val())" disabled>Slow</button>
+		<p style="display:inline"> | </p>
+		<p id="status-text" style="display:inline">Status: awaiting code</p>
+		
 		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 100 steps. <a id="permalink" href="{% url 'main' %}?code={{permalink}}">Permalink.</a></p>
+		
+		<p id="curr-inst">Current instruction:</p>
 		
 		<!-- <br/><br/> -->
 		<div id="code-table">
@@ -44,13 +49,41 @@
 		<br/>
 		
 		<label for="output-text">Output:</label>
-		<p id="output-text" style="border: 1px solid gray; min-height: 1em;"></p>
+		<pre id="output-text" style="border: 1px solid gray; min-height: 1em;"></pre>
 		
-		<label for="stacj-text">Stack:</label>
+		<label for="stack-text">Stack:</label>
 		<p id="stack-text" style="border: 1px solid gray; min-height: 1em;"></p>
 		
 		<label for="loops-text">Loops:</label>
 		<p id="loops-text" style="border: 1px solid gray; min-height: 1em;"></p>
+		
+		<h2 id="instructions">Instructions:</h2>
+		<p>
+			<strong>Movement and flow control</strong>
+			<ul>
+				<li id="v"><code>v</code> Redirect program counter down.</li>
+				<li id="<"><code><</code> Redirect program counter left.</li>
+				<li id=">"><code>></code> Redirect program counter right.</li>
+				<li id="^"><code>^</code> Redirect program counter up.</li>
+			</ul>
+			
+			<strong>Literals</strong>
+			<ul>
+				<li><code>"..."</code> String literal. Minkolang reverses this before pushing each character onto the stack.</li>
+				<li id="<"><code><</code> Redirect program counter left.</li>
+				<li id=">"><code>></code> Redirect program counter right.</li>
+				<li id="^"><code>^</code> Redirect program counter up.</li>
+			</ul>
+			
+			<strong>Special</strong>
+			<ul>
+				<li id="$"><code>$</code> Toggle functionality of some functions.</li>
+				<li id="$$"><code>$$</code> Toggle permanently until another <code>$</code> is encountered.</li>
+				<!-- <li id="<"><code><</code> Redirect program counter left.</li>
+				<li id=">"><code>></code> Redirect program counter right.</li>
+				<li id="^"><code>^</code> Redirect program counter up.</li> -->
+			</ul>
+		</p>
 		
 		<p id="uid" style="display:none;">{{uid}}</p>
 

@@ -1,6 +1,6 @@
-import sys
 import os
-##import signal
+import sys
+import json
 
 debug = 0
 if "idlelib" in sys.modules:
@@ -51,6 +51,7 @@ class Program:
         
         self.fallable = 1
         self.toggleFlag = 0
+        self.oldToggle = 0
         self.fallFlag = 0
         self.stuckFlag = 0
         
@@ -82,6 +83,7 @@ class Program:
             movedir = ""
             arg2 = None
             stack = self.loops[-1][3] if self.loops else self.stack
+            self.oldToggle = self.toggleFlag
 
             if self.currChar == '"':
                 self.fallable = not self.fallable
@@ -518,8 +520,6 @@ class Program:
                         elif self.currChar.isdigit():
                             self.numLiteral = 10*self.numLiteral + int(self.currChar)
 
-            self.oldToggle = self.toggleFlag
-
             if self.toggleFlag and self.currChar != "$" and not self.stuckFlag: self.toggleFlag = 0
 
             if debug: print(stack)
@@ -579,6 +579,7 @@ class Program:
     def getArray(self): return self.array
     def getLoops(self): return self.loops
     def getStack(self): return self.stack
+    def getModes(self): return [self.strMode,self.numMode]
     def getIsDone(self): return self.isDone
     def getOutput(self): return self.output
     def getCurrChar(self): return self.currChar
@@ -586,6 +587,13 @@ class Program:
     def getVelocity(self): return self.velocity
     def getOldToggle(self): return self.oldToggle
     def getOldPosition(self): return self.oldposition
+
+    def getVars(self):
+        return vars(self)
+    def getVarsJson(self):
+        V = vars(self).copy()
+        V.pop('outfile')
+        return json.dumps(V)
 
     def stop(self): self.stopNow = True
 

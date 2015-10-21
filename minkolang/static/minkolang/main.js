@@ -5,6 +5,9 @@ function sendcode() {
 	$('#stack-text').text("");
 	$('#loops-text').text("");
 	
+	$('#run-button').attr('disabled', false);
+	$('#step-button').attr('disabled', false);
+	
 	$.ajax({
 		url: window.location,
 		type: 'get',
@@ -14,8 +17,7 @@ function sendcode() {
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
 			$('#permalink').attr('href', "?code=" + encodeURIComponent(code));
-			console.log(code);
-			console.log(encodeURI(code));
+			$('#status-text').text("Status: ready!");
 		},
 		failure: function(response) { console.log(response); }
 	});
@@ -26,6 +28,7 @@ function stepcode(steps) {
 		$('#run-button').toggle();
 		$('#stop-button').toggle();
 	}
+	$('#status-text').text("Status: running...");
 	
 	$.ajax({
 		url: window.location,
@@ -39,9 +42,19 @@ function stepcode(steps) {
 			$('#loops-text').html(response['loops']);
 			$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 			
+			$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
+			
 			if (steps == -1) {
 				$('#run-button').toggle();
 				$('#stop-button').toggle();
+			}
+			
+			if (response['done']) {
+				$('#run-button').attr('disabled', true);
+				$('#step-button').attr('disabled', true);
+				$('#status-text').text("Status: done!");
+			} else {
+				$('#status-text').text("Status: waiting...");
 			}
 		},
 		failure: function(response) { console.log(response); }
