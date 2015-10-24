@@ -414,7 +414,7 @@ class Program:
                         if b[0][0] <= x < b[0][1] and b[1][0] <= y < b[1][1] and b[2][0] <= z < b[2][1]:
                             self.code[z][y][x] = n
                         else:
-                            self.codeput[(x,y,z)] = n
+                            self.codeput[str((x,y,z))] = n
 
                     elif self.currChar in "qQ": #code get
                         if self.currChar == "Q":
@@ -430,8 +430,8 @@ class Program:
                             q = self.code[z][y][x]
                             stack.append(ord(q) if type(q) == str else q)
                         else:
-                            if (x,y,z) in self.codeput:
-                                q = self.codeput[(x,y,z)]
+                            if str((x,y,z)) in self.codeput:
+                                q = self.codeput[str((x,y,z))]
                                 stack.append(ord(q) if type(q) == str else q)
                             else:
                                 stack.append(0)

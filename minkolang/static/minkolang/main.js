@@ -5,6 +5,8 @@ function sendcode() {
 	$('#stack-text').text("");
 	$('#loops-text').text("");
 	
+	$('#run-button').show();
+	$('#stop-button').hide();
 	$('#run-button').attr('disabled', false);
 	$('#step-button').attr('disabled', false);
 	
