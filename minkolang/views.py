@@ -114,6 +114,7 @@ def main_view(request, **kwargs):
                     looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
                     data['loops'] = "<br/>".join(map(looptext, V['loops']))
                     
+                    data['inputstr'] = V['inputStr']
                     data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
 
                     data['currchar'] = V['oldToggle']*'$' + V['currChar']

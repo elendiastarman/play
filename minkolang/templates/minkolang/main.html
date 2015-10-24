@@ -29,7 +29,7 @@
 		<p style="display:inline"> | </p>
 		<p id="status-text" style="display:inline">Status: awaiting code</p>
 		
-		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 100 steps. <a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a></p>
+		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 1000 steps or 1 minute, whichever is shorter. <a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a></p>
 		
 		<p id="curr-inst">Current instruction:</p>
 		
@@ -48,6 +48,8 @@
 		{% endif %}
 		</div>
 		<br/>
+		
+		<p id="input-str">Input: <code></code></p>
 		
 		<label for="output-text">Output:</label>
 		<pre id="output-text" style="border: 1px solid gray; min-height: 1em;"></pre>

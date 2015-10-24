@@ -19,12 +19,17 @@ function sendcode() {
 		data: {'code':code, 'action':'start', 'input':input, 'uid':$('#uid').text()},
 		dataType: 'html',
 		success: function(response) {
+			console.log(response);
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
 			var permalinkHREF = "?code=" + encodeURIComponent(code)
 			if (input) { permalinkHREF += "&input=" + encodeURIComponent(input) }
 			$('#permalink').attr('href', permalinkHREF);
+			
+			stepcode(0);
+			
 			$('#status-text').text("Status: ready!");
+			// $('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 		},
 		failure: function(response) { console.log(response); }
 	});
@@ -50,6 +55,7 @@ function stepcode(steps) {
 			$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 			
 			$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
+			$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 			
 			if (steps == -1) {
 				$('#run-button').toggle();
@@ -75,14 +81,17 @@ function stepcode(steps) {
 };
 
 var slow_repeat;
+var slow_break;
 var stepLim;
 var ready;
 
 function slowcode(steps) {
-	stepLim = 100;
+	stepLim = 1000;
 	ready = 1;
 	$('#slow-button').toggle();
 	$('#stopslow-button').toggle();
+	
+	slow_break = setTimeout( function() { stopslow() }, 60000 );
 	
 	slow_repeat = setInterval( function() {
 		if (stepLim <= 0) {
@@ -102,6 +111,9 @@ function slowcode(steps) {
 						$('#loops-text').html(response['loops']);
 						$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 						
+						$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
+						$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
+						
 						if (response['isDone']) {
 							stepLim = -1;
 						} else {
@@ -111,13 +123,14 @@ function slowcode(steps) {
 					},
 					failure: function(response) { console.log(response); stepLim = -1; }
 				});
-			}
+			};
 		}
-	}, 50);
+	}, 5);
 };
 
 function stopslow() {
 	$('#slow-button').toggle();
 	$('#stopslow-button').toggle();
 	clearInterval(slow_repeat);
+	clearTimeout(slow_break);
 };
