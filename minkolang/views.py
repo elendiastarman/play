@@ -46,7 +46,7 @@ def main_view(request, **kwargs):
     context = RequestContext(request)
     context['code'] = '"Hello world!"(O).'
     context['code_lines'] = []
-    context['permalink'] = '%22Hello+world%21%22%28O%29.'
+    context['permalink'] = '?code=%22Hello+world%21%22%28O%29.'
 
     if request.method == 'GET':
 
@@ -64,7 +64,10 @@ def main_view(request, **kwargs):
         if 'code' in request.GET:
             code = request.GET['code']
             context['code'] = code
-            context['permalink'] = urllib.parse.quote_plus(code)
+            context['permalink'] = "?code="+urllib.parse.quote_plus(code)
+            if "input" in request.GET and request.GET["input"]:
+                context['input'] = request.GET["input"]
+                context['permalink'] += "&input="+urllib.parse.quote_plus(request.GET["input"])
 
         if request.is_ajax():
             if request.GET["action"] == "start":

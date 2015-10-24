@@ -18,7 +18,7 @@
 		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
 		<br/>
 		<label for="input-text">Input:</label>
-		<input type="text" id="input-text"/> <button onclick="sendcode()">Set code</button> 
+		<input type="text" id="input-text" value="{{input}}"/> <button onclick="sendcode()">Set code</button> 
 		<!-- <br/><br/> -->
 		<p style="display:inline"> | </p>
 		<button id="run-button" onclick="stepcode(-1)" disabled>Run</button>
@@ -28,7 +28,7 @@
 		<p style="display:inline"> | </p>
 		<p id="status-text" style="display:inline">Status: awaiting code</p>
 		
-		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 100 steps. <a id="permalink" href="{% url 'main' %}?code={{permalink}}">Permalink.</a></p>
+		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 100 steps. <a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a></p>
 		
 		<p id="curr-inst">Current instruction:</p>
 		

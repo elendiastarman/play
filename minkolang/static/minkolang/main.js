@@ -16,7 +16,9 @@ function sendcode() {
 		success: function(response) {
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
-			$('#permalink').attr('href', "?code=" + encodeURIComponent(code));
+			var permalinkHREF = "?code=" + encodeURIComponent(code)
+			if (input) { permalinkHREF += "&input=" + encodeURIComponent(input) }
+			$('#permalink').attr('href', permalinkHREF);
 			$('#status-text').text("Status: ready!");
 		},
 		failure: function(response) { console.log(response); }
