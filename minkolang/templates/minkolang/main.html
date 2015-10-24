@@ -18,7 +18,7 @@
 		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
 		<br/>
 		<label for="input-text">Input:</label>
-		<input type="text" id="input-text" value="{{input}}"/> <button onclick="sendcode()">Set code</button> 
+		<textarea id="input-text" rows="1" style="vertical-align: bottom"/>{{input}}</textarea> <button onclick="sendcode()">Set code</button> 
 		<!-- <br/><br/> -->
 		<p style="display:inline"> | </p>
 		<button id="run-button" onclick="stepcode(-1)" disabled>Run</button>

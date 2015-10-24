@@ -59,7 +59,13 @@ function stepcode(steps) {
 				$('#status-text').text("Status: waiting...");
 			}
 		},
-		failure: function(response) { console.log(response); }
+		failure: function(response) {
+			// if (steps == -1) {
+				// $('#run-button').toggle();
+				// $('#stop-button').toggle();
+			// }
+			// $('#status-text').text("Status: error!").style('color:red');
+		}
 	});
 };
 
