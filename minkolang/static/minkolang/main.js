@@ -141,16 +141,16 @@ function stopslow() {
 	clearTimeout(slow_break);
 };
 
-// $(document).ready(function() {
-    // $( "#speed-slider" ).slider({
-		// value:100,
-		// min: 5,
-		// max: 1000,
-		// step: 25,
-		// slide: function( event, ui ) {
-			// $( "#speed-input" ).val( ui.value );
-		// }
-	// });
-	// $( "#speed-input" ).val( $( "#speed-slider" ).slider( "value" ) );
-  // }
-// );
+$(function() {
+    $( "#speed-slider" ).slider({
+		value:100,
+		min: 0,
+		max: 1000,
+		step: 25,
+		slide: function( event, ui ) {
+			$( "#speed-input" ).val( ui.value );
+		}
+	});
+	$( "#speed-input" ).val( $( "#speed-slider" ).slider( "value" ) );
+  }
+);
