@@ -20,13 +20,20 @@
 		<label for="input-text">Input:</label>
 		<textarea id="input-text" rows="1" style="vertical-align: bottom"/>{{input}}</textarea> <button onclick="sendcode()">Set code</button> 
 		<!-- <br/><br/> -->
-		<p style="display:inline"> | </p>
+		<p style="display:inline"> || </p>
 		<button id="run-button" onclick="stepcode(-1)" disabled>Run</button>
 		<button id="stop-button" onclick="stepcode(0)" style="display:none;">Stop</button>
-		<button id="step-button" onclick="stepcode($('#steps-input').val())" disabled>Step</button> <input type="text" id="steps-input" size="3" value="1"/>
-		<button id="slow-button" onclick="slowcode($('#steps-input').val())" disabled>Slow</button>
+		<button id="step-button" onclick="stepcode($('#steps-input').val())" disabled>Step</button>
+		<input type="text" id="steps-input" size="3" value="1"/>
+		<p style="display:inline"> || </p>
+		<button id="slow-button" onclick="slowcode($('#slowstep-input').val(),$('#speed-input').val())" disabled>Slow</button>
 		<button id="stopslow-button" onclick="stopslow()" style="display:none;">Stop</button>
-		<p style="display:inline"> | </p>
+		<p style="display:inline">
+		<input type="text" id="slowstep-input" size="3" value="1"/> step(s),
+		<input type="text" id="speed-input" size="3" value="500"/> ms
+		<!-- <div id="speed-slider" width="10%"></div> -->
+		</p>
+		<p style="display:inline"> || </p>
 		<p id="status-text" style="display:inline">Status: awaiting code</p>
 		
 		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 1000 steps or 1 minute, whichever is shorter. <a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a></p>

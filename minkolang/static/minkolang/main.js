@@ -19,23 +19,20 @@ function sendcode() {
 		data: {'code':code, 'action':'start', 'input':input, 'uid':$('#uid').text()},
 		dataType: 'html',
 		success: function(response) {
-			console.log(response);
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
 			var permalinkHREF = "?code=" + encodeURIComponent(code)
 			if (input) { permalinkHREF += "&input=" + encodeURIComponent(input) }
 			$('#permalink').attr('href', permalinkHREF);
 			
-			stepcode(0);
-			
-			$('#status-text').text("Status: ready!");
-			// $('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
+			stepcode(0, state="init");
 		},
 		failure: function(response) { console.log(response); }
 	});
 };
 
-function stepcode(steps) {
+function stepcode(steps, state) {
+	// state = state || ""
 	if (steps == -1) {
 		$('#run-button').toggle();
 		$('#stop-button').toggle();
@@ -65,9 +62,15 @@ function stepcode(steps) {
 			if (response['done']) {
 				$('#run-button').attr('disabled', true);
 				$('#step-button').attr('disabled', true);
+				$('#slow-button').attr('disabled', true);
 				$('#status-text').text("Status: done!");
 			} else {
 				$('#status-text').text("Status: waiting...");
+			}
+			
+			if (state === "init") {
+				$('.cell_highlight').removeClass('cell_highlight');
+				$('#status-text').text("Status: ready!");
 			}
 		},
 		failure: function(response) {
@@ -85,7 +88,7 @@ var slow_break;
 var stepLim;
 var ready;
 
-function slowcode(steps) {
+function slowcode(steps, speed) {
 	stepLim = 1000;
 	ready = 1;
 	$('#slow-button').toggle();
@@ -114,8 +117,11 @@ function slowcode(steps) {
 						$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
 						$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 						
-						if (response['isDone']) {
+						if (response['done']) {
 							stepLim = -1;
+							$('#run-button').attr('disabled', true);
+							$('#step-button').attr('disabled', true);
+							$('#slow-button').attr('disabled', true);
 						} else {
 							stepLim -= steps;
 							ready = 1;
@@ -125,7 +131,7 @@ function slowcode(steps) {
 				});
 			};
 		}
-	}, 5);
+	}, speed);
 };
 
 function stopslow() {
@@ -134,3 +140,17 @@ function stopslow() {
 	clearInterval(slow_repeat);
 	clearTimeout(slow_break);
 };
+
+// $(document).ready(function() {
+    // $( "#speed-slider" ).slider({
+		// value:100,
+		// min: 5,
+		// max: 1000,
+		// step: 25,
+		// slide: function( event, ui ) {
+			// $( "#speed-input" ).val( ui.value );
+		// }
+	// });
+	// $( "#speed-input" ).val( $( "#speed-slider" ).slider( "value" ) );
+  // }
+// );
