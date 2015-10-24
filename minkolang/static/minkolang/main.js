@@ -9,6 +9,9 @@ function sendcode() {
 	$('#stop-button').hide();
 	$('#run-button').attr('disabled', false);
 	$('#step-button').attr('disabled', false);
+	$('#slow-button').attr('disabled', false);
+	
+	if (slow_repeat) { stopslow(); };
 	
 	$.ajax({
 		url: window.location,
@@ -71,25 +74,50 @@ function stepcode(steps) {
 	});
 };
 
+var slow_repeat;
+var stepLim;
+var ready;
+
 function slowcode(steps) {
-	var stepLim = 100;
+	stepLim = 100;
+	ready = 1;
+	$('#slow-button').toggle();
+	$('#stopslow-button').toggle();
 	
-	while (stepLim > 0) {
-		$.ajax({
-			url: window.location,
-			type: 'get',
-			data: {'action':'step', 'steps':Math.min(steps, stepLim), 'uid':$('#uid').text()},
-			dataType: 'json',
-			success: function(response) {
-				$('.cell_highlight').removeClass('cell_highlight');
-				$('#output-text').text(response['output']);
-				$('#stack-text').text(response['stack']);
-				$('#loops-text').html(response['loops']);
-				$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
-				
-				stepLim -= steps;
-			},
-			failure: function(response) { console.log(response); stepLim = -1; }
-		});
-	}
+	slow_repeat = setInterval( function() {
+		if (stepLim <= 0) {
+			stopslow();
+		} else {
+			if (ready) {
+				ready = 0;
+				$.ajax({
+					url: window.location,
+					type: 'get',
+					data: {'action':'step', 'steps':Math.min(steps, stepLim), 'uid':$('#uid').text()},
+					dataType: 'json',
+					success: function(response) {
+						$('.cell_highlight').removeClass('cell_highlight');
+						$('#output-text').text(response['output']);
+						$('#stack-text').text(response['stack']);
+						$('#loops-text').html(response['loops']);
+						$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
+						
+						if (response['isDone']) {
+							stepLim = -1;
+						} else {
+							stepLim -= steps;
+							ready = 1;
+						}
+					},
+					failure: function(response) { console.log(response); stepLim = -1; }
+				});
+			}
+		}
+	}, 50);
+};
+
+function stopslow() {
+	$('#slow-button').toggle();
+	$('#stopslow-button').toggle();
+	clearInterval(slow_repeat);
 };
