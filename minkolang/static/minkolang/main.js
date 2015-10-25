@@ -1,3 +1,8 @@
+function encodeURL(S) {
+	var U = encodeURIComponent(S);
+	return U.replace('(','%28').replace(')','%29').replace('.','%2E');
+}
+
 function sendcode() {
 	var code = $('#code-input').val();
 	var input = $('#input-text').val();
@@ -23,8 +28,8 @@ function sendcode() {
 		success: function(response) {
 			$('#code-table').children().remove();
 			$('#code-table').append(response);
-			var permalinkHREF = "?code=" + encodeURIComponent(code)
-			if (input) { permalinkHREF += "&input=" + encodeURIComponent(input) }
+			var permalinkHREF = "?code=" + encodeURL(code)
+			if (input) { permalinkHREF += "&input=" + encodeURL(input) }
 			$('#permalink').attr('href', permalinkHREF);
 			
 			stepcode(0, state="init");

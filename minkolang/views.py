@@ -33,6 +33,10 @@ manager = None
 class MyManager(BaseManager): pass
 MyManager.register('Program', Program)
 
+def encodeURL(S):
+    U = urllib.parse.quote_plus(S)
+    return U.replace('(','%28').replace(')','%29').replace('.','%2E')
+
 # Create your views here.
 def main_view(request, **kwargs):
     global manager
@@ -64,10 +68,10 @@ def main_view(request, **kwargs):
         if 'code' in request.GET:
             code = request.GET['code']
             context['code'] = code
-            context['permalink'] = "?code="+urllib.parse.quote_plus(code)
+            context['permalink'] = "?code="+encodeURL(code)
             if "input" in request.GET and request.GET["input"]:
                 context['input'] = request.GET["input"]
-                context['permalink'] += "&input="+urllib.parse.quote_plus(request.GET["input"])
+                context['permalink'] += "&input="+encodeURL(request.GET["input"])
 
         if request.is_ajax():
             if request.GET["action"] == "start":
