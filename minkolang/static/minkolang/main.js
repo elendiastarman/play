@@ -10,6 +10,8 @@ function sendcode() {
 	$('#run-button').attr('disabled', false);
 	$('#step-button').attr('disabled', false);
 	$('#slow-button').attr('disabled', false);
+	$('#slow-button').show();
+	$('#stopslow-button').hide();
 	
 	if (slow_repeat) { stopslow(); };
 	

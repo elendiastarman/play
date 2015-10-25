@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
@@ -665,6 +666,17 @@ class Program:
     def getVarsJson(self):
         V = vars(self).copy()
         V.pop('outfile')
+
+        #make complex numbers serializable by stringifying them
+        V['stack'] = V['stack'][:]
+        for i,v in enumerate(V['stack']):
+            if type(v) == complex: V['stack'][i] = str(v)
+
+        V['loops'] = deepcopy(V['loops'])
+        for L in V['loops']:
+            for i,v in enumerate(L[3]):
+                if type(v) == complex: L[3][i] = str(v)
+                
         return json.dumps(V)
 
     def stop(self): self.stopNow = True
