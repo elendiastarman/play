@@ -35,10 +35,12 @@
 		</p>
 		<div id="speed-slider"></div>
 		
-		<p style="display:inline;"> || </p>
-		<p id="status-text" style="display:inline; font-weight:bold;">Status: awaiting code</p>
+		<!-- <p style="display:inline;"> || </p> -->
 		
-		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 1000 steps or 1 minute, whichever is shorter. <a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a></p>
+		
+		<p><a id="permalink" href="{% url 'main' %}{{permalink}}">Permalink.</a> || <span id="byte-counter"></span> bytes, <span id="char-counter"></span> chars || <span id="status-text" style="display:inline; font-weight:bold;">Status: awaiting code</span></p>
+		
+		<p id="note-text">Note: <kbd>Run</kbd> is limited to 1 minute at a time and <code>Slow</code> is limited to a total of 1000 steps or 1 minute, whichever is shorter.</p>
 		
 		<p id="curr-inst">Current instruction:</p>
 		
@@ -102,6 +104,7 @@
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script src="{% static 'minkolang/utf8.js' %}"></script>
 		<script src="{% static 'minkolang/main.js' %}"></script>
 	</body>
 </html>
