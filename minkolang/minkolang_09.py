@@ -1,11 +1,12 @@
 import os
 import sys
 import json
+import math
 from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.1.py", "PPCG_ISawThatComing.mkl", "-3"]
+    sys.argv = ["minkolang_0.1.py", "PPCG_disapprovalface.mkl", ""]
     debug = 1
     numSteps = 100
 
@@ -16,7 +17,8 @@ if "idlelib" in sys.modules:
 ##print(os.curdir, os.getcwd())
 
 if len(sys.argv) > 1 and sys.argv[1][-4:] == ".mkl":
-    file = open(sys.argv[1]).read()
+    file = open(sys.argv[1], encoding="utf-8").read()
+    if '\ufeff' in file: file = file[1:]
 else:
     file = None
 
@@ -32,6 +34,7 @@ class Program:
             
         if debug: print("Code:",self.code)
         self.codeput = {}
+        self.codeChanged = 0
         
         self.inputStr = inputStr
         if debug: print("Input:",self.inputStr)
@@ -47,7 +50,7 @@ class Program:
         self.strLiteral = ""
         self.strMode = 0
         
-        self.numLiteral = 0
+        self.numLiteral = ""
         self.numMode = 0
         
         self.fallable = 1
@@ -70,7 +73,7 @@ class Program:
         self.currChar = ""
         self.output = ""
         if outfile == None:
-            self.outfile = open(os.devnull, 'w')
+            self.outfile = None #open(os.devnull, 'w')
         else:
             self.outfile = outfile
 
@@ -79,6 +82,7 @@ class Program:
 
     def run(self, steps=-1): #steps = -1 for run-until-halt
         self.stopNow = False
+        self.codeChanged = 0
         
         while steps != 0 and self.stopNow == False and not self.isDone:
             steps -= 1
@@ -88,7 +92,7 @@ class Program:
             stack = self.loops[-1][3] if self.loops else self.stack
             self.oldToggle = self.toggleFlag
 
-            if self.currChar == '"':
+            if self.currChar == '"' and not self.numMode:
                 self.fallable = not self.fallable
                 self.strMode = not self.strMode
 
@@ -96,14 +100,31 @@ class Program:
 ##                    self.push(self.strLiteral)
                     stack.extend(list(map(ord,self.strLiteral[::-1])))
                     self.strLiteral = ""
-            if self.currChar == "'":
+            if self.currChar == "'" and not self.strMode:
                 self.fallable = not self.fallable
-                self.numMode = not self.numMode
+                if not self.numMode:
+                    self.numMode = stack.pop() if self.toggleFlag and stack else 10
+                    if self.numMode == 0: self.numMode = 16
+                else:
+                    self.numMode = 0
 
                 if not self.numMode:
-##                    self.push(self.numLiteral)
-                    stack.append(self.numLiteral)
-                    self.numLiteral = 0
+                    result = 0
+                    print(self.numLiteral)
+##                    if
+                    try:
+                        result = int(self.numLiteral)
+                    except ValueError:
+                        try:
+                            result = float(self.numLiteral)
+                        except ValueError:
+                            try:
+                                result = complex(self.numLiteral)
+                            except ValueError:
+                                pass
+##                    result = int(
+                    stack.append(result)
+                    self.numLiteral = ""
 
             if self.currChar not in "'\"":
                 if not self.strMode and not self.numMode:
@@ -156,6 +177,8 @@ class Program:
 
                     elif self.currChar in "0123456789":
                         stack.append(int(self.currChar))
+                    elif self.currChar == "l":
+                        stack.append(10)
 
                     elif self.currChar in "+-*:;%=`": #operators and comparators
                         if self.toggleFlag and self.currChar in "+*":
@@ -180,21 +203,26 @@ class Program:
                             elif self.currChar == ":":
                                 result = a//b if not self.toggleFlag else a/b
                             elif self.currChar == ";":
-                                result = a**b if not self.toggleFlag else b**a
+                                result = a**b if not self.toggleFlag else math.log(b,a)
                             elif self.currChar == "%":
-                                result = a%b if not self.toggleFlag else b%a
+                                result = a%b if not self.toggleFlag else [a//b,a%b]
                             elif self.currChar == "=":
-                                result = int(a==b if not self.toggleFlag else a!=b)
+                                if not self.toggleFlag:
+                                    result = int(a==b)
+                                else:
+                                    n,b = b,a
+                                    a = stack.pop() if stack else 0
+                                    result = int(a%n == b)
                             elif self.currChar == "`":
                                 result = int(a>b if not self.toggleFlag else b>a)
 
-                        stack.append(result)
+                        if type(result) != list:
+                            stack.append(result)
+                        else:
+                            stack.extend(result)
 
                     elif self.currChar in "~,": #negation and not
-                        if len(stack) < 1:
-                            stack = [0]*(1-len(stack)) + stack
-
-                        b = stack.pop()
+                        b = stack.pop() if stack else 0
 
                         if self.currChar == "~":
                             stack.append(-b if not self.toggleFlag else abs(b))
@@ -255,14 +283,14 @@ class Program:
                         tos = stack.pop() if stack else 0
                         
                         if self.currChar == "N":
-                            print(tos, end=' ', flush=True, file=self.outfile)
+                            if self.outfile: print(tos, end=' ', flush=True, file=self.outfile)
                             self.output += str(tos) + ' '
                         elif self.currChar == "O":
                             try:
                                 c = chr(int(tos))
                             except ValueError:
                                 c = ""
-                            print(c, end='', flush=True, file=self.outfile)
+                            if self.outfile: print(c, end='', flush=True, file=self.outfile)
                             self.output += c
 
                     elif self.currChar in "dD": #duplication
@@ -320,9 +348,6 @@ class Program:
                             else:
                                 tos2 = stack.pop() if stack else 0
                                 stack.extend(stack[tos2:tos])
-##                        elif self.currChar == "G" and stack:
-##                            toput = stack.pop() if stack else 0
-##                            stack.insert(tos, toput)
 
                     elif self.currChar in "xX": #dump
                         if self.currChar == "x":
@@ -414,6 +439,7 @@ class Program:
 
                         if b[0][0] <= x < b[0][1] and b[1][0] <= y < b[1][1] and b[2][0] <= z < b[2][1]:
                             self.code[z][y][x] = n
+                            self.codeChanged = 1
                         else:
                             self.codeput[str((x,y,z))] = n
 
@@ -588,10 +614,7 @@ class Program:
                     if self.strMode:
                         self.strLiteral += self.currChar
                     elif self.numMode:
-                        if self.currChar == "-":
-                            self.numLiteral *= -1
-                        elif self.currChar.isdigit():
-                            self.numLiteral = 10*self.numLiteral + int(self.currChar)
+                        self.numLiteral += self.currChar
 
             if self.toggleFlag and self.currChar != "$" and not self.stuckFlag: self.toggleFlag = 0
 
@@ -640,26 +663,26 @@ class Program:
         if direction == "jump":
             self.velocity = [bool(v)*int(copysign(1,v)) for v in self.velocity] #resets after a jump
 
-    def push(self, L):
-        if type(L) == list:
-            self.stack.extend(L)
-        elif type(L) == str:
-            self.stack.extend(map(ord,L[::-1]))
-        elif type(L) == int:
-            self.stack.append(L)
-
+##    def push(self, L):
+##        if type(L) == list:
+##            self.stack.extend(L)
+##        elif type(L) == str:
+##            self.stack.extend(map(ord,L[::-1]))
+##        elif type(L) == int:
+##            self.stack.append(L)
+##
     def getCode(self): return self.code
-    def getArray(self): return self.array
-    def getLoops(self): return self.loops
-    def getStack(self): return self.stack
+##    def getArray(self): return self.array
+##    def getLoops(self): return self.loops
+##    def getStack(self): return self.stack
     def getModes(self): return [self.strMode,self.numMode]
-    def getIsDone(self): return self.isDone
-    def getOutput(self): return self.output
-    def getCurrChar(self): return self.currChar
-    def getPosition(self): return self.position
-    def getVelocity(self): return self.velocity
+##    def getIsDone(self): return self.isDone
+##    def getOutput(self): return self.output
+##    def getCurrChar(self): return self.currChar
+##    def getPosition(self): return self.position
+##    def getVelocity(self): return self.velocity
     def getOldToggle(self): return self.oldToggle
-    def getOldPosition(self): return self.oldposition
+##    def getOldPosition(self): return self.oldposition
 
     def getVars(self):
         return vars(self)
