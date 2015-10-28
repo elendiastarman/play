@@ -6,7 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import Context, RequestContext
 import json
 
-from minkolang.minkolang_09 import Program
+from minkolang.minkolang_0_10 import Program
+from minkolang.minkolang_09 import Program as Program_old
 
 import os
 import sys
@@ -14,9 +15,6 @@ import urllib
 import traceback
 import multiprocessing
 from multiprocessing.managers import BaseManager
-
-global stdnull
-stdnull = open(os.devnull, 'w')
 
 import random
 import string
@@ -32,6 +30,7 @@ manager = None
 
 class MyManager(BaseManager): pass
 MyManager.register('Program', Program)
+MyManager.register('Program_old', Program_old)
 
 def encodeURL(S):
     U = urllib.parse.quote_plus(S)
@@ -134,7 +133,98 @@ def main_view(request, **kwargs):
 
     return render(request, 'minkolang/main.html', context_instance=context)
 
-def interpreter_view(request, **kwargs):
-    context = RequestContext(request)
+def old_main_view(request, **kwargs):
+    global manager
+    global prgmT
+    global proxies
 
-    return render(request, 'minkolang/interpreter.html', context_instance=context)
+    if not manager:
+        manager = MyManager()
+        manager.start()
+    
+    context = RequestContext(request)
+    context['code'] = '"Hello world!"(O).'
+    context['code_lines'] = []
+    context['permalink'] = '?code=%22Hello+world%21%22%28O%29.'
+
+    if request.method == 'GET':
+
+        if not request.is_ajax():
+            uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
+            context['uid'] = uid
+        else:
+            uid = request.GET['uid']
+
+        print("UID:",uid)
+        if uid in prgmT and prgmT[uid].is_alive():
+            prgmT[uid].terminate()
+            proxies[uid].stop()
+        
+        if 'code' in request.GET:
+            code = request.GET['code']
+            context['code'] = code
+            context['permalink'] = "old?code="+encodeURL(code)
+            if "input" in request.GET and request.GET["input"]:
+                context['input'] = request.GET["input"]
+                context['permalink'] += "&input="+encodeURL(request.GET["input"])
+
+        if request.is_ajax():
+            if request.GET["action"] == "start":
+
+                try:
+                    proxies[uid] = manager.Program_old(
+                        code,
+                        inputStr=request.GET["input"],
+                        debugFlag=0,
+                        outfile=None)
+                    context['code_array'] = proxies[uid].getCode()
+                    
+                    return render(request, 'minkolang/codeTable.html', context_instance=context)
+                except Exception as e:
+                    traceback.print_exc(file=sys.stderr)
+                    raise e
+                
+            elif request.GET["action"] == "step":
+
+                try:
+                    proxy_prgm = proxies[uid]
+                    
+                    steps = int(request.GET["steps"])
+
+                    prgmT[uid] = multiprocessing.Process(
+                        target = proxy_prgm.run,
+                        args = (steps,),
+                        name="program run")
+                    
+                    prgmT[uid].start()
+                    prgmT[uid].join(60) #time limit of 1 minute
+
+                    if prgmT[uid].is_alive():
+                        prgmT[uid].terminate()
+                        proxy_prgm.stop()
+
+                    V = json.loads(proxy_prgm.getVarsJson())
+
+##                    print(V)
+                    
+                    oldpos = V['oldposition']
+                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
+                    data['stack'] = V['stack']
+                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
+                    
+                    data['inputstr'] = V['inputStr']
+                    data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
+
+                    data['currchar'] = V['oldToggle']*'$' + V['currChar']
+                    
+
+                    data['done'] = V['isDone']
+                    
+                except Exception as e:
+                    traceback.print_exc(file=sys.stderr)
+                    raise e
+
+                return HttpResponse(json.dumps(data), content_type="application/json")
+
+    return render(request, 'minkolang/main_old.html', context_instance=context)

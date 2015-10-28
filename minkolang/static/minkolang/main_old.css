@@ -1,0 +1,41 @@
+table {
+	border-collapse: collapse;
+	table-layout: fixed;
+	font-family: monospace;
+}
+table, th, td {
+	border: 1px solid gray;
+}
+td {
+	width: 1em;
+	height: 1em;
+	text-align: center;
+}
+
+code, kbd {
+	background-color: #EEE;
+	padding: 0 5px;
+}
+
+.cell_highlight {
+	background-color: #FAA;
+}
+
+#instructions ul {
+	margin-top: -20px;
+}
+
+#speed-slider {
+	display: inline-block;
+	vertical-align: bottom;
+}
+.ui-slider-horizontal {
+    margin: 5px 0px;
+    height: 8px;
+    width: 200px;
+}
+.ui-slider .ui-slider-handle {
+    height: 15px;
+    width: 5px;
+    padding-left: 5px;
+}

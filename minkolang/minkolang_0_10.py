@@ -246,52 +246,73 @@ class Program:
 
                     elif self.currChar in "no": #input
                         if self.currChar == "n":
-                            beg = 0
-                            while beg < len(self.inputStr) and not self.inputStr[beg].isdecimal():
-                                if debug: print(beg, self.inputStr[beg])
-                                beg += 1
+                            times = 1 if not self.toggleFlag else -1
 
-                            if beg >= len(self.inputStr):
-                                stack.append(-1)
-                                self.inputStr = ""
-                            else:
-                                end = beg+1
-                                num = 0.0
-                                
-                                while end <= len(self.inputStr):
-                                    try:
-                                        num = float(self.inputStr[beg:end])
-                                        end += 1
-                                    except ValueError:
-                                        break
+                            while times and self.inputStr:
+                                beg = 0
+                                while beg < len(self.inputStr) and not self.inputStr[beg].isdecimal():
+                                    if debug: print(beg, self.inputStr[beg])
+                                    beg += 1
 
-                                if num.is_integer(): num = int(num)
+                                if beg >= len(self.inputStr):
+                                    stack.append(-1)
+                                    self.inputStr = ""
+                                else:
+                                    end = beg+1
+                                    num = 0.0
+                                    
+                                    while end <= len(self.inputStr):
+                                        try:
+                                            num = float(self.inputStr[beg:end])
+                                            end += 1
+                                        except ValueError:
+                                            break
 
-                                if self.inputStr[beg-1] == "-": num *= -1
+                                    if num.is_integer(): num = int(num)
 
-                                stack.append(num)
-                                self.inputStr = self.inputStr[end-1:]
+                                    if self.inputStr[beg-1] == "-": num *= -1
+
+                                    stack.append(num)
+                                    self.inputStr = self.inputStr[end-1:]
+
+                                    times -= 1
                                 
                         elif self.currChar == "o":
                             if not len(self.inputStr):
                                 stack.append(0)
                             else:
-                                stack.append(ord(self.inputStr[0]))
-                                self.inputStr = self.inputStr[1:]
+                                if not self.toggleFlag:
+                                    stack.append(ord(self.inputStr[0]))
+                                    self.inputStr = self.inputStr[1:]
+                                else:
+                                    stack.extend(map(ord,self.inputStr))
+                                    self.inputStr = ""
                             
                     elif self.currChar in "NO": #output
-                        tos = stack.pop() if stack else 0
                         
                         if self.currChar == "N":
-                            if self.outfile: print(tos, end=' ', flush=True, file=self.outfile)
-                            self.output += str(tos) + ' '
+                            if not self.toggleFlag:
+                                out = [stack.pop() if stack else 0]
+                            else:
+                                out = stack[:]; stack.clear()
+
+                            for elem in out:
+                                if self.outfile: print(elem, end=' ', flush=True, file=self.outfile)
+                                self.output += str(elem) + ' '
+                                
                         elif self.currChar == "O":
-                            try:
-                                c = chr(int(tos))
-                            except ValueError:
-                                c = ""
-                            if self.outfile: print(c, end='', flush=True, file=self.outfile)
-                            self.output += c
+                            if not self.toggleFlag:
+                                out = [stack.pop() if stack else 0]
+                            else:
+                                out = stack[:]; stack.clear()
+
+                            for elem in out:
+                                try:
+                                    c = chr(int(elem))
+                                except ValueError:
+                                    c = ""
+                                if self.outfile: print(c, end='', flush=True, file=self.outfile)
+                                self.output += c
 
                     elif self.currChar in "dD": #duplication
                         if not self.toggleFlag:
@@ -350,11 +371,12 @@ class Program:
                                 stack.extend(stack[tos2:tos])
 
                     elif self.currChar in "xX": #dump
-                        if self.currChar == "x":
-                            stack.pop() if not self.toggleFlag else stack.pop(0)
-                        if self.currChar == "X":
-                            tos = stack.pop() if stack else 0
-                            for i in range(min([tos,len(stack)])): stack.pop() if not self.toggleFlag else stack.pop(0)
+                        if stack:
+                            if self.currChar == "x":
+                                stack.pop() if not self.toggleFlag else stack.pop(0)
+                            if self.currChar == "X":
+                                tos = stack.pop() if stack else 0
+                                for i in range(min([tos,len(stack)])): stack.pop() if not self.toggleFlag else stack.pop(0)
 
                     elif self.currChar in "i": #loop counter
                         if self.toggleFlag: #for loop iters
@@ -521,13 +543,7 @@ class Program:
                             if self.loops[-1][0] != "while":
                                 raise ValueError("Expected a while loop. Got a %s loop."%self.loops[-1][0])
 
-                            finishLoop = 0
-
-                            if self.toggleFlag:
-                                tos = stack.pop() if stack else 0
-                                if not tos: finishLoop = 1
-                            else:
-                                if len(self.loops[-1][3]) == 0: finishLoop = 1
+                            finishLoop = not stack.pop() if stack else 1
 
                             if finishLoop:
                                 lastLoop = self.loops.pop()

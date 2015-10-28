@@ -5,16 +5,16 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
-		<title>Minkolang</title>
+		<title>Minkolang 0.9</title>
 		
 		{% load staticfiles %}
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<link rel="stylesheet" type="text/css" href="{% static 'minkolang/main.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'minkolang/main_old.css' %}" />
 	</head>
 	
 	<body>
 	
-		<h1>Official Minkolang Online Interpreter - version 0.10</h1>
+		<h1>Official Minkolang Online Interpreter - version 0.9 (depreciated)</h1>
 		
 		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
 		<br/>
@@ -105,6 +105,6 @@
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 		<script src="{% static 'minkolang/utf8.js' %}"></script>
-		<script src="{% static 'minkolang/main.js' %}"></script>
+		<script src="{% static 'minkolang/main_old.js' %}"></script>
 	</body>
 </html>
