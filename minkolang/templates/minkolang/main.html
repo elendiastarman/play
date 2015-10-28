@@ -71,33 +71,7 @@
 		<label for="loops-text">Loops:</label>
 		<p id="loops-text" style="border: 1px solid gray; min-height: 1em;"></p>
 		
-		<h2 id="instructions">Instructions:</h2>
-		<p>
-			<strong>Movement and flow control</strong>
-			<ul>
-				<li id="v"><code>v</code> Redirect program counter down.</li>
-				<li id="<"><code><</code> Redirect program counter left.</li>
-				<li id=">"><code>></code> Redirect program counter right.</li>
-				<li id="^"><code>^</code> Redirect program counter up.</li>
-			</ul>
-			
-			<strong>Literals</strong>
-			<ul>
-				<li><code>"..."</code> String literal. Minkolang reverses this before pushing each character onto the stack.</li>
-				<li id="<"><code><</code> Redirect program counter left.</li>
-				<li id=">"><code>></code> Redirect program counter right.</li>
-				<li id="^"><code>^</code> Redirect program counter up.</li>
-			</ul>
-			
-			<strong>Special</strong>
-			<ul>
-				<li id="$"><code>$</code> Toggle functionality of some functions.</li>
-				<li id="$$"><code>$$</code> Toggle permanently until another <code>$</code> is encountered.</li>
-				<!-- <li id="<"><code><</code> Redirect program counter left.</li>
-				<li id=">"><code>></code> Redirect program counter right.</li>
-				<li id="^"><code>^</code> Redirect program counter up.</li> -->
-			</ul>
-		</p>
+		{% include "minkolang/instructions.html" %}
 		
 		<p id="uid" style="display:none;">{{uid}}</p>
 

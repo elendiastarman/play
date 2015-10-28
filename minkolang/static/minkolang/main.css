@@ -21,9 +21,9 @@ code, kbd {
 	background-color: #FAA;
 }
 
-#instructions ul {
+/* #instructions ul {
 	margin-top: -20px;
-}
+} */
 
 #speed-slider {
 	display: inline-block;

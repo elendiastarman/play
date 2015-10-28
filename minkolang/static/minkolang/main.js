@@ -76,8 +76,39 @@ function sendcode() {
 	});
 };
 
+function updateStuff(response) {
+	$('.cell_highlight').removeClass('cell_highlight');
+	$('#output-text').html(response['output']);
+	$('#stack-text').text(response['stack']);
+	$('#loops-text').html(response['loops']);
+	$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
+	
+	$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
+	$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
+	
+	var cc = response['currchar'];
+	if (cc.length == 1) { cc = cc+" "; }
+	$('#instructions li').each( function(i,e) {
+		// console.log($(e).children()[0].innerHTML);
+		// console.log(
+		if ($($(e).children()[0]).text() == cc) {
+			// console.log(e);
+			$('#curr-inst').html("Current instruction: "+$(e).html());
+		}
+	});
+}
+
+function resetButtons() {
+	$('#run-button').attr('disabled', true);
+	$('#step-button').attr('disabled', true);
+	$('#slow-button').attr('disabled', true);
+	$('#slow-button').show();
+	$('#stopslow-button').hide();
+	$('#status-text').text("Status: done!");	
+}
+
 function stepcode(steps, state) {
-	// state = state || ""
+
 	if (steps == -1) {
 		$('#run-button').toggle();
 		$('#stop-button').toggle();
@@ -90,14 +121,7 @@ function stepcode(steps, state) {
 		data: {'action':'step', 'steps':steps, 'uid':$('#uid').text()},
 		dataType: 'json',
 		success: function(response) {
-			$('.cell_highlight').removeClass('cell_highlight');
-			$('#output-text').html(response['output']);
-			$('#stack-text').text(response['stack']);
-			$('#loops-text').html(response['loops']);
-			$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
-			
-			$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
-			$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
+			updateStuff(response);
 			
 			if (steps == -1) {
 				$('#run-button').toggle();
@@ -105,10 +129,7 @@ function stepcode(steps, state) {
 			}
 			
 			if (response['done']) {
-				$('#run-button').attr('disabled', true);
-				$('#step-button').attr('disabled', true);
-				$('#slow-button').attr('disabled', true);
-				$('#status-text').text("Status: done!");
+				resetButtons();
 			} else {
 				$('#status-text').text("Status: waiting...");
 			}
@@ -153,20 +174,11 @@ function slowcode(steps, speed) {
 					data: {'action':'step', 'steps':Math.min(steps, stepLim), 'uid':$('#uid').text()},
 					dataType: 'json',
 					success: function(response) {
-						$('.cell_highlight').removeClass('cell_highlight');
-						$('#output-text').text(response['output']);
-						$('#stack-text').text(response['stack']);
-						$('#loops-text').html(response['loops']);
-						$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
-						
-						$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
-						$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
+						updateStuff(response);
 						
 						if (response['done']) {
 							stepLim = -1;
-							$('#run-button').attr('disabled', true);
-							$('#step-button').attr('disabled', true);
-							$('#slow-button').attr('disabled', true);
+							resetButtons();
 						} else {
 							stepLim -= steps;
 							ready = 1;
@@ -180,8 +192,8 @@ function slowcode(steps, speed) {
 };
 
 function stopslow() {
-	$('#slow-button').toggle();
-	$('#stopslow-button').toggle();
+	$('#slow-button').show();
+	$('#stopslow-button').hide();
 	clearInterval(slow_repeat);
 	clearTimeout(slow_break);
 };
