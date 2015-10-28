@@ -87,15 +87,27 @@ function updateStuff(response) {
 	$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 	
 	var cc = response['currchar'];
+	if (cc == "$ ") {cc = "  ";}
+	
 	if (cc.length == 1) { cc = cc+" "; }
+	var found = 0;
+	
 	$('#instructions li').each( function(i,e) {
-		// console.log($(e).children()[0].innerHTML);
-		// console.log(
 		if ($($(e).children()[0]).text() == cc) {
-			// console.log(e);
 			$('#curr-inst').html("Current instruction: "+$(e).html());
+			found = 1;
 		}
 	});
+	
+	if (!found && cc[0] == "$") {
+		cc = cc[1]+" ";
+		$('#instructions li').each( function(i,e) {
+			if ($($(e).children()[0]).text() == cc) {
+				$('#curr-inst').html("Current instruction: "+$(e).html());
+				found = 1;
+			}
+		});
+	}
 }
 
 function resetButtons() {

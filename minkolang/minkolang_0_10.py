@@ -140,8 +140,11 @@ class Program:
                         if self.stuckFlag:
                             self.toggleFlag = 0
                             self.stuckFlag = 0
+                        elif self.toggleFlag:
+                            self.stuckFlag = 1
                         else:
                             self.toggleFlag = 1
+
                     elif self.currChar == "V":
                         if self.fallFlag:
                             self.fallable = 1
