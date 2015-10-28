@@ -1,0 +1,151 @@
+<h2>Instructions:</h2>
+<div id="instructions">
+	<strong>Movement</strong>
+	
+	<ul>
+		<li><code>   </code> &nbsp;(Empty space.) Lets the program counter move through time (fall to the next layer).</li>
+		<li><code># </code> &nbsp;Net; stops the program counter from moving through time (it's a no-op).</li>
+		
+		<li><code>v </code> &nbsp;Directs the program counter down.</li>
+		<li><code>&lt; </code> &nbsp;Directs the program counter left.</li>
+		<li><code>&gt; </code> &nbsp;Directs the program counter right.</li>
+		<li><code>^ </code> &nbsp;Directs the program counter up.</li>
+		
+		<li><code>/ </code> &nbsp;A mirror that acts like you would expect.</li>
+		<li><code>\ </code> &nbsp;A mirror that acts like you would expect.</li>
+		<li><code>_ </code> &nbsp;A mirror that acts like you would expect.</li>
+		<li><code>| </code> &nbsp;A mirror that acts like you would expect.</li>
+		
+		<li><code>! </code> &nbsp;Unconditional single-space trampoline.</li>
+		<li><code>? </code> &nbsp;Conditional single-space trampoline; pops <code>t</code> and jumps if <code>t</code> is truthy.</li>
+		<li><code>@ </code> &nbsp;Unconditional n-space trampoline; pops <code>n</code> and jumps that many spaces.</li>
+		<li><code>&amp; </code> &nbsp;Conditional n-space trampoline; pops <code>n</code>, <code>t</code> and jumps <code>n</code> spaces if <code>t</code> is truthy.</li>
+		
+		<li><code>V </code> &nbsp;Boost; enables the program counter to cross any number of spaces.
+		<li><code>$V</code> enables the boost permanently until it encounters another <code>V</code>.</li>
+		
+		<li><code>w </code> &nbsp;Space wormhole; pops <code>y</code>,<code>x</code> and jumps to <code>(x,y)</code> in the codebox.</li>
+		<li><code>W </code> &nbsp;Space-time wormhole; pops <code>t</code>,<code>y</code>,<code>x</code> and jumps to <code>(x,y,t)</code> in the codebox.</li>
+	</ul>
+
+	<strong>Control structures</strong>
+
+	<ul>
+		<li><code>. </code> &nbsp;Stop.</li>
+		
+		<li><code>b </code> &nbsp;Straight branch; pops <code>t</code> and continues forward if truthy, backwards otherwise.</li>
+		<li><code>$b</code> Reversed straight branch; pops <code>t</code> and continues forward if falsy, backwards otherwise.</li>
+		<li><code>B </code> &nbsp;T branch; pops <code>t</code> and turns right (clockwise) if truthy, left (counterclockwise) otherwise.</li>
+		<li><code>$B</code> Reversed T branch; pops <code>t</code> and turns right (clockwise) if falsy, left (counterclockwise) otherwise.</li>
+		
+		<li><code>( </code> &nbsp;Opens while loop; takes all of parent's stack.</li>
+		<li><code>$(</code> Opens while loop; pops <code>n</code> and takes the top <code>n</code> elements of parent's stack.</li>
+		<li><code>) </code> &nbsp;Closes while loop; pops <code>t</code> and jumps back to the opening <code>(</code> if truthy, continues forward otherwise, extending parent stack with current stack.</li>
+		
+		<li><code>[ </code> &nbsp;Opens for loop; pops <code>n</code> and repeats the body <code>n</code> times; takes all of parent's stack.</li>
+		<li><code>$[</code> Opens for loop; pops <code>n</code> and repeats the body <code>n</code> times; then also pops <code>k</code> and takes the top <code>k</code> elements of parent's stack.</li>
+		<li><code>] </code> &nbsp;Closes for loop and extends parent stack with current stack.</li>
+		
+		<li><code>{ </code> &nbsp;Starts a new recursion if not already in a recursion; jumps back to the initial <code>{</code> otherwise. Pops <code>n</code> when initialized and takes the top <code>n</code> elements of parent stack on every iteration.</li>
+		<li><code>${</code> Starts a new recursion no matter what. Pops <code>n</code> when initialized and takes the top <code>n</code> elements of parent stack on every iteration.</li>
+		<li><code>} </code> &nbsp;Returns; that is, closes current recursion level and extends parent stack with current stack.</li>
+		
+		<li><code>k </code> &nbsp;Break; breaks out of the current loop or recursion and extends parent stack with current stack.</li>
+	</ul>
+
+	<strong>Literals</strong>
+
+	<ul>
+	 <li><code>0...9,l</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10).</li>
+	 <li><code>"..."</code> String literal. Minkolang is smart enough to reverse this before pushing on the stack.</li>
+	 <li><code>'...'</code> Number literal. Does the work of multiplying by 10 and adding the next digit.</li>
+	</ul>
+
+	<strong>Math and comparisons</strong>
+
+	<ul>
+		<li><code>+ </code> &nbsp;Add; pops <code>b</code>,<code>a</code> and pushes <code>a+b</code>.</li>
+		<li><code>$+</code> Sum; clears the stack and pushes its sum.</li>
+		<li><code>- </code> &nbsp;Subtract; pops <code>b</code>,<code>a</code> and pushes <code>a-b</code>.</li>
+		<li><code>$-</code> Flip-then-subtract; pops <code>b</code>,<code>a</code> and pushes <code>b-a</code>.</li>
+		<li><code>* </code> &nbsp;Multiply; pops <code>b</code>,<code>a</code> and pushes <code>a*b</code>.</li>
+		<li><code>$*</code> Product; clears the stack and pushes the product of its elements.</li>
+		<li><code>: </code> &nbsp;Integer division; pops <code>b</code>,<code>a</code> and pushes <code>a//b</code>.</li>
+		<li><code>$:</code> Float; pops <code>b</code>,<code>a</code> and pushes <code>a/b</code>.</li>
+		
+		<li><code>; </code> &nbsp;Exponentiation; pops <code>b</code>,<code>a</code> and pushes <code>a**b</code>.</li>
+		<li><code>$;</code> Logarithm; pops <code>b</code>,<code>a</code> and pushes <code>log_a(b)</code>.</li>
+		<li><code>% </code> &nbsp;Modulo; pops <code>b</code>,<code>a</code> and pushes <code>a%b</code>.</li>
+		<li><code>$%</code> Divmod; pops <code>b</code>,<code>a</code> and pushes <code>a//b</code>, <code>a%b</code>.</li>
+		<li><code>~ </code> &nbsp;Negation; pops <code>a</code> and pushes <code>-a</code>.</li>
+		<li><code>$~</code> Absolute value; pops <code>a</code> and pushes <code>abs(a)</code>.</li>
+		
+		<li><code>= </code> &nbsp;Equality; pops <code>b</code>,<code>a</code> and pushes <code>a == b</code>.</li>
+		<li><code>$=</code> Equivalence (modulo); pops <code>n</code>,<code>b</code>,<code>a</code> and pushes <code>a == b (mod n)</code>.</li>
+		<li><code>` </code> &nbsp;Greater than; pops <code>b</code>,<code>a</code> and pushes <code>a > b</code>.</li>
+		<li><code>$`</code> Less than; pops <code>b</code>,<code>a</code> and pushes <code>a < b</code>.</li>
+		<li><code>, </code> &nbsp;Not; pops <code>a</code> and pushes <code>not(a)</code>.</li>
+		<li><code>$,</code> Boolean; pops <code>a</code> and pushes <code>bool(a)</code>.</li>
+	</ul>
+
+	<strong>Input and output</strong>
+
+	<ul>
+		<li><code>o </code> &nbsp;Takes character from input. If input is empty, pushes 0 onto the stack.</li>
+		<li><code>$o</code> Reads in all of input as characters. If input is empty, pushes 0 onto the stack.</li>
+		<li><code>O </code> &nbsp;Pops top of stack and outputs as character.</li>
+		<li><code>$O</code> Outputs all of stack as characters.</li>
+	 
+		<li><code>n </code> &nbsp;Takes number (int) from input. Dumps characters from input until a valid input is found. If not, pushes -1 onto the stack.</li>
+		<li><code>$n</code> Takes number (int) from input. Dumps characters from input until a valid input is found. If not, pushes -1 onto the stack.</li>
+		<li><code>N </code> &nbsp;Pops top of stack and outputs as number (int, float, complex).</li>
+		<li><code>$N</code> Pops top of stack and outputs as number (int, float, complex).</li>
+	</ul>
+
+	<strong>Stack manipulation</strong>
+
+	<ul>
+		<li><code>d </code> &nbsp;Duplicates top element of stack.</li>
+		<li><code>$d</code> Duplicates whole stack.</li>
+		<li><code>D </code> &nbsp;Multi-duplicate; pops <code>n</code> and duplicates the top of stack <code>n</code> times.</li>
+		<li><code>$D</code> Multi-duplicate; pops <code>n</code> and duplicates whole stack <code>n</code> times.</li>
+		<li><code>g </code> &nbsp;Stack get; pops <code>n</code> and gets the stack's <code>n</code>th element and puts it on top of stack.</li>
+		<li><code>G </code> &nbsp;Stack insert; pops <code>n</code>,<code>x</code> and inserts <code>x</code> at the <code>n</code>-th position (zero-indexed).</li>
+		<li><code>i </code> &nbsp;Gets loop's counter (0-based) and pushes it onto the stack.</li>
+		<li><code>$i</code> (For loops only.) Gets for loop's max number of iterations and pushes it onto the stack.</li>
+		<li><code>I </code> &nbsp;Pushes the stack's length onto the stack.</li>
+		<li><code>$I</code> Pushes the input's length onto the stack.</li>
+		<li><code>r </code> &nbsp;Reverses stack.</li>
+		<li><code>$r</code> Swaps top two elements of stack.</li>
+		<li><code>R </code> &nbsp;Rotates stack; pops <code>n</code> and rotates clockwise <code>n</code> times (may be negative).</li>
+		<li><code>s </code> &nbsp;Sorts the stack.
+		<li><code>$s</code> Sort some; pops <code>n</code> and sorts the top <code>n</code> elements of the stack.</li>
+		<li><code>S </code> &nbsp;Duplicate removal; <code>"Hello world!"S(O).</code> will give you <code>Hel wrd!</code>.
+		<li><code>$S</code> Partial duplicate removal; pops <code>n</code> and removes duplicates from the top <code>n</code> elements of the stack.</li>
+		<li><code>x </code> &nbsp;Dump; pops the top of stack and throws it away.</li>
+		<li><code>$x</code> Front dump; pops the bottom (or front) of stack and throws it away.</li>
+		<li><code>X </code> &nbsp;N-dump; pops <code>n</code> and throws away the top <code>n</code> elements of the stack.
+		<li><code>$X</code> Front N-dump; pops <code>n</code> and throws away the bottom (or front) <code>n</code> elements of the stack.
+	</ul>
+
+	<strong>Memory and reflection (self-modification)</strong>
+
+	<ul>
+	 <li><code>p </code> &nbsp;Puts to codebox; pops <code>k</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y)</code> with <code>k</code>.</li>
+	 <li><code>P </code> &nbsp;Multi-level puts to codebox; pops <code>k</code>,<code>t</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y,t)</code> with <code>k</code>.</li>
+	 <li><code>q </code> &nbsp;Get from codebox; pops <code>y</code>,<code>x</code> and pushes <code>Code(x,y)</code> on stack.</li>
+	 <li><code>Q </code> &nbsp;Multi-level get from codebox; pops <code>t</code>,<code>y</code>,<code>x</code> and pushes <code>Code(x,y,t)</code> on stack.</li>
+	 <li><code>a </code> &nbsp;Array get; pops <code>y</code>,<code>x</code> and pushes <code>Array[y][x]</code> on stack.</li>
+	 <li><code>A </code> &nbsp;Array put; pops <code>k</code>,<code>y</code>,<code>x</code> and writes <code>k</code> to <code>Array[y][x]</code>.</li>
+	</ul>
+
+	<strong>Special</strong>
+
+	<ul>
+	 <li><code>$ </code> &nbsp;Toggles the functionality of many functions. This "toggle flag" only remains active for one step.</li>
+	 <li><code>$$</code> Toggles functionality permanently until another <code>$</code> is encountered.</li>
+	 <li><code>$$$</code> Separates layers of a program.</li>
+	 <li><code>u </code> &nbsp;Debug (print) the current stack (Python interpreter only).</li>
+	 <li><code>U </code> &nbsp;Debug (print) the code and loops (Python interpreter only).</li>
+	</ul>
+</div>
