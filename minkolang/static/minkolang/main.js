@@ -83,7 +83,7 @@ function updateStuff(response) {
 	$('#loops-text').html(response['loops']);
 	$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 	
-	$('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
+	// $('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
 	$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 	
 	var cc = response['currchar'];
@@ -110,7 +110,11 @@ function updateStuff(response) {
 	}
 	
 	if (!found) {
-		$('#curr-inst').html("Current instruction: "+cc);
+		if (cc.length > 2) {
+			$('#curr-inst').html("Current instruction: "+cc);
+		} else {
+			$('#curr-inst').html("Current instruction: <code>"+cc+"</code>");
+		}
 	}
 }
 
