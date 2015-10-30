@@ -76,7 +76,7 @@ def main_view(request, **kwargs):
             if request.GET["action"] == "start":
 
                 try:
-                    proxies[uid] = manager.Program_old(
+                    proxies[uid] = manager.Program(
                         code,
                         inputStr=request.GET["input"],
                         debugFlag=0,
@@ -192,7 +192,7 @@ def old_main_view(request, **kwargs):
             if request.GET["action"] == "start":
 
                 try:
-                    proxies[uid] = manager.Program(
+                    proxies[uid] = manager.Program_old(
                         code,
                         inputStr=request.GET["input"],
                         debugFlag=0,

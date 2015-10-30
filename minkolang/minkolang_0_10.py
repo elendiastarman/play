@@ -97,9 +97,9 @@ class Program:
                 self.strMode = not self.strMode
 
                 if not self.strMode:
-##                    self.push(self.strLiteral)
                     stack.extend(list(map(ord,self.strLiteral[::-1])))
                     self.strLiteral = ""
+                    
             if self.currChar == "'" and not self.strMode:
                 self.fallable = not self.fallable
                 if not self.numMode:
@@ -110,8 +110,8 @@ class Program:
 
                 if not self.numMode:
                     result = 0
-                    print(self.numLiteral)
-##                    if
+                    if debug: print(self.numLiteral)
+
                     try:
                         result = int(self.numLiteral)
                     except ValueError:
@@ -122,7 +122,7 @@ class Program:
                                 result = complex(self.numLiteral)
                             except ValueError:
                                 pass
-##                    result = int(
+
                     stack.append(result)
                     self.numLiteral = ""
 
@@ -252,33 +252,75 @@ class Program:
                             times = 1 if not self.toggleFlag else -1
 
                             while times and self.inputStr:
-                                beg = 0
-                                while beg < len(self.inputStr) and not self.inputStr[beg].isdecimal():
-                                    if debug: print(beg, self.inputStr[beg])
-                                    beg += 1
+                                found = 0
+                                num = 0
 
-                                if beg >= len(self.inputStr):
-                                    stack.append(-1)
-                                    self.inputStr = ""
-                                else:
-                                    end = beg+1
-                                    num = 0.0
-                                    
-                                    while end <= len(self.inputStr):
+                                for beg in range(0,len(self.inputStr)):
+                                    for end in range(len(self.inputStr)+1,beg,-1):
+                                        part = self.inputStr[beg:end]
+
                                         try:
-                                            num = float(self.inputStr[beg:end])
-                                            end += 1
+                                            num = int(part)
                                         except ValueError:
-                                            break
+                                            try:
+                                                num = float(part)
+                                            except ValueError:
+                                                try:
+                                                    num = complex(part)
+                                                except ValueError:
+                                                    continue
+                                                else:
+                                                    found = 1
+                                            else:
+                                                found = 1
+                                        else:
+                                            found = 1
 
-                                    if num.is_integer(): num = int(num)
+                                        if found: break
 
-                                    if self.inputStr[beg-1] == "-": num *= -1
+                                    if found: break
 
+                                if found:
                                     stack.append(num)
-                                    self.inputStr = self.inputStr[end-1:]
+                                    self.inputStr = self.inputStr[end:]
+                                else:
+                                    stack.append(0)
+                                    self.inputStr = ""
+                                    break
 
-                                    times -= 1
+
+                                times -= 1
+                                
+##                            times = 1 if not self.toggleFlag else -1
+##
+##                            while times and self.inputStr:
+##                                beg = 0
+##                                while beg < len(self.inputStr) and not self.inputStr[beg].isdecimal():
+##                                    if debug: print(beg, self.inputStr[beg])
+##                                    beg += 1
+##
+##                                if beg >= len(self.inputStr):
+##                                    stack.append(-1)
+##                                    self.inputStr = ""
+##                                else:
+##                                    end = beg+1
+##                                    num = 0.0
+##                                    
+##                                    while end <= len(self.inputStr):
+##                                        try:
+##                                            num = float(self.inputStr[beg:end])
+##                                            end += 1
+##                                        except ValueError:
+##                                            break
+##
+##                                    if num.is_integer(): num = int(num)
+##
+##                                    if self.inputStr[beg-1] == "-": num *= -1
+##
+##                                    stack.append(num)
+##                                    self.inputStr = self.inputStr[end-1:]
+##
+##                                    times -= 1
                                 
                         elif self.currChar == "o":
                             if not len(self.inputStr):
