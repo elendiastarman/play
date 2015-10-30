@@ -339,7 +339,7 @@ class Program:
                             if not self.toggleFlag:
                                 out = [stack.pop() if stack else 0]
                             else:
-                                out = stack[:]; stack.clear()
+                                out = stack[::-1]; stack.clear()
 
                             for elem in out:
                                 if self.outfile: print(elem, end=' ', flush=True, file=self.outfile)
@@ -349,7 +349,7 @@ class Program:
                             if not self.toggleFlag:
                                 out = [stack.pop() if stack else 0]
                             else:
-                                out = stack[:]; stack.clear()
+                                out = stack[::-1]; stack.clear()
 
                             for elem in out:
                                 try:
