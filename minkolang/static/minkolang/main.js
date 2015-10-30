@@ -108,6 +108,10 @@ function updateStuff(response) {
 			}
 		});
 	}
+	
+	if (!found) {
+		$('#curr-inst').html("Current instruction: "+cc);
+	}
 }
 
 function resetButtons() {

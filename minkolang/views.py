@@ -67,6 +67,122 @@ def main_view(request, **kwargs):
         if 'code' in request.GET:
             code = request.GET['code']
             context['code'] = code
+            context['permalink'] = "old?code="+encodeURL(code)
+            if "input" in request.GET and request.GET["input"]:
+                context['input'] = request.GET["input"]
+                context['permalink'] += "&input="+encodeURL(request.GET["input"])
+
+        if request.is_ajax():
+            if request.GET["action"] == "start":
+
+                try:
+                    proxies[uid] = manager.Program_old(
+                        code,
+                        inputStr=request.GET["input"],
+                        debugFlag=0,
+                        outfile=None)
+                    context['code_array'] = proxies[uid].getCode()
+                    
+                    return render(request, 'minkolang/codeTable.html', context_instance=context)
+                except Exception as e:
+                    traceback.print_exc(file=sys.stderr)
+                    raise e
+                
+            elif request.GET["action"] == "step":
+
+                try:
+                    proxy_prgm = proxies[uid]
+                    
+                    steps = int(request.GET["steps"])
+
+                    prgmT[uid] = multiprocessing.Process(
+                        target = proxy_prgm.run,
+                        args = (steps,),
+                        name="program run")
+                    
+                    prgmT[uid].start()
+                    prgmT[uid].join(60) #time limit of 1 minute
+
+                    if prgmT[uid].is_alive():
+                        prgmT[uid].terminate()
+                        proxy_prgm.stop()
+
+                    V = json.loads(proxy_prgm.getVarsJson())
+                    
+                    oldpos = V['oldposition']
+                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
+                    data['stack'] = V['stack']
+                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
+                    
+                    data['inputstr'] = V['inputStr']
+                    data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
+
+                    if V['strMode']:
+                        if V['currChar'] == '"':
+                            data['currchar'] = "<code>\" </code> &nbsp;Starts a string literal."
+                        else:
+                            data['currchar'] = "Building up a string literal: <code>%s</code>" % V['strLiteral']
+                    elif V['currChar'] == '"':
+                        data['currchar'] = "<code>\" </code> &nbsp;Closes a string literal and \
+                                            pushes the characters onto the stack in reverse order."
+                    elif V['numMode']:
+                        if V['currChar'] == "'":
+                            data['currchar'] = "<code>' </code> &nbsp;Starts a number literal."
+                        else:
+                            data['currchar'] = "Building up a number literal: <code>%s</code>" % V['numLiteral']
+                    elif V['currChar'] == "'":
+                        data['currchar'] = "<code>' </code> &nbsp;Closes a string literal and \
+                                            pushes the number onto the stack."
+                    else:
+                        if "0" <= V['currChar'] <= "9" and len(V['currChar']) == 1:
+                            data['currchar'] = "<code>%d </code> &nbsp;Pushes a %d onto the stack." % ((int(V['currChar']),)*2)
+                        elif V['currChar'] == "l":
+                            data['currchar'] = "<code>l </code> &nbsp;Pushes a 10 onto the stack."
+                        else:
+                            data['currchar'] = V['oldToggle']*'$' + V['currChar']
+                    
+
+                    data['done'] = V['isDone']
+                    
+                except Exception as e:
+                    traceback.print_exc(file=sys.stderr)
+                    raise e
+
+                return HttpResponse(json.dumps(data), content_type="application/json")
+
+    return render(request, 'minkolang/main.html', context_instance=context)
+
+def old_main_view(request, **kwargs):
+    global manager
+    global prgmT
+    global proxies
+
+    if not manager:
+        manager = MyManager()
+        manager.start()
+    
+    context = RequestContext(request)
+    context['code'] = '"Hello world!"(O).'
+    context['code_lines'] = []
+    context['permalink'] = '?code=%22Hello+world%21%22%28O%29.'
+
+    if request.method == 'GET':
+
+        if not request.is_ajax():
+            uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
+            context['uid'] = uid
+        else:
+            uid = request.GET['uid']
+
+        print("UID:",uid)
+        if uid in prgmT and prgmT[uid].is_alive():
+            prgmT[uid].terminate()
+            proxies[uid].stop()
+        
+        if 'code' in request.GET:
+            code = request.GET['code']
+            context['code'] = code
             context['permalink'] = "?code="+encodeURL(code)
             if "input" in request.GET and request.GET["input"]:
                 context['input'] = request.GET["input"]
@@ -126,102 +242,7 @@ def main_view(request, **kwargs):
                     data['done'] = V['isDone']
                     
                 except Exception as e:
-                    traceback.print_exc(file=sys.stderr)
-                    raise e
-
-                return HttpResponse(json.dumps(data), content_type="application/json")
-
-    return render(request, 'minkolang/main.html', context_instance=context)
-
-def old_main_view(request, **kwargs):
-    global manager
-    global prgmT
-    global proxies
-
-    if not manager:
-        manager = MyManager()
-        manager.start()
-    
-    context = RequestContext(request)
-    context['code'] = '"Hello world!"(O).'
-    context['code_lines'] = []
-    context['permalink'] = '?code=%22Hello+world%21%22%28O%29.'
-
-    if request.method == 'GET':
-
-        if not request.is_ajax():
-            uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
-            context['uid'] = uid
-        else:
-            uid = request.GET['uid']
-
-        print("UID:",uid)
-        if uid in prgmT and prgmT[uid].is_alive():
-            prgmT[uid].terminate()
-            proxies[uid].stop()
-        
-        if 'code' in request.GET:
-            code = request.GET['code']
-            context['code'] = code
-            context['permalink'] = "old?code="+encodeURL(code)
-            if "input" in request.GET and request.GET["input"]:
-                context['input'] = request.GET["input"]
-                context['permalink'] += "&input="+encodeURL(request.GET["input"])
-
-        if request.is_ajax():
-            if request.GET["action"] == "start":
-
-                try:
-                    proxies[uid] = manager.Program_old(
-                        code,
-                        inputStr=request.GET["input"],
-                        debugFlag=0,
-                        outfile=None)
-                    context['code_array'] = proxies[uid].getCode()
-                    
-                    return render(request, 'minkolang/codeTable.html', context_instance=context)
-                except Exception as e:
-                    traceback.print_exc(file=sys.stderr)
-                    raise e
-                
-            elif request.GET["action"] == "step":
-
-                try:
-                    proxy_prgm = proxies[uid]
-                    
-                    steps = int(request.GET["steps"])
-
-                    prgmT[uid] = multiprocessing.Process(
-                        target = proxy_prgm.run,
-                        args = (steps,),
-                        name="program run")
-                    
-                    prgmT[uid].start()
-                    prgmT[uid].join(60) #time limit of 1 minute
-
-                    if prgmT[uid].is_alive():
-                        prgmT[uid].terminate()
-                        proxy_prgm.stop()
-
-                    V = json.loads(proxy_prgm.getVarsJson())
-
-##                    print(V)
-                    
-                    oldpos = V['oldposition']
-                    data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
-                    data['stack'] = V['stack']
-                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
-                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
-                    
-                    data['inputstr'] = V['inputStr']
-                    data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
-
-                    data['currchar'] = V['oldToggle']*'$' + V['currChar']
-                    
-
-                    data['done'] = V['isDone']
-                    
-                except Exception as e:
+                    print(e)
                     traceback.print_exc(file=sys.stderr)
                     raise e
 
