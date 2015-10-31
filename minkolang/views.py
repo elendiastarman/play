@@ -47,11 +47,23 @@ def main_view(request, **kwargs):
         manager.start()
     
     context = RequestContext(request)
-    context['code'] = '"Hello world!"(O).'
+    context['code'] = '"Hello world!"$O.'
     context['code_lines'] = []
-    context['permalink'] = '?code=%22Hello+world%21%22%28O%29.'
+    context['permalink'] = '?code=%22Hello+world%21%22%24O%2E'
 
     if request.method == 'GET':
+
+        if 'action' in request.GET and request.GET["action"] == "load":
+            try:
+                filename = os.getcwd()+"\\minkolang\\Code Examples\\"+request.GET['name']+".mkl"
+                text = open(filename,'r').read()
+            except Exception as e:
+                print(e)
+                traceback.print_exc(e, file=std.stderr)
+                raise e
+            
+            data = {'text':text}
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
         if not request.is_ajax():
             uid = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))

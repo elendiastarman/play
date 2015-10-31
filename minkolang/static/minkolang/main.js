@@ -83,7 +83,6 @@ function updateStuff(response) {
 	$('#loops-text').html(response['loops']);
 	$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 	
-	// $('#curr-inst').html("Current instruction: <kbd>"+response['currchar']+"</kbd>");
 	$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
 	
 	var cc = response['currchar'];
@@ -231,3 +230,16 @@ $(function() {
 	$( "#speed-input" ).val( $( "#speed-slider" ).slider( "value" ) );
   }
 );
+
+$('#examples-dropdown').on("change", function(){
+	$.ajax({
+		url: window.location,
+		type: 'get',
+		data: {'action':'load', 'name':$('#examples-dropdown option:selected').val()},
+		dataType: 'json',
+		success: function(response) {
+			$('#code-input').text(response['text']);
+		},
+		failure: function(response) { console.log("Wah!"); }
+	});
+});

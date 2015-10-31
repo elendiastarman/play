@@ -16,7 +16,18 @@
 	
 		<h1>Official Minkolang Online Interpreter - version 0.10</h1>
 		
-		<textarea id="code-input" rows="20" cols="80" style="width:80em;">{% if code %}{{code}}{% endif %}</textarea>
+		<p><strong>Examples:</strong> <select id="examples-dropdown">
+			<option selected disabled>------------</option>
+			<option value="hello_world">Hello world!</option>
+			<option value="fizzbuzz">Fizz Buzz</option>
+			<option value="collatz">Collatz Sequence</option>
+			<option value="quine">Quine</option>
+			<option value="Mandelbrot">Mandelbrot Set</option>
+			<option value="fibonacci">Fibonacci Sequence</option>
+			<option value="fibonacci_recursive">Fibonacci (recursive)</option>
+		</select></p>
+		
+		<textarea id="code-input" rows="15" cols="70" style="width:70em;">{% if code %}{{code}}{% endif %}</textarea>
 		<br/>
 		<label for="input-text">Input:</label>
 		<textarea id="input-text" rows="1" style="vertical-align: bottom"/>{{input}}</textarea> <button onclick="sendcode()">Set code</button> 
