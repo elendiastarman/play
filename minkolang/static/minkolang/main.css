@@ -1,3 +1,9 @@
+body {
+	margin: 10px;
+	margin-top: -10px;
+	padding: 0px;
+}
+
 table {
 	border-collapse: collapse;
 	table-layout: fixed;
@@ -21,9 +27,14 @@ code, kbd {
 	background-color: #FAA;
 }
 
-/* #instructions ul {
-	margin-top: -20px;
-} */
+img {
+	float: right;
+	border: 2px solid #500070;
+}
+img:hover {
+	/* border: 1px solid #500070; */
+	background-color: #ffffcc;
+}
 
 #speed-slider {
 	display: inline-block;

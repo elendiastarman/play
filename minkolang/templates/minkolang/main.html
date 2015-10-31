@@ -13,6 +13,10 @@
 	</head>
 	
 	<body>
+		
+		<a href="http://www.starmaninnovations.com/"><img src="{% static 'minkolang/StarmanInnovations_logo1_iconsOnly_smaller.png' %}" width="108px" alt="Starman Innovations logo" /></a>
+		
+		<h3 style="float:right; text-align: right; margin-right:3px; margin-top:0px;">Starman<br/>Innovations</h3>
 	
 		<h1>Official Minkolang Online Interpreter - version 0.10</h1>
 		
@@ -25,6 +29,8 @@
 			<option value="Mandelbrot">Mandelbrot Set</option>
 			<option value="fibonacci">Fibonacci Sequence</option>
 			<option value="fibonacci_recursive">Fibonacci (recursive)</option>
+			<option value="insertionSort">Insertion Sort</option>
+			<option value="PPCG_TypeUniqChars">Unique Characters</option>
 		</select></p>
 		
 		<textarea id="code-input" rows="15" cols="70" style="width:70em;">{% if code %}{{code}}{% endif %}</textarea>
