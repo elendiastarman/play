@@ -55,7 +55,10 @@ def main_view(request, **kwargs):
 
         if 'action' in request.GET and request.GET["action"] == "load":
             try:
-                filename = os.getcwd()+"\\minkolang\\Code Examples\\"+request.GET['name']+".mkl"
+                if sys.platform == 'win32':
+                    filename = os.getcwd()+"\\minkolang\\Code Examples\\"+request.GET['name']+".mkl"
+                elif sys.platform == 'linux':
+                    filename = os.getcwd()+"/minkolang/Code Examples/"+request.GET['name']+".mkl"
                 text = open(filename,'r').read()
             except Exception as e:
                 print(e)
