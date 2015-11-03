@@ -250,6 +250,7 @@ class Program:
                     elif self.currChar in "no": #input
                         if self.currChar == "n":
                             times = 1 if not self.toggleFlag else -1
+                            found = 0
 
                             while times and self.inputStr:
                                 found = 0
@@ -284,12 +285,15 @@ class Program:
                                     stack.append(num)
                                     self.inputStr = self.inputStr[end:]
                                 else:
-                                    stack.append(0)
+##                                    stack.append(-1)
                                     self.inputStr = ""
                                     break
 
 
                                 times -= 1
+
+                            if not found:
+                                stack.append(-1)
                                 
 ##                            times = 1 if not self.toggleFlag else -1
 ##

@@ -238,7 +238,8 @@ $('#examples-dropdown').on("change", function(){
 		data: {'action':'load', 'name':$('#examples-dropdown option:selected').val()},
 		dataType: 'json',
 		success: function(response) {
-			$('#code-input').text(response['text']);
+			console.log(response['text']);
+			$('#code-input').val(response['text']);
 		},
 		failure: function(response) { console.log("Wah!"); }
 	});
