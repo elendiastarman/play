@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from django.template import Context, RequestContext
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 import json
 
 from minkolang.minkolang_0_10 import Program
@@ -156,7 +158,31 @@ def main_view(request, **kwargs):
                             data['currchar'] = "<code>l </code> &nbsp;Pushes a 10 onto the stack."
                         else:
                             data['currchar'] = V['oldToggle']*'$' + V['currChar']
-                    
+
+                    data['code_changed'] = V['codeChanged']
+                    data['array_changed'] = V['arrayChanged']
+
+                    if V['codeChanged']:
+                        code_array = V['code'][:]
+                        for z in range(len(code_array)):
+                            for y in range(len(code_array[z])):
+                                for x in range(len(code_array[z][y])):
+                                    if type(code_array[z][y][x]) != str:
+                                        if code_array[z][y][x] < 32:
+                                            code_array[z][y][x] = "<em>%s</em>" % code_array[z][y][x]
+                                        else:
+                                            c = " "
+                                            try:
+                                                c = chr(code_array[z][y][x])
+                                            except ValueError:
+                                                c = "<em>%s</em>" % code_array[z][y][x]
+                                            code_array[z][y][x] = c
+
+                                        code_array[z][y][x] = mark_safe(code_array[z][y][x])
+                                            
+                        data['code_table'] = render_to_string('minkolang/codeTable.html', {'code_array':code_array})
+                    if V['arrayChanged']:
+                        data['array_table'] = render_to_string('minkolang/arrayTable.html', {'array':V['array']})
 
                     data['done'] = V['isDone']
                     

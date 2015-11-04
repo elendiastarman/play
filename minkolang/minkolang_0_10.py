@@ -83,6 +83,7 @@ class Program:
     def run(self, steps=-1): #steps = -1 for run-until-halt
         self.stopNow = False
         self.codeChanged = 0
+        self.arrayChanged = 0
         
         while steps != 0 and self.stopNow == False and not self.isDone:
             steps -= 1
@@ -526,6 +527,7 @@ class Program:
                                 if debug: print(*self.array)
                                         
                                 self.array[y][x] = k
+                                self.arrayChanged = 1
 
                     elif self.currChar == "u":
                         print(stack, file=self.outfile)
@@ -659,7 +661,7 @@ class Program:
         if type(self.currChar) != str:
             try:
                 self.currChar = chr(self.currChar)
-            except [ValueError, TypeError]:
+            except (ValueError, TypeError):
                 self.currChar = ""
         if debug: print("Current character:",self.currChar)
 

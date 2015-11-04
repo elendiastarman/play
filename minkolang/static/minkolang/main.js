@@ -47,6 +47,7 @@ function sendcode() {
 	$('#output-text').text("");
 	$('#stack-text').text("");
 	$('#loops-text').text("");
+	$('#array-table').children().remove();
 	
 	$('#run-button').show();
 	$('#stop-button').hide();
@@ -81,6 +82,20 @@ function updateStuff(response) {
 	$('#output-text').html(response['output']);
 	$('#stack-text').text(response['stack']);
 	$('#loops-text').html(response['loops']);
+	
+	if (response['code_changed']) {
+		$('#code-table').children().remove();
+		$('#code-table').append(response['code_table']);
+		// $('#code-table').find('td').each( function(i,e) {
+			// pass;
+		// });
+	}
+	if (response['array_changed']) {
+		$('#array-table').children().remove();
+		$('#array-table').append(response['array_table']);
+	}
+	
+		
 	$('#code-table').find('table').eq(response['z']).find('tr').eq(response['y']).find('td').eq(response['x']).addClass('cell_highlight');
 	
 	$('#input-str').html("Input: <code>"+response['inputstr']+"</code>");
