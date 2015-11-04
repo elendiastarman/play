@@ -86,9 +86,9 @@ function updateStuff(response) {
 	if (response['code_changed']) {
 		$('#code-table').children().remove();
 		$('#code-table').append(response['code_table']);
-		// $('#code-table').find('td').each( function(i,e) {
-			// pass;
-		// });
+		if (response['code_put']) {
+			$('#code-table').append(response['code_put']);
+		}
 	}
 	if (response['array_changed']) {
 		$('#array-table').children().remove();

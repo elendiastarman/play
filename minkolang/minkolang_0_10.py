@@ -134,9 +134,12 @@ class Program:
                         self.fallable = 1
                     
                     if self.currChar == ".": #stop execution
-                        self.oldposition = self.position
-                        self.isDone = True
-                        return
+                        if not self.toggleFlag: #'$.' is a soft halt (breakpoint)
+                            self.oldposition = self.position
+                            self.isDone = True
+                            return
+                        else:
+                            self.stopNow = True
                     elif self.currChar == "$": #toggle functionality
                         if self.stuckFlag:
                             self.toggleFlag = 0
@@ -478,9 +481,10 @@ class Program:
 
                         if b[0][0] <= x < b[0][1] and b[1][0] <= y < b[1][1] and b[2][0] <= z < b[2][1]:
                             self.code[z][y][x] = n
-                            self.codeChanged = 1
                         else:
                             self.codeput[str((x,y,z))] = n
+                            
+                        self.codeChanged = 1
 
                     elif self.currChar in "qQ": #code get
                         if self.currChar == "Q":

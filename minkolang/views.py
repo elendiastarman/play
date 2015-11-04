@@ -181,6 +181,28 @@ def main_view(request, **kwargs):
                                         code_array[z][y][x] = mark_safe(code_array[z][y][x])
                                             
                         data['code_table'] = render_to_string('minkolang/codeTable.html', {'code_array':code_array})
+
+                        if V['codeput']:
+                            code_put = []
+                            for key,value in V['codeput'].items():
+                                coords = eval(key)
+                                c = ''
+                                if value < 32:
+                                    c = "<em>%s</em>" % value
+                                else:
+                                    try:
+                                        c = chr(value)
+                                    except ValueError:
+                                        c = "<em>%s</em>" % value
+                                c = mark_safe(c)
+                                code_put.append({'x':coords[0],
+                                                 'y':coords[1],
+                                                 'z':coords[2],
+                                                 'v':value,
+                                                 'c':c})
+                            code_put.sort(key=lambda k:(k['x'],k['y'],k['z']))
+
+                        data['code_put'] = render_to_string('minkolang/codePutTable.html', {'code_put':code_put})
                     if V['arrayChanged']:
                         data['array_table'] = render_to_string('minkolang/arrayTable.html', {'array':V['array']})
 

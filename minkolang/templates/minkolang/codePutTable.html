@@ -1,0 +1,22 @@
+{% if code_put %}
+	<p>Additional values stored in the codebox:</p>
+	
+	<table>
+		<tr>
+			<th>x</th>
+			<th>y</th>
+			<th>z</th>
+			<th>value</th>
+			<th>char</th>
+		</tr>
+	{% for row in code_put %}
+		<tr>
+			<td>{{row.x}}</td>
+			<td>{{row.y}}</td>
+			<td>{{row.z}}</td>
+			<td>{{row.v}}</td>
+			<td>{{row.c}}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}
