@@ -46,7 +46,7 @@ function sendcode() {
 	var input = $('#input-text').val();
 	$('#output-text').text("");
 	$('#stack-text').text("");
-	$('#loops-text').text("");
+	$('#loops-table').children().remove();
 	$('#array-table').children().remove();
 	
 	$('#run-button').show();
@@ -81,7 +81,8 @@ function updateStuff(response) {
 	$('.cell_highlight').removeClass('cell_highlight');
 	$('#output-text').html(response['output']);
 	$('#stack-text').text(response['stack']);
-	$('#loops-text').html(response['loops']);
+	$('#loops-table').children().remove();
+	$('#loops-table').append(response['loops']);
 	
 	if (response['code_changed']) {
 		$('#code-table').children().remove();
@@ -253,7 +254,6 @@ $('#examples-dropdown').on("change", function(){
 		data: {'action':'load', 'name':$('#examples-dropdown option:selected').val()},
 		dataType: 'json',
 		success: function(response) {
-			console.log(response['text']);
 			$('#code-input').val(response['text']);
 		},
 		failure: function(response) { console.log("Wah!"); }

@@ -11,11 +11,15 @@ table {
 }
 table, th, td {
 	border: 1px solid gray;
+	padding: 3px;
 }
 td {
 	width: 1em;
 	height: 1em;
 	text-align: center;
+}
+#loops-table th, #loops-table td {
+	text-align: left;
 }
 
 code, kbd {

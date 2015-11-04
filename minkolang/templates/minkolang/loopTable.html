@@ -1,0 +1,16 @@
+{% if loops %}
+	<table>
+		<tr>
+			<th>type</th>
+			<th>counter</th>
+			<th style="width:100%">stack</th>
+		</tr>
+	{% for loop in loops %}
+		<tr>
+			<td>{{loop.0}}</td>
+			<td>{{loop.4}}</td>
+			<td>{{loop.3}}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}

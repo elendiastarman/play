@@ -129,8 +129,9 @@ def main_view(request, **kwargs):
                     oldpos = V['oldposition']
                     data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
                     data['stack'] = V['stack']
-                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
-                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
+##                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
+##                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
+                    data['loops'] = render_to_string('minkolang/loopTable.html', {'loops':V['loops']})
                     
                     data['inputstr'] = V['inputStr']
                     data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
