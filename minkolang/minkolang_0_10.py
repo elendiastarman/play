@@ -502,9 +502,9 @@ class Program:
                                 stack.append(0)
 
                     elif self.currChar in "aA": #array get/put
-                        k = stack.pop() if stack and self.currChar == "A" else 0
                         y = stack.pop() if stack else 0
                         x = stack.pop() if stack else 0
+                        k = stack.pop() if stack and self.currChar == "A" else 0
                         
                         if x>=0 and y>=0:
                             
