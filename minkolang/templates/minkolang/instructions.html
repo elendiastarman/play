@@ -52,14 +52,26 @@
 		<li><code>} </code> &nbsp;Returns; that is, closes current recursion level and extends parent stack with current stack.</li>
 		
 		<li><code>k </code> &nbsp;Break; breaks out of the current loop or recursion and extends parent stack with current stack.</li>
+		
+		<li><code>K </code> &nbsp;Sends the program counter in a random direction.</li>
+		<li><code>$K</code> Sends the program counter in a random direction, possibly forward in time.</li>
 	</ul>
 
 	<strong>Literals</strong>
 
 	<ul>
-	 <li><code>0...9,l</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10).</li>
-	 <li><code>"..."</code> String literal. Minkolang is smart enough to reverse this before pushing on the stack.</li>
-	 <li><code>'...'</code> Number literal. Does the work of multiplying by 10 and adding the next digit.</li>
+		<li><code>0...9,l</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10).</li>
+		<li><code>"..."</code> String literal. Minkolang is smart enough to reverse this before pushing on the stack.</li>
+		<li><code>'...'</code> Number literal. Does the work of multiplying by 10 and adding the next digit.</li>
+	</ul>
+	
+	<strong>Generation</strong>
+	
+	<ul>
+		<li><code>h </code> &nbsp;Pops <code>n</code> and pushes a random integer between <code>0</code> and <code>n</code>, inclusive.</li>
+		<li><code>$h</code> Pops <code>n</code> and pushes a random float between <code>0</code> and <code>n</code>, inclusive.</li>
+		<li><code>H </code> &nbsp;Pops <code>b</code>,<code>a</code> and pushes a random integer between <code>a</code> and <code>b</code>, inclusive.</li>
+		<li><code>$H</code> Pops <code>b</code>,<code>a</code> and pushes a random float between <code>a</code> and <code>b</code>, inclusive.</li>
 	</ul>
 
 	<strong>Math and comparisons</strong>
