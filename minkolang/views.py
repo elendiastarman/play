@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 import json
 
-from minkolang.minkolang_0_10 import Program
+from minkolang.minkolang_0_11 import Program
 from minkolang.minkolang_09 import Program as Program_old
 
 import os
@@ -129,8 +129,6 @@ def main_view(request, **kwargs):
                     oldpos = V['oldposition']
                     data = {'x':oldpos[0], 'y':oldpos[1], 'z':oldpos[2]}
                     data['stack'] = V['stack']
-##                    looptext = lambda L: " ".join([L[0], str(L[4]), str(L[3])])
-##                    data['loops'] = "<br/>".join(map(looptext, V['loops']))
                     data['loops'] = render_to_string('minkolang/loopTable.html', {'loops':V['loops']})
                     
                     data['inputstr'] = V['inputStr']

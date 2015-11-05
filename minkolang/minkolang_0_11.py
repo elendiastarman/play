@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import math
+import random
 from copy import deepcopy
 
 debug = 0
@@ -176,10 +177,41 @@ class Program:
                                              self.velocity[1],
                                              self.velocity[2]]
 
+                    elif self.currChar == "K":
+                        n = 3 + self.toggleFlag
+                        direc = random.randint(0,n)
+                        if direc == 0: #down
+                            self.velocity = [0,1,0]
+                        elif direc == 1: #left
+                            self.velocity = [-1,0,0]
+                        elif direc == 2: #right
+                            self.velocity = [1,0,0]
+                        elif direc == 3: #up
+                            self.velocity = [0,-1,0]
+                        elif direc == 4: #forward
+                            self.velocity = [0,0,1]
+                        else:
+                            pass
+
                     elif self.currChar in "0123456789":
                         stack.append(int(self.currChar))
                     elif self.currChar == "l":
                         stack.append(10)
+
+                    elif self.currChar in "hH": #random number
+                        if self.currChar == "h":
+                            n = stack.pop() if stack else 0
+                            if not self.toggleFlag:
+                                stack.append(random.randint(0,n))
+                            else:
+                                stack.append(random.random()*n)
+                        elif self.currChar == "H":
+                            b = stack.pop() if stack else 0
+                            a = stack.pop() if stack else 0
+                            if not self.toggleFlag:
+                                stack.append(random.randint(a,b))
+                            else:
+                                stack.append(random.random()*(b-a)+a)
 
                     elif self.currChar in "+-*:;%=`": #operators and comparators
                         if self.toggleFlag and self.currChar in "+*":
