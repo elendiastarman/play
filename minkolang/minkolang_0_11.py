@@ -553,7 +553,7 @@ class Program:
                                     for line in self.array:
                                         line.extend([0]*(x-len(line)+1))
                                     while len(self.array) <= y:
-                                        self.array.append([0]*(x+1))
+                                        self.array.append([0]*(max([x+1,len(self.array[0])])))
                                 if debug: print(*self.array)
                                         
                                 self.array[y][x] = k
