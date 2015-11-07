@@ -197,6 +197,8 @@ class Program:
                         stack.append(int(self.currChar))
                     elif self.currChar == "l":
                         stack.append(10)
+                    elif self.currChar == "j":
+                        stack.append(1j)
 
                     elif self.currChar in "hH": #random number
                         if self.currChar == "h":
@@ -565,6 +567,78 @@ class Program:
                         print(*self.code, file=self.outfile)
                         print(*self.loops, file=self.outfile)
 
+                    elif self.currChar == "M": #MATH
+                        tos = stack.pop() if stack else 0
+
+                        if tos == 0:
+                            if not self.toggleFlag: #factorial
+                                pass
+                            else: #binomial
+                                pass
+                        elif tos == 1:
+                            if not self.toggleFlag: #sqrt
+                                pass
+                            else: #nth root
+                                pass
+                        elif tos == 2:
+                            n = stack.pop() if stack else 0
+                            P = getPrimes_parallelized()
+                            if not self.toggleFlag: #is prime?
+                                if n <= 1:
+                                    stack.append(0)
+                                else:
+                                    for p in P:
+                                        if p**2 > n:
+                                            stack.append(1)
+                                            break
+                                        if n%p == 0:
+                                            stack.append(0)
+                                            break
+                            else: #is composite?
+                                pass
+                        elif tos == 3:
+                            n = stack.pop() if stack else 0
+                            P = getPrimes_parallelized()
+                            if not self.toggleFlag: #nth prime
+                                for i,p in enumerate(P):
+                                    if i == n:
+                                        stack.append(p)
+                                        break
+                            else: #nth composite
+                                pass
+                        elif tos == 4:
+                            if not self.toggleFlag: #gcd
+                                pass
+                            else: #lcm
+                                pass
+                        elif tos == 5:
+                            if not self.toggleFlag: #mean
+                                pass
+                            else: #standard deviation
+                                pass
+                        elif tos == 6:
+                            if not self.toggleFlag: #complex conjugate
+                                pass
+                            else: #?
+                                pass
+                        elif tos == 7:
+                            if not self.toggleFlag: #nth permutation
+                                pass
+                            else: #is composite?
+                                pass
+
+                    elif self.currChar == "M": #STRING
+                        tos = stack.pop() if stack else 0
+                        pass
+
+                    elif self.currChar == "T": #TRIG
+                        tos = stack.pop() if stack else 0
+                        pass
+
+                    elif self.currChar == "J": #MATRICES
+                        tos = stack.pop() if stack else 0
+                        pass
+
                     elif self.currChar == "k": #break
                         if self.loops:
                             lastLoop = self.loops.pop()
@@ -750,6 +824,22 @@ class Program:
         return json.dumps(V)
 
     def stop(self): self.stopNow = True
+
+def getPrimes_parallelized(): #uses sieve of Sundaram
+        yield 2
+        yield 3
+        P = [[4,1]]
+        i = 2
+        while 1:
+            if P[0][0] <= i:
+                while P[0][0] <= i:
+                    P[0][0] += 2*P[0][1]+1
+                    P.sort()
+            elif P[0][0] > i:
+                yield 2*i+1
+                P.append([2*(i+i*i), i])
+                P.sort()
+            i += 1
 
 if file:
     if debug:
