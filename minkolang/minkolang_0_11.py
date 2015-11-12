@@ -7,13 +7,15 @@ from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.1.py", "PPCG_disapprovalface.mkl", "7"]
+    sys.argv = ["minkolang_0.11.py", "0$I2&N.\"j\"o-$-dr=,*!", "vv^^v^^^"]
     debug = 1
     numSteps = 100
 
 if len(sys.argv) > 1 and sys.argv[1][-4:] == ".mkl":
     file = open(sys.argv[1], encoding="utf-8").read()
     if '\ufeff' in file: file = file[1:]
+elif len(sys.argv) > 1 and "idlelib" in sys.modules:
+    file = sys.argv[1]
 else:
     file = None
 
@@ -232,7 +234,12 @@ class Program:
                             if self.currChar == "+":
                                 result = a+b
                             elif self.currChar == "-":
-                                result = a-b if not self.toggleFlag else b-a
+                                if not self.toggleFlag:
+                                    result = a-b
+                                else:
+                                    stack.append(a)
+                                    result = math.copysign(1,b) if b else 0
+                                    if result.is_integer(): result=int(result)
                             elif self.currChar == "*":
                                 result = a*b
                             elif self.currChar == ":":
@@ -668,6 +675,27 @@ class Program:
                                 stack.append(math.sqrt(sum([(x[i]-x[i+n])**2 for i in range(n)])))
                                 
                         elif tos == 9:
+                            n = stack.pop() if stack else 0
+                            P = getPrimes_parallelized()
+                            total = 0
+                            
+                            if not self.toggleFlag: #pi(n)
+                                for p in P:
+                                    if p <= n: total += 1
+                                    else: break
+                            else: #phi(n)
+                                for i in range(1,n+1):
+                                    if gcd(i,n) == 1: total += 1
+                                
+                            stack.append(total)
+                            
+                        elif tos == 10:
+                            if not self.toggleFlag: #?
+                                pass
+                            else: #?
+                                pass
+                                
+                        elif tos == 11:
                             if not self.toggleFlag: #nth permutation
                                 pass
                             else: #?
@@ -894,7 +922,7 @@ def gcd(a,b):
 
 if file:
     if debug:
-        prog = Program(file, sys.argv[2], debugFlag=1)
+        prog = Program(file, sys.argv[2] if len(sys.argv) > 2 else "", debugFlag=1)
         prog.run(numSteps)
 
     else:

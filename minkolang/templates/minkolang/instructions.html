@@ -60,7 +60,7 @@
 	<strong>Literals</strong>
 
 	<ul>
-		<li><code>0...9,l</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10).</li>
+		<li><code>0...9,l,j</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10 and <code>j</code> is <code>sqrt(-1)</code>).</li>
 		<li><code>"..."</code> String literal. Minkolang is smart enough to reverse this before pushing on the stack.</li>
 		<li><code>'...'</code> Number literal. Does the work of multiplying by 10 and adding the next digit.</li>
 	</ul>
@@ -80,7 +80,7 @@
 		<li><code>+ </code> &nbsp;Add; pops <code>b</code>,<code>a</code> and pushes <code>a+b</code>.</li>
 		<li><code>$+</code> Sum; clears the stack and pushes its sum.</li>
 		<li><code>- </code> &nbsp;Subtract; pops <code>b</code>,<code>a</code> and pushes <code>a-b</code>.</li>
-		<li><code>$-</code> Flip-then-subtract; pops <code>b</code>,<code>a</code> and pushes <code>b-a</code>.</li>
+		<li><code>$-</code> Sign; pops <code>a</code> and pushes <code>1</code> if <code>a</code> is positive, <code>-1</code> if <code>a</code> is negative, <code>0</code> otherwise.</li>
 		<li><code>* </code> &nbsp;Multiply; pops <code>b</code>,<code>a</code> and pushes <code>a*b</code>.</li>
 		<li><code>$*</code> Product; clears the stack and pushes the product of its elements.</li>
 		<li><code>: </code> &nbsp;Integer division; pops <code>b</code>,<code>a</code> and pushes <code>a//b</code>.</li>
@@ -145,21 +145,28 @@
 	<strong>Memory and reflection (self-modification)</strong>
 
 	<ul>
-	 <li><code>p </code> &nbsp;Puts to codebox; pops <code>k</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y)</code> with <code>k</code>.</li>
-	 <li><code>P </code> &nbsp;Multi-level puts to codebox; pops <code>k</code>,<code>t</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y,t)</code> with <code>k</code>.</li>
-	 <li><code>q </code> &nbsp;Get from codebox; pops <code>y</code>,<code>x</code> and pushes <code>Code(x,y)</code> on stack.</li>
-	 <li><code>Q </code> &nbsp;Multi-level get from codebox; pops <code>t</code>,<code>y</code>,<code>x</code> and pushes <code>Code(x,y,t)</code> on stack.</li>
-	 <li><code>a </code> &nbsp;Array get; pops <code>y</code>,<code>x</code> and pushes <code>Array[y][x]</code> on stack.</li>
-	 <li><code>A </code> &nbsp;Array put; pops <code>k</code>,<code>y</code>,<code>x</code> and writes <code>k</code> to <code>Array[y][x]</code>.</li>
+		<li><code>p </code> &nbsp;Puts to codebox; pops <code>k</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y)</code> with <code>k</code>.</li>
+		<li><code>P </code> &nbsp;Multi-level puts to codebox; pops <code>k</code>,<code>t</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y,t)</code> with <code>k</code>.</li>
+		<li><code>q </code> &nbsp;Get from codebox; pops <code>y</code>,<code>x</code> and pushes <code>Code(x,y)</code> on stack.</li>
+		<li><code>Q </code> &nbsp;Multi-level get from codebox; pops <code>t</code>,<code>y</code>,<code>x</code> and pushes <code>Code(x,y,t)</code> on stack.</li>
+		<li><code>a </code> &nbsp;Array get; pops <code>y</code>,<code>x</code> and pushes <code>Array[y][x]</code> on stack.</li>
+		<li><code>A </code> &nbsp;Array put; pops <code>k</code>,<code>y</code>,<code>x</code> and writes <code>k</code> to <code>Array[y][x]</code>.</li>
 	</ul>
 
 	<strong>Special</strong>
 
 	<ul>
-	 <li><code>$ </code> &nbsp;Toggles the functionality of many functions. This "toggle flag" only remains active for one step.</li>
-	 <li><code>$$</code> Toggles functionality permanently until another <code>$</code> is encountered.</li>
-	 <li><code>$$$</code> Separates layers of a program.</li>
-	 <li><code>u </code> &nbsp;Debug (print) the current stack (Python interpreter only).</li>
-	 <li><code>U </code> &nbsp;Debug (print) the code and loops (Python interpreter only).</li>
+		<li><code>$ </code> &nbsp;Toggles the functionality of many functions. This "toggle flag" only remains active for one step.</li>
+		<li><code>$$</code> Toggles functionality permanently until another <code>$</code> is encountered.</li>
+		<li><code>$$$</code> Separates layers of a program.</li>
+		<li><code>u </code> &nbsp;Debug (print) the current stack (Python interpreter only).</li>
+		<li><code>U </code> &nbsp;Debug (print) the code and loops (Python interpreter only).</li>
+	</ul>
+	
+	<strong>Grouped: Math</strong>
+	
+	<ul>
+		<li><code>0M</code> &nbsp;Factorial; pops <code>a</code> and pushes <code>a!</code>.</li>
+		<li><code>0$M</code> Gamma; pops <code>a</code> and pushes <code>Γ(a)</code>.</li>
 	</ul>
 </div>
