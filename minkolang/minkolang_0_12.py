@@ -7,7 +7,7 @@ from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.11.py", "0$I2&N.\"j\"o-$-dr=,*!", "vv^^v^^^"]
+    sys.argv = ["minkolang_0.11.py", "o\"`\"-n+2%t\"dark\"t\"light\"t$O.", "c2"]
     debug = 1
     numSteps = 100
 
@@ -100,7 +100,7 @@ class Program:
                 self.strMode = not self.strMode
 
                 if not self.strMode:
-                    stack.extend(list(map(ord,self.strLiteral[::-1])))
+                    if not self.ignoreFlag: stack.extend(list(map(ord,self.strLiteral[::-1])))
                     self.strLiteral = ""
                     
             if self.currChar == "'" and not self.strMode:
@@ -126,7 +126,7 @@ class Program:
                             except ValueError:
                                 pass
 
-                    stack.append(result)
+                    if not self.ignoreFlag: stack.append(result)
                     self.numLiteral = ""
 
             if self.currChar not in "'\"":
@@ -855,16 +855,22 @@ class Program:
                             for j in range(3): arg2[0][j] -= arg2[1][j]
 
                     elif self.currChar == "t": #ternary
+##                        if debug: print("ternaryFlag: %s" % self.ternaryFlag)
                         if not self.ternaryFlag:
                             if (stack.pop() if stack else 0) == 0:
                                 self.ternaryFlag = "t0"
                             else:
                                 self.ignoreFlag = " t1"
+                                self.ternaryFlag = "t1"
                         else:
                             if self.ternaryFlag == "t1":
+                                self.ternaryFlag = "t2"
+                            elif self.ternaryFlag == "t2":
                                 self.ternaryFlag = ""
                             elif self.ternaryFlag == "t0":
+                                self.ternaryFlag = ""
                                 self.ignoreFlag = " t0"
+                        if debug: print(" ternaryFlag: %s" % self.ternaryFlag)
                             
                     elif self.currChar in "()": #while loop
                         if self.currChar == "(":
@@ -977,10 +983,12 @@ class Program:
                         self.strLiteral += self.currChar
                     elif self.numMode:
                         self.numLiteral += self.currChar
-                    elif self.ignoreFlag:
+
+                    if self.ignoreFlag:
+                        if debug: print("ignoreFlag: %s" % self.ignoreFlag)
                         if self.ignoreFlag[0] == " ":
                             self.ignoreFlag = self.ignoreFlag[1:]
-                        elif self.currChar == self.ignoreFlag[0]:
+                        elif self.currChar == self.ignoreFlag[0] and not self.strMode and not self.numMode:
                             if self.ignoreFlag == "t0":
                                 self.ternaryFlag = ""
                             elif self.ignoreFlag == "t1":
@@ -1018,10 +1026,10 @@ class Program:
         if direction in ["teleport","wormhole"]:
             self.position, self.velocity = arg2
 
-        if debug: print("Old position:",self.position)
+##        if debug: print("Old position:",self.position)
         if direction != "wormhole":
             self.position = [a+b for a,b in zip(self.position, self.velocity)]
-        if debug: print("New position:",self.position)
+##        if debug: print("New position:",self.position)
 
         
         for i in range(3):
@@ -1029,7 +1037,7 @@ class Program:
                 self.position[i] += (self.bounds[i][1]-self.bounds[i][0])
             while self.position[i] >= self.bounds[i][1]:
                 self.position[i] -= (self.bounds[i][1]-self.bounds[i][0])
-        if debug: print("New position:",self.position)
+##        if debug: print("New position:",self.position)
 
         if direction == "jump":
             self.velocity = [bool(v)*int(copysign(1,v)) for v in self.velocity] #resets after a jump
