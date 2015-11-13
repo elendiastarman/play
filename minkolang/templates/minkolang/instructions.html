@@ -39,6 +39,10 @@
 		<li><code>B </code> &nbsp;T branch; pops <code>t</code> and turns right (clockwise) if truthy, left (counterclockwise) otherwise.</li>
 		<li><code>$B</code> Reversed T branch; pops <code>t</code> and turns right (clockwise) if falsy, left (counterclockwise) otherwise.</li>
 		
+		<li><code>f </code> &nbsp;Gosub return; jumps back to where <code>F</code> was used last.</li>
+		<li><code>F </code> &nbsp;Gosub jump in 2D; pops <code>y</code>,<code>x</code> and jumps to <code>(x,y)</code> in the codebox.</li>
+		<li><code>$F</code> Gosub jump in 3D; pops <code>t</code>,<code>y</code>,<code>x</code> and jumps to <code>(x,y,t)</code> in the codebox.</li>
+		
 		<li><code>( </code> &nbsp;Opens while loop; takes all of parent's stack.</li>
 		<li><code>$(</code> Opens while loop; pops <code>n</code> and takes the top <code>n</code> elements of parent's stack.</li>
 		<li><code>) </code> &nbsp;Closes while loop; pops <code>t</code> and jumps back to the opening <code>(</code> if truthy, continues forward otherwise, extending parent stack with current stack.</li>
