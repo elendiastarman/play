@@ -649,10 +649,20 @@ class Program:
                                 stack.append(math.sqrt(total)/len(stack) if stack else 0)
                                 
                         elif tos == 6:
+                            r = stack.pop() if stack else 0
+                            n = stack.pop() if stack else 0
+                            
+                            num = 1
+                            for i in range(n,r,-1):
+                                num *= i
+                            
                             if not self.toggleFlag: #binomial (nCr)
-                                pass
+                                for j in range(1,(n-r)+1):
+                                    num //= j
                             else: #nPr
                                 pass
+
+                            stack.append(num)
                             
                         elif tos == 7:
                             n = complex(stack.pop() if stack else 0)
@@ -701,11 +711,55 @@ class Program:
                             else: #?
                                 pass
 
-                    elif self.currChar == "M": #STRING
-                        tos = stack.pop() if stack else 0
-                        pass
-
                     elif self.currChar == "T": #TRIG
+                        tos = stack.pop() if stack else 0
+
+                        if tos == 0:
+                            stack.append(math.pi if not self.toggleFlag else math.e)
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                        elif tos == 1:
+                            if not self.toggleFlag: #convert to radians
+                                pass
+                            else: #degrees
+                                pass
+
+                    elif self.currChar == "Z": #STRING
                         tos = stack.pop() if stack else 0
                         pass
 
