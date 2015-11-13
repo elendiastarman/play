@@ -39,6 +39,8 @@
 		<li><code>B </code> &nbsp;T branch; pops <code>t</code> and turns right (clockwise) if truthy, left (counterclockwise) otherwise.</li>
 		<li><code>$B</code> Reversed T branch; pops <code>t</code> and turns right (clockwise) if falsy, left (counterclockwise) otherwise.</li>
 		
+		<li><code>t </code> &nbsp;Ternary; expects code to be arranged like this: <code>t...t...t</code>. Pops <code>n</code> and runs the first segment if 0; runs the second segment otherwise.
+		
 		<li><code>f </code> &nbsp;Gosub return; jumps back to where <code>F</code> was used last.</li>
 		<li><code>F </code> &nbsp;Gosub jump in 2D; pops <code>y</code>,<code>x</code> and jumps to <code>(x,y)</code> in the codebox.</li>
 		<li><code>$F</code> Gosub jump in 3D; pops <code>t</code>,<code>y</code>,<code>x</code> and jumps to <code>(x,y,t)</code> in the codebox.</li>
