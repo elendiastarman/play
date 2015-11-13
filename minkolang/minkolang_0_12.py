@@ -43,6 +43,7 @@ class Program:
         self.stack = []
         self.array = [[]]
         self.loops = []
+        self.gosub = []
 
         self.strLiteral = ""
         self.strMode = 0
@@ -833,6 +834,20 @@ class Program:
                             lastLoop = self.loops.pop()
                             parent = self.loops[-1][3] if self.loops else self.stack
                             if not self.toggleFlag: parent.extend(lastLoop[3])
+
+                    elif self.currChar in "fF": #gosub
+                        if self.currChar == "f":
+                            movedir = "teleport"
+                            arg2 = self.gosub.pop()
+                        elif self.currChar == "F":
+                            movedir = "teleport"
+                            arg2 = [self.position,self.velocity]
+                            self.gosub.append(arg2[:])
+                            jz = stack.pop() if stack and self.toggleFlag else self.position[2]
+                            jy = stack.pop() if stack else 0
+                            jx = stack.pop() if stack else 0
+                            arg2[0] = [jx,jy,jz]
+                            for j in range(3): arg2[0][j] -= arg2[1][j]
                             
                     elif self.currChar in "()": #while loop
                         if self.currChar == "(":
