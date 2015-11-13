@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 import json
 
-from minkolang.minkolang_0_11 import Program
+from minkolang.minkolang_0_12 import Program
 from minkolang.minkolang_09 import Program as Program_old
 
 import os
@@ -157,6 +157,8 @@ def main_view(request, **kwargs):
                             data['currchar'] = "<code>l </code> &nbsp;Pushes a 10 onto the stack."
                         else:
                             data['currchar'] = V['oldToggle']*'$' + V['currChar']
+
+                    data['register'] = V['register']
 
                     data['code_changed'] = V['codeChanged']
                     data['array_changed'] = V['arrayChanged']

@@ -25,7 +25,7 @@
 		<li><code>$V</code> enables the boost permanently until it encounters another <code>V</code>.</li>
 		
 		<li><code>w </code> &nbsp;Space wormhole; pops <code>y</code>,<code>x</code> and jumps to <code>(x,y)</code> in the codebox.</li>
-		<li><code>W </code> &nbsp;Space-time wormhole; pops <code>t</code>,<code>y</code>,<code>x</code> and jumps to <code>(x,y,t)</code> in the codebox.</li>
+		<li><code>$w</code> Space-time wormhole; pops <code>t</code>,<code>y</code>,<code>x</code> and jumps to <code>(x,y,t)</code> in the codebox.</li>
 	</ul>
 
 	<strong>Control structures</strong>
@@ -52,6 +52,7 @@
 		<li><code>} </code> &nbsp;Returns; that is, closes current recursion level and extends parent stack with current stack.</li>
 		
 		<li><code>k </code> &nbsp;Break; breaks out of the current loop or recursion and extends parent stack with current stack.</li>
+		<li><code>$k</code> Break; breaks out of the current loop or recursion and throws away the current stack.</li>
 		
 		<li><code>K </code> &nbsp;Sends the program counter in a random direction.</li>
 		<li><code>$K</code> Sends the program counter in a random direction, possibly forward in time.</li>
@@ -124,7 +125,8 @@
 		<li><code>$D</code> Multi-duplicate; pops <code>n</code> and duplicates whole stack <code>n</code> times.</li>
 		<li><code>g </code> &nbsp;Stack get; pops <code>n</code> and gets the stack's <code>n</code>th element and puts it on top of stack.</li>
 		<li><code>G </code> &nbsp;Stack insert; pops <code>n</code>,<code>x</code> and inserts <code>x</code> at the <code>n</code>-th position (zero-indexed).</li>
-		<li><code>c </code> &nbsp;Stack copy; pops <code>n</code> and copies the <code>n</code>-th element to the top of stack.
+		<li><code>c </code> &nbsp;Stack copy; pops <code>n</code> and copies the <code>n</code>-th element to the top of stack.</li>
+		<li><code>$c</code> Stack copy-slice; pops <code>b</code>,<code>a</code> and copies <code>stack[a:b]</code> to the top of stack.</li>
 		<li><code>i </code> &nbsp;Gets loop's counter (0-based) and pushes it onto the stack.</li>
 		<li><code>$i</code> (For loops only.) Gets for loop's max number of iterations and pushes it onto the stack.</li>
 		<li><code>I </code> &nbsp;Pushes the stack's length onto the stack.</li>
@@ -146,9 +148,9 @@
 
 	<ul>
 		<li><code>p </code> &nbsp;Puts to codebox; pops <code>k</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y)</code> with <code>k</code>.</li>
-		<li><code>P </code> &nbsp;Multi-level puts to codebox; pops <code>k</code>,<code>t</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y,t)</code> with <code>k</code>.</li>
+		<li><code>$p</code> Multi-level puts to codebox; pops <code>k</code>,<code>t</code>,<code>y</code>,<code>x</code> and replaces <code>Code(x,y,t)</code> with <code>k</code>.</li>
 		<li><code>q </code> &nbsp;Get from codebox; pops <code>y</code>,<code>x</code> and pushes <code>Code(x,y)</code> on stack.</li>
-		<li><code>Q </code> &nbsp;Multi-level get from codebox; pops <code>t</code>,<code>y</code>,<code>x</code> and pushes <code>Code(x,y,t)</code> on stack.</li>
+		<li><code>$q</code> Multi-level get from codebox; pops <code>t</code>,<code>y</code>,<code>x</code> and pushes <code>Code(x,y,t)</code> on stack.</li>
 		<li><code>a </code> &nbsp;Array get; pops <code>y</code>,<code>x</code> and pushes <code>Array[y][x]</code> on stack.</li>
 		<li><code>A </code> &nbsp;Array put; pops <code>k</code>,<code>y</code>,<code>x</code> and writes <code>k</code> to <code>Array[y][x]</code>.</li>
 	</ul>

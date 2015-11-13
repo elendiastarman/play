@@ -83,6 +83,7 @@ function updateStuff(response) {
 	$('#stack-text').text(response['stack']);
 	$('#loops-table').children().remove();
 	$('#loops-table').append(response['loops']);
+	$('#register-text').html("Register: <code>"+response['register']+"</code>");
 	
 	if (response['code_changed']) {
 		$('#code-table').children().remove();
