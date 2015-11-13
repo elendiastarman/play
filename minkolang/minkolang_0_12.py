@@ -58,6 +58,8 @@ class Program:
         self.oldToggle = 0
         self.fallFlag = 0
         self.stuckFlag = 0
+        self.ignoreFlag = ""
+        self.ternaryFlag = ""
         
         self.bounds = [[0,max([ max(map(len,layer)) for layer in self.code])],
                        [0,max(map(len,self.code))],
@@ -128,7 +130,7 @@ class Program:
                     self.numLiteral = ""
 
             if self.currChar not in "'\"":
-                if not self.strMode and not self.numMode:
+                if not self.strMode and not self.numMode and not self.ignoreFlag:
 
                     if self.currChar != " " and not self.fallable and not self.fallFlag:
                         self.fallable = 1
@@ -148,6 +150,9 @@ class Program:
                             self.stuckFlag = 1
                         else:
                             self.toggleFlag = 1
+
+                    elif self.currChar == "C": #comments
+                        self.ignoreFlag = " C"
 
                     elif self.currChar == "V":
                         if self.fallFlag:
@@ -848,6 +853,18 @@ class Program:
                             jx = stack.pop() if stack else 0
                             arg2[0] = [jx,jy,jz]
                             for j in range(3): arg2[0][j] -= arg2[1][j]
+
+                    elif self.currChar == "t": #ternary
+                        if not self.ternaryFlag:
+                            if (stack.pop() if stack else 0) == 0:
+                                self.ternaryFlag = "t0"
+                            else:
+                                self.ignoreFlag = " t1"
+                        else:
+                            if self.ternaryFlag == "t1":
+                                self.ternaryFlag = ""
+                            elif self.ternaryFlag == "t0":
+                                self.ignoreFlag = " t0"
                             
                     elif self.currChar in "()": #while loop
                         if self.currChar == "(":
@@ -886,18 +903,21 @@ class Program:
                             iters = stack.pop() if stack else 0                        
                             tos = stack.pop() if stack and self.toggleFlag else 0
 
-                            newstack = stack[-tos:]
-                            self.loops.append(["for",
-                                               self.position,
-                                               self.velocity,
-                                               newstack,
-                                               0,
-                                               iters])
-                            
-                            if self.toggleFlag:
-                                for n in newstack: stack.pop()
+                            if iters > 0:
+                                newstack = stack[-tos:]
+                                self.loops.append(["for",
+                                                   self.position,
+                                                   self.velocity,
+                                                   newstack,
+                                                   0,
+                                                   iters])
+                                
+                                if self.toggleFlag:
+                                    for n in newstack: stack.pop()
+                                else:
+                                    stack.clear()
                             else:
-                                stack.clear()
+                                self.ignoreFlag = " ]"
                             
                         elif self.currChar == "]":
                             if self.loops[-1][0] != "for":
@@ -952,11 +972,20 @@ class Program:
 
                     else:
                         pass
-                else: #if in string or number mode
+                else: #if in string or number mode or ignoreFlag is set
                     if self.strMode:
                         self.strLiteral += self.currChar
                     elif self.numMode:
                         self.numLiteral += self.currChar
+                    elif self.ignoreFlag:
+                        if self.ignoreFlag[0] == " ":
+                            self.ignoreFlag = self.ignoreFlag[1:]
+                        elif self.currChar == self.ignoreFlag[0]:
+                            if self.ignoreFlag == "t0":
+                                self.ternaryFlag = ""
+                            elif self.ignoreFlag == "t1":
+                                self.ternaryFlag = "t1"
+                            self.ignoreFlag = ""
 
             if self.toggleFlag and self.currChar != "$" and not self.stuckFlag: self.toggleFlag = 0
 
