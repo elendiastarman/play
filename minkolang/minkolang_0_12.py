@@ -736,10 +736,11 @@ class Program:
                             
                         elif tos == 10:
                             n = stack.pop() if stack else 0
-                            if not self.toggleFlag: #exp
-                                stack.append(math.exp(n))
-                            else: #?
-                                pass
+                            if not self.toggleFlag: #log
+                                stack.append(math.log(n))
+                            else: #log_n
+                                b = stack.pop() if stack else 0
+                                stack.append(math.log(n,b))
 
                     elif self.currChar == "T": #TRIG
                         tos = stack.pop() if stack else 0

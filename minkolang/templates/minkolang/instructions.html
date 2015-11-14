@@ -66,17 +66,15 @@
 		<li><code>$K</code> Sends the program counter in a random direction, possibly forward in time.</li>
 	</ul>
 
-	<strong>Literals</strong>
+	<strong>Literals/Generation</strong>
 
 	<ul>
 		<li><code>0...9,l,j</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10 and <code>j</code> is <code>sqrt(-1)</code>).</li>
-		<li><code>"..."</code> String literal. Minkolang is smart enough to reverse this before pushing on the stack.</li>
-		<li><code>'...'</code> Number literal. Does the work of multiplying by 10 and adding the next digit.</li>
-	</ul>
-	
-	<strong>Generation</strong>
-	
-	<ul>
+		<li><code>"..." </code> &nbsp;String literal; Minkolang is smart enough to reverse this before pushing on the stack.</li>
+		<li><code>$"..."</code> String literal with escapes; all escape sequences are converted before pushing on the stack.</li>
+		<li><code>'...' </code> &nbsp;Number literal; does the work of multiplying by 10 and adding the next digit.</li>
+		<li><code>$'...'</code> Number literal with a specific base; pops <code>n</code> before the literal and converts from base <code>n</code> to base <code>10</code> before pushing on the stack.</li>
+		
 		<li><code>h </code> &nbsp;Pops <code>n</code> and pushes a random integer between <code>0</code> and <code>n</code>, inclusive.</li>
 		<li><code>$h</code> Pops <code>n</code> and pushes a random float between <code>0</code> and <code>n</code>, inclusive.</li>
 		<li><code>H </code> &nbsp;Pops <code>b</code>,<code>a</code> and pushes a random integer between <code>a</code> and <code>b</code>, inclusive.</li>
@@ -172,7 +170,7 @@
 		<li><code>$$</code> Toggles functionality permanently until another <code>$</code> is encountered.</li>
 		<li><code>$$$</code> Separates layers of a program.</li>
 		<li><code>u </code> &nbsp;Debug (print) the current stack (Python interpreter only).</li>
-		<li><code>U </code> &nbsp;Debug (print) the code and loops (Python interpreter only).</li>
+		<li><code>$u</code> Debug (print) the code and loops (Python interpreter only).</li>
 	</ul>
 	
 	<strong>Grouped: Math</strong>
@@ -180,5 +178,50 @@
 	<ul>
 		<li><code>0M</code> &nbsp;Factorial; pops <code>a</code> and pushes <code>a!</code>.</li>
 		<li><code>0$M</code> Gamma; pops <code>a</code> and pushes <code>Γ(a)</code>.</li>
+		<li><code>1M</code> &nbsp;Square root; pops <code>a</code> and pushes <code>sqrt(a)</code>.</li>
+		<li><code>1$M</code> Nth root; pops <code>a</code>,<code>r</code> and pushes <code>(a)**(1/r)</code>.</li>
+		<li><code>2M</code> &nbsp;Is prime; pops <code>a</code> and pushes <code>a!</code>.</li>
+		<li><code>2$M</code> Is composite; pops <code>a</code> and pushes <code>Γ(a)</code>.</li>
+		<li><code>3M</code> &nbsp;Nth prime; pops <code>a</code> and pushes 1 if <code>a</code> is prime, 0 otherwise.</li>
+		<li><code>3$M</code> Nth composite; pops <code>a</code> and pushes 1 if <code>a</code> is composite, 1 otherwise.</li>
+		<li><code>4M</code> &nbsp;GCD; pops <code>b</code>,<code>a</code> and pushes <code>gcd(a,b)</code>.</li>
+		<li><code>4$M</code> LCM; pops <code>b</code>,<code>a</code> and pushes <code>lcm(a,b)</code>.</li>
+		<li><code>5M</code> &nbsp;Mean; pops the whole stack and pushes its mean.</li>
+		<li><code>5$M</code> Standard deviation; pops the whole stack and pushes its population standard deviation.</li>
+		<li><code>6M</code> &nbsp;Binomial (nCr); pops <code>b</code>,<code>a</code> and pushes <code>a C b</code>.</li>
+		<li><code>6$M</code> Permutation (nPr); pops <code>b</code>,<code>a</code> and pushes <code>a P b</code>.</li>
+		<li><code>7M</code> &nbsp;Real/imag; pops <code>z</code> and pushes its real and imaginary parts, in that order.</li>
+		<li><code>7$M</code> Complex conjugate; pops <code>z</code> and pushes its conjugate.</li>
+		<li><code>8M</code> &nbsp;2D distance; pops <code>y2</code>,<code>x2</code>,<code>y1</code>,<code>x1</code> and pushes the distance from <code>(x1,y1)</code> to <code>(x2,y2)</code>.</li>
+		<li><code>8$M</code> N-D distance; pops <code>n</code>, then pops the next <code>2n</code> elements (treats them as (x1,y1,...),(x2,y2,...)) and pushes the distance between them.</li>
+		<li><code>9M</code> &nbsp;Pi(x) (prime counting); pops <code>a</code> and pushes <code>pi(a)</code>.</li>
+		<li><code>9$M</code> Phi(x) (totient); pops <code>a</code> and pushes <code>totient(a)</code>.</li>
+		<li><code>lM</code> &nbsp;log(x); pops <code>a</code> and pushes <code>log(a)</code> (natural log).</li>
+		<li><code>l$M</code> log_b(x); pops <code>b</code>,<code>a</code> and pushes <code>log_b(a)</code>.</li>
+	</ul>
+	
+	<strong>Grouped: Trigonometry</strong>
+	
+	<ul>
+		<li><code>0T</code> &nbsp;Pi; pushes <code>pi</code>.</li>
+		<li><code>0$T</code> e (Euler's number); pushes <code>e</code>.</li>
+		<li><code>1T</code> &nbsp;Radians; pops <code>a</code> and pushes <code>a*pi/180</code>.</li>
+		<li><code>1$T</code> Degrees; pops <code>a</code> and pushes <code>a*180/pi</code>.</li>
+		<li><code>2T</code> &nbsp;Sine; pops <code>a</code> and pushes <code>sin(a)</code>.</li>
+		<li><code>2$T</code> Arcsine; pops <code>a</code> and pushes <code>asin(a)</code>.</li>
+		<li><code>3T</code> &nbsp;Cosine; pops <code>a</code> and pushes <code>cos(a)</code>.</li>
+		<li><code>3$T</code> Arccosine; pops <code>a</code> and pushes <code>acos(a)</code>.</li>
+		<li><code>4T</code> &nbsp;Tangent; pops <code>a</code> and pushes <code>tan(a)</code>.</li>
+		<li><code>4$T</code> Arctangent; pops <code>a</code> and pushes <code>atan(a)</code>.</li>
+		<li><code>5T</code> &nbsp;Atan2; pops <code>y</code>,<code>x</code> and pushes <code>atan2(y,x)</code>.</li>
+		<li><code>5$T</code> Hypotenuse; pops <code>y</code>,<code>x</code> and pushes <code>hypot(x,y)</code>.</li>
+		<li><code>6T</code> &nbsp;Angle difference - angles; pops <code>b</code>,<code>a</code> and pushes the signed angle difference between <code>a</code> and <code>b</code>.</li>
+		<li><code>6$T</code> Angle difference - coordinates; pops <code>y2</code>,<code>x2</code>,<code>y1</code>,<code>x1</code> and pushes the signed angle difference between <code>(x1,y1)</code> and <code>(x2,y2)</code>.</li>
+		<li><code>7T</code> &nbsp;Hyperbolic sine; pops <code>a</code> and pushes <code>sinh(a)</code>.</li>
+		<li><code>7$T</code> Hyperbolic arcsine; pops <code>a</code> and pushes <code>asinh(a)</code>.</li>
+		<li><code>8T</code> &nbsp;Hyperbolic cosine; pops <code>a</code> and pushes <code>cosh(a)</code>.</li>
+		<li><code>8$T</code> Hyperbolic arccosine; pops <code>a</code> and pushes <code>acosh(a)</code>.</li>
+		<li><code>9T</code> &nbsp;Hyperbolic tangent; pops <code>a</code> and pushes <code>tanh(a)</code>.</li>
+		<li><code>9$T</code> Hyperbolic arctangent; pops <code>a</code> and pushes <code>atanh(a)</code>.</li>
 	</ul>
 </div>
