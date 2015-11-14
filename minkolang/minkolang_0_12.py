@@ -60,6 +60,7 @@ class Program:
         self.stuckFlag = 0
         self.ignoreFlag = ""
         self.ternaryFlag = ""
+        self.escapeFlag = 0
         
         self.bounds = [[0,max([ max(map(len,layer)) for layer in self.code])],
                        [0,max(map(len,self.code))],
@@ -98,10 +99,13 @@ class Program:
             if self.currChar == '"' and not self.numMode:
                 self.fallable = not self.fallable
                 self.strMode = not self.strMode
+                if not self.escapeFlag: self.escapeFlag = self.toggleFlag
 
                 if not self.strMode:
+                    if self.escapeFlag: self.strLiteral = bytes(self.strLiteral, "utf-8").decode("unicode_escape")
                     if not self.ignoreFlag: stack.extend(list(map(ord,self.strLiteral[::-1])))
                     self.strLiteral = ""
+                    self.escapeFlag = 0
                     
             if self.currChar == "'" and not self.strMode:
                 self.fallable = not self.fallable
