@@ -75,6 +75,9 @@
 		<li><code>'...' </code> &nbsp;Number literal; does the work of multiplying by 10 and adding the next digit.</li>
 		<li><code>$'...'</code> Number literal with a specific base; pops <code>n</code> before the literal and converts from base <code>n</code> to base <code>10</code> before pushing on the stack.</li>
 		
+		<li><code>L </code> &nbsp;Range; pops <code>b</code>,<code>a</code> and pushes onto the stack every number from <code>a</code> to <code>b</code> in increments of 1, inclusive.</li>
+		<li><code>$L</code> Range with step; pops <code>s</code>,<code>b</code>,<code>a</code> and pushes onto the stack every number from <code>a</code> to <code>b</code> in increments of <code>s</code>, inclusive.</li>
+		
 		<li><code>h </code> &nbsp;Pops <code>n</code> and pushes a random integer between <code>0</code> and <code>n</code>, inclusive.</li>
 		<li><code>$h</code> Pops <code>n</code> and pushes a random float between <code>0</code> and <code>n</code>, inclusive.</li>
 		<li><code>H </code> &nbsp;Pops <code>b</code>,<code>a</code> and pushes a random integer between <code>a</code> and <code>b</code>, inclusive.</li>
@@ -91,7 +94,7 @@
 		<li><code>* </code> &nbsp;Multiply; pops <code>b</code>,<code>a</code> and pushes <code>a*b</code>.</li>
 		<li><code>$*</code> Product; clears the stack and pushes the product of its elements.</li>
 		<li><code>: </code> &nbsp;Integer division; pops <code>b</code>,<code>a</code> and pushes <code>a//b</code>.</li>
-		<li><code>$:</code> Float; pops <code>b</code>,<code>a</code> and pushes <code>a/b</code>.</li>
+		<li><code>$:</code> Float division; pops <code>b</code>,<code>a</code> and pushes <code>a/b</code>.</li>
 		
 		<li><code>; </code> &nbsp;Exponentiation; pops <code>b</code>,<code>a</code> and pushes <code>a**b</code>.</li>
 		<li><code>$;</code> Logarithm; pops <code>b</code>,<code>a</code> and pushes <code>log_a(b)</code>.</li>

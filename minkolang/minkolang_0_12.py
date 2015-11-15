@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import math
+import cmath
 import random
 from copy import deepcopy
 
@@ -737,10 +738,16 @@ class Program:
                         elif tos == 10:
                             n = stack.pop() if stack else 0
                             if not self.toggleFlag: #log
-                                stack.append(math.log(n))
+                                try:
+                                    stack.append(math.log(n))
+                                except ValueError:
+                                    stack.append(cmath.log(n))
                             else: #log_n
                                 b = stack.pop() if stack else 0
-                                stack.append(math.log(n,b))
+                                try:
+                                    stack.append(math.log(n,b))
+                                except ValueError:
+                                    stack.append(cmath.log(n,b))
 
                     elif self.currChar == "T": #TRIG
                         tos = stack.pop() if stack else 0
