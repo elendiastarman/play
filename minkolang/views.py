@@ -183,6 +183,7 @@ def main_view(request, **kwargs):
                                             
                         data['code_table'] = render_to_string('minkolang/codeTable.html', {'code_array':code_array})
 
+                        code_put = []
                         if V['codeput']:
                             code_put = []
                             for key,value in V['codeput'].items():
