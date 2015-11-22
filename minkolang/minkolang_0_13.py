@@ -890,15 +890,15 @@ class Program:
                             elif tos == 3: result = ~(a&b)
                             elif tos == 4: result = ~(a|b)
                             elif tos == 5: result = ~(a^b)
-                        elif tos == 7: result = ~(stack.pop() if stack else 0) #complement
-                        elif tos == 8: #if/not if
+                        elif tos == 6: result = ~(stack.pop() if stack else 0) #complement
+                        elif tos == 7: #if/not if
                             b = stack.pop() if stack else 0
                             a = stack.pop() if stack else 0
                             result = (b if a else 1) if not self.toggleFlag else (b if not a else 1)
-                        elif tos == 9 or tos == 10: #bitshift left/right
+                        elif tos == 8 or tos == 9: #bitshift left/right
                             b = stack.pop() if stack and self.toggleFlag else 1
                             a = stack.pop() if stack else 0
-                            result = (a << b) if tos == 9 else (a >> b)
+                            result = (a << b) if tos == 8 else (a >> b)
                         
                         stack.append(result)
 
