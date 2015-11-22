@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 import json
 
-from minkolang.minkolang_0_12 import Program
+from minkolang.minkolang_0_13 import Program
 from minkolang.minkolang_09 import Program as Program_old
 
 import os
@@ -113,7 +113,7 @@ def main_view(request, **kwargs):
                     steps = int(request.GET["steps"])
 
                     prgmT[uid] = multiprocessing.Process(
-                        target = proxy_prgm.run,
+                        target = proxy_prgm.runCatch,
                         args = (steps,),
                         name="program run")
                     
@@ -209,8 +209,10 @@ def main_view(request, **kwargs):
                         data['array_table'] = render_to_string('minkolang/arrayTable.html', {'array':V['array']})
 
                     data['done'] = V['isDone']
+                    data['error_type'] = V['errorType']
                     
                 except Exception as e:
+                    print("views.py error:",file=sys.stderr)
                     traceback.print_exc(file=sys.stderr)
                     raise e
 

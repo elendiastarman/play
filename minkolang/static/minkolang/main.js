@@ -85,6 +85,10 @@ function updateStuff(response) {
 	$('#loops-table').append(response['loops']);
 	$('#register-text').html("Register: <code>"+response['register']+"</code>");
 	
+	if (response['error_type']) {
+		$('#status-text').html("<span style='color:red'>Error: "+response['error_type']+"</span>");
+	}
+	
 	if (response['code_changed']) {
 		$('#code-table').children().remove();
 		$('#code-table').append(response['code_table']);
@@ -174,14 +178,13 @@ function stepcode(steps, state) {
 				$('.cell_highlight').removeClass('cell_highlight');
 				$('#status-text').text("Status: ready!");
 			}
+	
+			console.log("error_type: "+response['error_type']);
+			if (response['error_type']) {
+				$('#status-text').html("<span style='color:red'>Error: "+response['error_type']+"</span>");
+			}
 		},
-		failure: function(response) {
-			// if (steps == -1) {
-				// $('#run-button').toggle();
-				// $('#stop-button').toggle();
-			// }
-			// $('#status-text').text("Status: error!").style('color:red');
-		}
+		failure: function(response) {}
 	});
 };
 
@@ -218,6 +221,10 @@ function slowcode(steps, speed) {
 						} else {
 							stepLim -= steps;
 							ready = 1;
+						}
+	
+						if (response['error_type']) {
+							$('#status-text').html("<span style='color:red'>Error: "+response['error_type']+"</span>");
 						}
 					},
 					failure: function(response) { console.log(response); stepLim = -1; }
