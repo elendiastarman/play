@@ -178,8 +178,7 @@ function stepcode(steps, state) {
 				$('.cell_highlight').removeClass('cell_highlight');
 				$('#status-text').text("Status: ready!");
 			}
-	
-			console.log("error_type: "+response['error_type']);
+			
 			if (response['error_type']) {
 				$('#status-text').html("<span style='color:red'>Error: "+response['error_type']+"</span>");
 			}
