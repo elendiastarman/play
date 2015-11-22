@@ -231,12 +231,27 @@ class Program:
                         else:
                             pass
 
-                    elif self.currChar in "0123456789":
+                    elif self.currChar in "0123456789" and not self.toggleFlag:
                         stack.append(int(self.currChar))
-                    elif self.currChar == "l":
+                    elif self.currChar == "l" and not self.toggleFlag:
                         stack.append(10)
-                    elif self.currChar == "j":
+                    elif self.currChar == "j" and not self.toggleFlag:
                         stack.append(1j)
+                    elif self.currChar in "0123456789lj" and self.toggleFlag:
+                        if self.currChar == "0":
+                            stack.append(0.1)
+                        elif self.currChar in "123456":
+                            stack.append(int(self.currChar)+10)
+                        elif self.currChar == "7":
+                            stack.append(1/2)
+                        elif self.currChar == "8":
+                            stack.append((1+5**.5)/2) #phi
+                        elif self.currChar == "9":
+                            stack.append(2**.5)
+                        elif self.currChar == "l":
+                            stack.append(100)
+                        elif self.currChar == "j":
+                            stack.append(2**.5/2+2**.5*1j/2)
 
                     elif self.currChar == "L":
                         s = stack.pop() if stack and self.toggleFlag else 1
