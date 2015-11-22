@@ -440,13 +440,24 @@ class Program:
                         arg2 = [[nx,ny,nz],self.velocity]
 
                     elif self.currChar in "gG": #stack index/insert
-                        tos = stack.pop() if stack else 0
-
-                        if self.currChar == "g" and stack:
-                            stack.append(stack.pop(tos))
-                        elif self.currChar == "G" and stack:
-                            toput = stack.pop() if stack else 0
-                            stack.insert(tos, toput)
+                        if not self.toggleFlag:
+                            n = stack.pop() if stack else 0
+                            if self.currChar == "g" and stack:
+                                stack.append(stack.pop(n))
+                            elif self.currChar == "G" and stack:
+                                toput = stack.pop() if stack else 0
+                                stack.insert(n, toput)
+                        else:
+                            b = stack.pop() if stack else 0
+                            a = stack.pop() if stack else 0
+                            if self.currChar == "g" and stack:
+                                newstack = stack[a:b]
+                                for k in newstack: stack.pop(a)
+                                stack.extend(newstack)
+                            elif self.currChar == "G" and stack:
+                                newstack = stack[b:-a]
+                                for k in newstack: stack.pop(b)
+                                stack.extend(newstack)
 
                     elif self.currChar == "c": #stack copy/slice
                         tos = stack.pop() if stack else 0
