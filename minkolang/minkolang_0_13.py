@@ -938,10 +938,27 @@ class Program:
                                 i += 1
 
                         elif tos == 5:
-                            if not self.toggleFlag: #replace all
-                                pass
-                            else: #replace one
-                                pass
+                            b = stack.pop() if stack else 0
+                            a = stack.pop() if stack else 0
+                            B = stack[-b:]
+                            A = stack[-b-a:-b]
+                            for k in A+B: stack.pop()
+
+                            newstack = []
+                            i = 0
+                            while i < len(stack):
+                                if stack[i:i+len(A)] == A:
+                                    newstack.extend(B)
+                                    i += len(A)-1
+                                    if self.toggleFlag: #replace only once
+                                        newstack.extend(stack[i+1:])
+                                        break
+                                else:
+                                    newstack.append(stack[i])
+                                i += 1
+
+                            stack.clear()
+                            stack.extend(newstack)
 
                         elif tos == 6:
                             if not self.toggleFlag: #convert number to string
