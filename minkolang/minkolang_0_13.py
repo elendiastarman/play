@@ -893,25 +893,35 @@ class Program:
                     elif self.currChar == "Z": #LISTS/STRINGS
                         tos = stack.pop() if stack else 0
 
-                        if tos == 1:
+                        if tos == 0:
                             if not self.toggleFlag: #count single item
                                 a = stack.pop() if stack else 0
                                 stack.append(stack.count(a))
                             else: #count multi item
                                 a = stack.pop() if stack else 0
                                 needle = stack[-a:]
-                                haystack = stack[:-a]
+                                for k in needle: stack.pop()
                                 count = 0
-                                for i in range(len(haystack)-len(needle)):
-                                    if haystack[i:i+len(needle)] == needle:
+                                for i in range(len(stack)-len(needle)):
+                                    if stack[i:i+len(needle)] == needle:
                                         count += 1
                                 stack.append(count)
 
-                        elif tos == 2:
-                            if not self.toggleFlag: #find one
-                                pass
-                            else: #find all
-                                pass
+                        elif tos == 1 or tos == 2:
+                            if not self.toggleFlag: #find [first] single item
+                                needle = [stack[-1] if stack else 0]
+                            else: #find [first] multi item
+                                needle = stack[-(stack.pop() if stack else 0):]
+                            for k in needle: stack.pop()
+
+                            count = 0
+                            for i in range(len(stack)-len(needle)):
+                                if stack[i:i+len(needle)] == needle:
+                                    stack.append(i)
+                                    count += 1
+                                    if tos == 1: break
+                                    
+                            if tos == 2: stack.append(count)
 
                         elif tos == 3:
                             if not self.toggleFlag: #remove all
