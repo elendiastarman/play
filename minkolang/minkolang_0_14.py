@@ -1031,7 +1031,7 @@ class Program:
                                 for prod in prods[::-1]:
                                     stack.extend(prod[::-1])
                                     stack.append(len(prod))
-                                stack.append(len(prods[0]))
+                                stack.append(len(prods))
                             else: #nth product
                                 for x in range(n): p = next(prods)
                                 stack.extend(p[::-1])
@@ -1048,7 +1048,7 @@ class Program:
                                 for perm in perms[::-1]:
                                     stack.extend(perm[::-1])
                                     stack.append(len(perm))
-                                stack.append(len(perms[0]))
+                                stack.append(len(perms))
                             else: #nth permutation
                                 perm = itertools.permutations(newstack,n)
                                 stack.extend(perm[::-1])
