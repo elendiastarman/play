@@ -1033,9 +1033,9 @@ class Program:
                                     stack.append(len(prod))
                                 stack.append(len(prods))
                             else: #nth product
-                                for x in range(n): p = next(prods)
-                                stack.extend(p[::-1])
-                                stack.append(len(p))
+                                for x in range(n): prod = next(prods)
+                                stack.extend(prod[::-1])
+                                stack.append(len(prod))
 
                         elif tos == 2: #Permutations
                             n = stack.pop() if stack and self.toggleFlag else 0
@@ -1079,17 +1079,32 @@ class Program:
                                 stack.extend(comb[::-1])
                                 stack.append(len(comb))
 
-                        elif tos == 4: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                        elif tos == 5: #Transpose/rotate/flip
+                            k = stack.pop()%8 if stack and self.toggleFlag else 0
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0
 
-                        elif tos == 5: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+                            arrayT = [[array[j][i] for j in range(y)] for i in range(x)] #transpose
+                            
+                            if self.toggleFlag: #rotate too if desired
+                                array2,x,y = (array,x,y) if k < 4 else (arrayT,y,x)
+                                k %= 4
+                                array3 = array2
+                                
+                                if k == 1:
+                                    array3 = [[array2[j][i] for j in range(y)[::-1]] for i in range(x)]
+                                elif k == 2:
+                                    array3 = [row[::-1] for row in array2[::-1]]
+                                elif k == 3:
+                                    array3 = [[array2[j][i] for j in range(y)] for i in range(x)[::-1]]
+                                
+                            else:
+                                array3 = arrayT
+
+                            for row in array3[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array3[0]))
+                            stack.append(len(array3))
 
                         elif tos == 6: #Cartesian product
                             if not self.toggleFlag: #all products
