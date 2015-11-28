@@ -9,7 +9,7 @@ from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.14.py", "o\"`\"-n+2%t\"dark\"t\"light\"t$O.", "c2"]
+    sys.argv = ["minkolang_0.14.py", ".", "c2"]
     debug = 1
     numSteps = 100
 
@@ -1128,11 +1128,16 @@ class Program:
 
                             stack.append(determinant(array))
 
-                        elif tos == 8: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                        elif tos == 8: #Matrix inverse
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0
+
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+                            invA = matrixInverse(array)
+
+                            for row in invA[::-1]: stack.extend(row[::-1])
+                            stack.append(len(invA[0]))
+                            stack.append(len(invA))
 
                         elif tos == 9: #Cartesian product
                             if not self.toggleFlag: #all products
@@ -1428,7 +1433,7 @@ def gcd(a,b):
 
 def determinant(A):
     if len(A) == 0: raise ValueError("Matrix must be non-empty")
-    if len(A) != len(A[0]): raise ValueError("Matrix must be square (it is $dx%d)" % (len(A),len(A[0])))
+    if len(A) != len(A[0]): raise ValueError("Matrix must be square (it is %dx%d)" % (len(A),len(A[0])))
 
     if len(A) == 1: return A[0][0]
     
@@ -1439,6 +1444,24 @@ def determinant(A):
             A2.append(A[j][:i]+A[j][i+1:])
         det += ((i%2)*2-1)*A[0][i]*determinant(A2)
     return det
+
+def matrixInverse(A): #uses a very inefficient recursive algorithm
+    if len(A) == 0: raise ValueError("Matrix must be non-empty")
+    if len(A) != len(A[0]): raise ValueError("Matrix must be square (it is %dx%d)" % (len(A),len(A[0])))
+
+    if len(A) == 1: return A[0][0]
+    
+    C = [[0]*len(A) for x in range(len(A))]
+    det = determinant(A)
+    
+    for j in range(len(A)):
+        for i in range(len(A[0])):
+            A2 = []
+            for row in A[:j]+A[j+1:]:
+                A2.append(row[:i]+row[i+1:])
+            C[i][j] = ((i+j)%2*2-1)*determinant(A2)/det
+
+    return C
 
 if file:
     if debug:
