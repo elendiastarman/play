@@ -1036,17 +1036,45 @@ class Program:
                                 stack.extend(p[::-1])
                                 stack.append(len(p))
 
-                        elif tos == 2: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                        elif tos == 2: #Permutations
+                            n = stack.pop() if stack and self.toggleFlag else 0
+                            k = stack.pop() if stack else 0
+                            newstack = stack[-k:]
+                            for x in newstack: stack.pop()
+                            
+                            if not self.toggleFlag: #all permutations
+                                perms = list(itertools.permutations(newstack))
+                                for perm in perms[::-1]: stack.extend(perm[::-1])
+                                stack.append(len(perms))
+                                stack.append(len(perms[0]))
+                            else: #nth permutation
+                                perm = itertools.permutations(newstack,n)
+                                stack.extend(perm[::-1])
+                                stack.append(len(perm))
 
-                        elif tos == 3: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                        elif tos == 3 or tos == 4: #Combinations without/with replacement
+                            n = stack.pop() if stack and self.toggleFlag else 0
+                            r = stack.pop() if stack else 0
+                            k = stack.pop() if stack else 0
+                            newstack = stack[-k:]
+                            for x in newstack: stack.pop()
+
+                            if tos == 3:
+                                comb_func = itertools.combinations
+                            elif tos == 4:
+                                comb_func = itertools.combinations_with_replacement
+
+                            combs = comb_func(newstack,r)
+                            
+                            if not self.toggleFlag: #all combinations
+                                combs = list(combs)
+                                for comb in combs[::-1]: stack.extend(comb[::-1])
+                                stack.append(len(combs))
+                                stack.append(len(combs[0]))
+                            else: #nth combination
+                                for i in range(n): comb = next(combs)
+                                stack.extend(comb[::-1])
+                                stack.append(len(comb))
 
                         elif tos == 4: #Cartesian product
                             if not self.toggleFlag: #all products
