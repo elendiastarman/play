@@ -1139,12 +1139,29 @@ class Program:
                             stack.append(len(invA[0]))
                             stack.append(len(invA))
 
-                        elif tos == 9: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
-
+                        elif tos == 9: #Submatrices
+                            if not self.toggleFlag: #contiguous
+                                y2 = stack.pop() if stack else 0
+                                x2 = stack.pop() if stack else 0
+                                y1 = stack.pop() if stack else 0
+                                x1 = stack.pop() if stack else 0
+                            else: #Minus a row and column
+                                b = stack.pop() if stack else 0
+                                a = stack.pop() if stack else 0
+                            
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0
+                            
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+                            
+                            if not self.toggleFlag: #contiguous
+                                array2 = [row[x1:x2+1] for row in array[y1:y2+1]]
+                            else: #Minus a row and column
+                                array2 = [row[:a]+row[a+1:] for row in array[:b]+array[b+1:]]
+                            
+                            for row in array2[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array2[0]))
+                            stack.append(len(array2))
                         elif tos == 10: #Cartesian product
                             if not self.toggleFlag: #all products
                                 pass
