@@ -1028,8 +1028,9 @@ class Program:
                             
                             if not self.toggleFlag: #all products
                                 prods = list(prods)
-                                for p in prods[::-1]: stack.extend(p[::-1])
-                                stack.append(len(prods))
+                                for prod in prods[::-1]:
+                                    stack.extend(prod[::-1])
+                                    stack.append(len(prod))
                                 stack.append(len(prods[0]))
                             else: #nth product
                                 for x in range(n): p = next(prods)
@@ -1044,8 +1045,9 @@ class Program:
                             
                             if not self.toggleFlag: #all permutations
                                 perms = list(itertools.permutations(newstack))
-                                for perm in perms[::-1]: stack.extend(perm[::-1])
-                                stack.append(len(perms))
+                                for perm in perms[::-1]:
+                                    stack.extend(perm[::-1])
+                                    stack.append(len(perm))
                                 stack.append(len(perms[0]))
                             else: #nth permutation
                                 perm = itertools.permutations(newstack,n)
@@ -1068,9 +1070,10 @@ class Program:
                             
                             if not self.toggleFlag: #all combinations
                                 combs = list(combs)
-                                for comb in combs[::-1]: stack.extend(comb[::-1])
+                                for comb in combs[::-1]:
+                                    stack.extend(comb[::-1])
+                                    stack.append(len(comb))
                                 stack.append(len(combs))
-                                stack.append(len(combs[0]))
                             else: #nth combination
                                 for i in range(n): comb = next(combs)
                                 stack.extend(comb[::-1])
