@@ -1120,11 +1120,13 @@ class Program:
                             stack.extend(sums[::-1])
                             stack.append(len(sums))
 
-                        elif tos == 7: #Cartesian product
-                            if not self.toggleFlag: #all products
-                                pass
-                            else: #nth product
-                                pass
+                        elif tos == 7: #Determinant
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0
+
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+
+                            stack.append(determinant(array))
 
                         elif tos == 8: #Cartesian product
                             if not self.toggleFlag: #all products
@@ -1423,6 +1425,20 @@ def gcd(a,b):
     while 1:
         a,b = b,a%b
         if b == 0: return a
+
+def determinant(A):
+    if len(A) == 0: raise ValueError("Matrix must be non-empty")
+    if len(A) != len(A[0]): raise ValueError("Matrix must be square (it is $dx%d)" % (len(A),len(A[0])))
+
+    if len(A) == 1: return A[0][0]
+    
+    det = 0
+    for i in range(len(A[0])):
+        A2 = []
+        for j in range(1,len(A)):
+            A2.append(A[j][:i]+A[j][i+1:])
+        det += ((i%2)*2-1)*A[0][i]*determinant(A2)
+    return det
 
 if file:
     if debug:
