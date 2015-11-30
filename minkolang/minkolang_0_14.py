@@ -795,9 +795,9 @@ class Program:
                             else: #log_n
                                 b = stack.pop() if stack else 0
                                 try:
-                                    stack.append(math.log(n,b))
+                                    stack.append(math.log(b,n))
                                 except ValueError:
-                                    stack.append(cmath.log(n,b))
+                                    stack.append(cmath.log(b,n))
 
                     elif self.currChar == "T": #TRIG
                         tos = stack.pop() if stack else 0
