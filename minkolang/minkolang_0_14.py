@@ -909,7 +909,7 @@ class Program:
                             for k in needle: stack.pop()
 
                             count = 0
-                            for i in range(len(stack)-len(needle)):
+                            for i in range(len(stack)-len(needle)+1):
                                 if stack[i:i+len(needle)] == needle:
                                     stack.append(i)
                                     count += 1
@@ -931,7 +931,7 @@ class Program:
                                     if tos == 3: break
                                 i += 1
 
-                        elif tos == 5:
+                        elif tos == 5: #replace
                             b = stack.pop() if stack else 0
                             a = stack.pop() if stack else 0
                             B = stack[-b:]
