@@ -224,7 +224,7 @@ def main_view(request, **kwargs):
 @csrf_exempt
 def github_view(request, *args, **kwargs):
 
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode())
 
     with open('github_json.txt','w') as f: f.write(str(data))
 
