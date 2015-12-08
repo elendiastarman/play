@@ -222,7 +222,7 @@ def main_view(request, **kwargs):
     return render(request, 'minkolang/main.html', context_instance=context)
 
 @csrf_exempt
-def github_view(*args, **kwargs):
+def github_view(request, *args, **kwargs):
 
     context = RequestContext(request)
 
