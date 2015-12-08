@@ -220,6 +220,15 @@ def main_view(request, **kwargs):
 
     return render(request, 'minkolang/main.html', context_instance=context)
 
+def github_view(*args, **kwargs):
+
+    context = RequestContext(request)
+
+    with open('github_json.txt','w') as f: f.write(context)
+
+
+
+####### DO NOT EDIT #######
 def old_main_view(request, **kwargs):
     global manager
     global prgmT
