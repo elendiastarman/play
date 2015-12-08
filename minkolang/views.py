@@ -230,7 +230,7 @@ def github_view(request, *args, **kwargs):
     #with open('github_json.txt','w') as f: f.write(str(data['pusher']))
 
     if data['pusher']['name'] == 'elendiastarman' and sys.platform == 'linux':
-        subprocess.call("~/webapps/maingit/repos/minkolang.git/pull-from-github")
+        subprocess.call("./webapps/maingit/repos/minkolang.git/pull-from-github")
 
     return HttpResponse("OK")
 
