@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import Context, RequestContext
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 from minkolang.minkolang_0_14 import Program
@@ -220,6 +221,7 @@ def main_view(request, **kwargs):
 
     return render(request, 'minkolang/main.html', context_instance=context)
 
+@csrf_exempt
 def github_view(*args, **kwargs):
 
     context = RequestContext(request)
