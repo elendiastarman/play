@@ -233,8 +233,10 @@ def github_view(request, *args, **kwargs):
 ##        pass
         try:
 ##            attempt = -1
-            attempt = subprocess.call("/home/elendia/bin/pull-from-github")
+##            attempt = subprocess.call("/home/elendia/bin/pull-from-github")
 ##            attempt = subprocess.call("pwd", shell=True)
+            os.chdir("/home/elendia/webapps/maingit/repos/minkolang.git/")
+            attempt = subprocess.call("./pull-from-github")
             with open('github_pull_attempt.txt','w') as f: f.write("Exit code: %s"%attempt)
         except Exception as e:
 ##            pass
