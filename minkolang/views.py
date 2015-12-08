@@ -226,7 +226,7 @@ def github_view(request, *args, **kwargs):
 
     context = RequestContext(request)
 
-    with open('github_json.txt','w') as f: f.write(str(context))
+    with open('github_json.txt','w') as f: f.write(str(request))
 
     return HttpResponse("hello!", content_type="text/plain")
 
