@@ -226,7 +226,7 @@ def github_view(request, *args, **kwargs):
 
     data = json.loads(request.body)
 
-    with open('github_json.txt','w') as f: f.write(str(data)))
+    with open('github_json.txt','w') as f: f.write(str(data))
 
     return HttpResponse("OK")
 
