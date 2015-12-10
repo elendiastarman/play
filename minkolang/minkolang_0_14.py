@@ -345,12 +345,6 @@ class Program:
                         else:
                             stack.extend(result)
 
-                    elif self.currChar == "Y":
-                        x = stack.pop() if stack else 0
-                        b = stack.pop() if stack else 0
-                        a = stack.pop() if stack else 0
-                        stack.append(int(a<=x<=b) if not self.toggleFlag else int(a<x<b))
-
                     elif self.currChar in "~,": #negation and not
                         b = stack.pop() if stack else 0
 
@@ -360,7 +354,26 @@ class Program:
                             stack.append(int(not b if not self.toggleFlag else bool(b)))
 
                     elif self.currChar == "y":
-                        stack.append(min(stack) if not self.toggleFlag else max(stack))
+                        a = stack.pop() if stack else 0
+                        if type(a) != complex:
+                            stack.append(int(a) if not self.toggleFlag else (a-int(a)))
+                        else:
+                            ar = a.real
+                            ai = a.imag
+                            ar2 = int(ar) if not self.toggleFlag else (ar-int(ar))
+                            ai2 = int(ai) if not self.toggleFlag else (ai-int(ai))
+                            stack.append((ar2+ai2*1j))
+
+                    elif self.currChar == "Y":
+                        a = stack.pop() if stack else 0
+                        if type(a) != complex:
+                            stack.append(math.floor(a) if not self.toggleFlag else math.ceil(a))
+                        else:
+                            ar = a.real
+                            ai = a.imag
+                            ar2 = math.floor(ar) if not self.toggleFlag else math.ceil(ar)
+                            ai2 = math.floor(ai) if not self.toggleFlag else math.ceil(ai)
+                            stack.append((ar2+ai2*1j))
 
                     elif self.currChar in "no": #input
                         if self.currChar == "n":
@@ -1009,6 +1022,11 @@ class Program:
                                 stack.extend((list(range(65,91))+list(range(97,123)))[::-1])
                             else: #numbers
                                 stack.extend(list(range(48,58))[::-1])
+
+                        elif tos == 1j: #min/max
+                            newstack = stack[:]
+                            stack.clear()
+                            stack.append(min(newstack) if not self.toggleFlag else max(newstack))
 
                     elif self.currChar == "P": #MATRICES
                         tos = stack.pop() if stack else 0

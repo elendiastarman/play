@@ -109,6 +109,10 @@
 		<li><code>$`</code> Less than; pops <code>b</code>,<code>a</code> and pushes <code>a < b</code>.</li>
 		<li><code>, </code> &nbsp;Not; pops <code>a</code> and pushes <code>not(a)</code>.</li>
 		<li><code>$,</code> Boolean; pops <code>a</code> and pushes <code>bool(a)</code>.</li>
+		<li><code>y </code> &nbsp;Int; pops <code>a</code> and pushes <code>int(a)</code>.</li>
+		<li><code>$y</code> &nbsp;Float; pops <code>a</code> and pushes <code>a-int(a)</code>.</li>
+		<li><code>Y </code> &nbsp;Floor; pops <code>a</code> and pushes <code>floor(a)</code>.</li>
+		<li><code>$Y</code> &nbsp;Ceiling; pops <code>a</code> and pushes <code>ceil(a)</code>.</li>
 	</ul>
 
 	<strong>Input and output</strong>
@@ -179,52 +183,127 @@
 	<strong>Grouped: Math</strong>
 	
 	<ul>
-		<li><code>0M</code> &nbsp;Factorial; pops <code>a</code> and pushes <code>a!</code>.</li>
+		<li><code>0M </code> &nbsp;Factorial; pops <code>a</code> and pushes <code>a!</code>.</li>
 		<li><code>0$M</code> Gamma; pops <code>a</code> and pushes <code>Γ(a)</code>.</li>
-		<li><code>1M</code> &nbsp;Square root; pops <code>a</code> and pushes <code>sqrt(a)</code>.</li>
+		<li><code>1M </code> &nbsp;Square root; pops <code>a</code> and pushes <code>sqrt(a)</code>.</li>
 		<li><code>1$M</code> Nth root; pops <code>a</code>,<code>r</code> and pushes <code>(a)**(1/r)</code>.</li>
-		<li><code>2M</code> &nbsp;Is prime; pops <code>a</code> and pushes <code>a!</code>.</li>
+		<li><code>2M </code> &nbsp;Is prime; pops <code>a</code> and pushes <code>a!</code>.</li>
 		<li><code>2$M</code> Is composite; pops <code>a</code> and pushes <code>Γ(a)</code>.</li>
-		<li><code>3M</code> &nbsp;Nth prime; pops <code>a</code> and pushes 1 if <code>a</code> is prime, 0 otherwise.</li>
+		<li><code>3M </code> &nbsp;Nth prime; pops <code>a</code> and pushes 1 if <code>a</code> is prime, 0 otherwise.</li>
 		<li><code>3$M</code> Nth composite; pops <code>a</code> and pushes 1 if <code>a</code> is composite, 1 otherwise.</li>
-		<li><code>4M</code> &nbsp;GCD; pops <code>b</code>,<code>a</code> and pushes <code>gcd(a,b)</code>.</li>
+		<li><code>4M </code> &nbsp;GCD; pops <code>b</code>,<code>a</code> and pushes <code>gcd(a,b)</code>.</li>
 		<li><code>4$M</code> LCM; pops <code>b</code>,<code>a</code> and pushes <code>lcm(a,b)</code>.</li>
-		<li><code>5M</code> &nbsp;Mean; pops the whole stack and pushes its mean.</li>
+		<li><code>5M </code> &nbsp;Mean; pops the whole stack and pushes its mean.</li>
 		<li><code>5$M</code> Standard deviation; pops the whole stack and pushes its population standard deviation.</li>
-		<li><code>6M</code> &nbsp;Binomial (nCr); pops <code>b</code>,<code>a</code> and pushes <code>a C b</code>.</li>
+		<li><code>6M </code> &nbsp;Binomial (nCr); pops <code>b</code>,<code>a</code> and pushes <code>a C b</code>.</li>
 		<li><code>6$M</code> Permutation (nPr); pops <code>b</code>,<code>a</code> and pushes <code>a P b</code>.</li>
-		<li><code>7M</code> &nbsp;Real/imag; pops <code>z</code> and pushes its real and imaginary parts, in that order.</li>
+		<li><code>7M </code> &nbsp;Real/imag; pops <code>z</code> and pushes its real and imaginary parts, in that order.</li>
 		<li><code>7$M</code> Complex conjugate; pops <code>z</code> and pushes its conjugate.</li>
-		<li><code>8M</code> &nbsp;2D distance; pops <code>y2</code>,<code>x2</code>,<code>y1</code>,<code>x1</code> and pushes the distance from <code>(x1,y1)</code> to <code>(x2,y2)</code>.</li>
+		<li><code>8M </code> &nbsp;2D distance; pops <code>y2</code>,<code>x2</code>,<code>y1</code>,<code>x1</code> and pushes the distance from <code>(x1,y1)</code> to <code>(x2,y2)</code>.</li>
 		<li><code>8$M</code> N-D distance; pops <code>n</code>, then pops the next <code>2n</code> elements (treats them as (x1,y1,...),(x2,y2,...)) and pushes the distance between them.</li>
-		<li><code>9M</code> &nbsp;Pi(x) (prime counting); pops <code>a</code> and pushes <code>pi(a)</code>.</li>
+		<li><code>9M </code> &nbsp;Pi(x) (prime counting); pops <code>a</code> and pushes <code>pi(a)</code>.</li>
 		<li><code>9$M</code> Phi(x) (totient); pops <code>a</code> and pushes <code>totient(a)</code>.</li>
-		<li><code>lM</code> &nbsp;log(x); pops <code>a</code> and pushes <code>log(a)</code> (natural log).</li>
+		<li><code>lM </code> &nbsp;log(x); pops <code>a</code> and pushes <code>log(a)</code> (natural log).</li>
 		<li><code>l$M</code> log_b(x); pops <code>b</code>,<code>a</code> and pushes <code>log_b(a)</code>.</li>
 	</ul>
 	
 	<strong>Grouped: Trigonometry</strong>
 	
 	<ul>
-		<li><code>0T</code> &nbsp;Pi; pushes <code>pi</code>.</li>
+		<li><code>0T </code> &nbsp;Pi; pushes <code>pi</code>.</li>
 		<li><code>0$T</code> e (Euler's number); pushes <code>e</code>.</li>
-		<li><code>1T</code> &nbsp;Radians; pops <code>a</code> and pushes <code>a*pi/180</code>.</li>
+		<li><code>1T </code> &nbsp;Radians; pops <code>a</code> and pushes <code>a*pi/180</code>.</li>
 		<li><code>1$T</code> Degrees; pops <code>a</code> and pushes <code>a*180/pi</code>.</li>
-		<li><code>2T</code> &nbsp;Sine; pops <code>a</code> and pushes <code>sin(a)</code>.</li>
+		<li><code>2T </code> &nbsp;Sine; pops <code>a</code> and pushes <code>sin(a)</code>.</li>
 		<li><code>2$T</code> Arcsine; pops <code>a</code> and pushes <code>asin(a)</code>.</li>
-		<li><code>3T</code> &nbsp;Cosine; pops <code>a</code> and pushes <code>cos(a)</code>.</li>
+		<li><code>3T </code> &nbsp;Cosine; pops <code>a</code> and pushes <code>cos(a)</code>.</li>
 		<li><code>3$T</code> Arccosine; pops <code>a</code> and pushes <code>acos(a)</code>.</li>
-		<li><code>4T</code> &nbsp;Tangent; pops <code>a</code> and pushes <code>tan(a)</code>.</li>
+		<li><code>4T </code> &nbsp;Tangent; pops <code>a</code> and pushes <code>tan(a)</code>.</li>
 		<li><code>4$T</code> Arctangent; pops <code>a</code> and pushes <code>atan(a)</code>.</li>
-		<li><code>5T</code> &nbsp;Atan2; pops <code>y</code>,<code>x</code> and pushes <code>atan2(y,x)</code>.</li>
+		<li><code>5T </code> &nbsp;Atan2; pops <code>y</code>,<code>x</code> and pushes <code>atan2(y,x)</code>.</li>
 		<li><code>5$T</code> Hypotenuse; pops <code>y</code>,<code>x</code> and pushes <code>hypot(x,y)</code>.</li>
-		<li><code>6T</code> &nbsp;Angle difference - angles; pops <code>b</code>,<code>a</code> and pushes the signed angle difference between <code>a</code> and <code>b</code>.</li>
+		<li><code>6T </code> &nbsp;Angle difference - angles; pops <code>b</code>,<code>a</code> and pushes the signed angle difference between <code>a</code> and <code>b</code>.</li>
 		<li><code>6$T</code> Angle difference - coordinates; pops <code>y2</code>,<code>x2</code>,<code>y1</code>,<code>x1</code> and pushes the signed angle difference between <code>(x1,y1)</code> and <code>(x2,y2)</code>.</li>
-		<li><code>7T</code> &nbsp;Hyperbolic sine; pops <code>a</code> and pushes <code>sinh(a)</code>.</li>
+		<li><code>7T </code> &nbsp;Hyperbolic sine; pops <code>a</code> and pushes <code>sinh(a)</code>.</li>
 		<li><code>7$T</code> Hyperbolic arcsine; pops <code>a</code> and pushes <code>asinh(a)</code>.</li>
-		<li><code>8T</code> &nbsp;Hyperbolic cosine; pops <code>a</code> and pushes <code>cosh(a)</code>.</li>
+		<li><code>8T </code> &nbsp;Hyperbolic cosine; pops <code>a</code> and pushes <code>cosh(a)</code>.</li>
 		<li><code>8$T</code> Hyperbolic arccosine; pops <code>a</code> and pushes <code>acosh(a)</code>.</li>
-		<li><code>9T</code> &nbsp;Hyperbolic tangent; pops <code>a</code> and pushes <code>tanh(a)</code>.</li>
+		<li><code>9T </code> &nbsp;Hyperbolic tangent; pops <code>a</code> and pushes <code>tanh(a)</code>.</li>
 		<li><code>9$T</code> Hyperbolic arctangent; pops <code>a</code> and pushes <code>atanh(a)</code>.</li>
+	</ul>
+	
+	<strong>Grouped: Lists and Strings</strong>
+	
+	<ul>
+		<li><code>0Z </code> &nbsp;Pi; pushes <code>pi</code>.</li>
+		<li><code>0$Z</code> e (Euler's number); pushes <code>e</code>.</li>
+	</ul>
+	
+	<strong>Grouped: Matrices</strong>
+	
+	<p>
+		A note: matrices are stored in the following manner: a stack of <code>[12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 4, 3]</code> corresponds to<br/>
+		
+		<pre>  1  2  3  4
+  5  6  7  8
+  9 10 11 12</pre>
+		
+		That is, the elements of the matrix are stored in reverse reading order (i.e. right to left, bottom to top), the top element of the stack is the number of rows and the next topmost element element is the number of columns. Any elements needed after the stack is exhausted will be zero. All matrix operations assume the matrices have been properly stored. <br/><br/>
+		
+		Warning: not all commands have been implemented yet: 1P - 4P, $1P - $3P.
+	</p>
+	
+	<ul>
+		<li><code>0P </code> &nbsp;Matrix output as numbers; pops <code>A</code> and outputs the elements of <code>A</code> as numbers, space separated and with newlines between each row.</li>
+		<li><code>0$P</code> Matrix output as characters; pops <code>A</code> and outputs the elements of <code>A</code> as characters, with newlines between each row.</li>
+		<li><code>1P </code> &nbsp;Matrix addition; pops <code>B</code>,<code>A</code> and pushes <code>A+B</code>. A mismatch in dimensions throws an error.</li>
+		<li><code>1$P</code> Matrix addition, loose; pops <code>B</code>,<code>A</code> and pushes <code>A+B</code>. Matrices are padded with zeros if dimensions don't match.</li>
+		<li><code>2P </code> &nbsp;Matrix subtraction; pops <code>B</code>,<code>A</code> and pushes <code>A-B</code>. A mismatch in dimensions throws an error.</li>
+		<li><code>2$P</code> Matrix subtraction, loose; pops <code>B</code>,<code>A</code> and pushes <code>A-B</code>. Matrices are padded with zeros if dimensions don't match.</li>
+		<li><code>3P </code> &nbsp;Matrix multiplication; pops <code>B</code>,<code>A</code> and pushes <code>AB</code>. A mismatch in dimensions throws an error.</li>
+		<li><code>3$P</code> Scalar multiplication, loose; pops <code>b</code>,<code>A</code> and pushes <code>bA</code>.</li>
+		<li><code>4P </code> &nbsp;Matrix division; pops <code>B</code>,<code>A</code> and pushes <code>A*inverse(B)</code>. A mismatch in dimensions throws an error.</li>
+		<li><code>4$P</code> Scalar division, loose; pops <code>b</code>,<code>A</code> and pushes <code>A/b</code>.</li>
+		<li><code>5P </code> &nbsp;Matrix transpose; pops <code>A</code> and pushes the transpose of <code>A</code>.</li>
+		<li><code>5$P</code> Matrix rotate/flip; pops <code>n</code>,<code>A</code> and rotates <code>A</code> <code>n*90</code> degrees clockwise, transposing first if <code>n > 3</code>.</li>
+		<li><code>6P </code> &nbsp;Identity matrix; pops <code>n</code> and pushes the <code>n</code> by <code>n</code> identity matrix.</li>
+		<li><code>6$P</code> Matrix fill; pops <code>y</code>,<code>x</code>,<code>n</code> and pushes an <code>x</code> by <code>y</code> matrix where every element is <code>n</code>.</li>
+		<li><code>7P </code> &nbsp;Matrix determinant; pops <code>A</code> and pushes the determinant of <code>A</code>. An error is thrown if <code>A</code> is not square.</li>
+		<li><code>8P </code> &nbsp;Matrix inverse; pops <code>A</code> and pushes the inverse of <code>A</code>. An error is thrown if <code>A</code> is not square.</li>
+		<li><code>9P </code> &nbsp;Scalar exponentiation; pops <code>n</code>,<code>A</code> and pushes <code>A^n</code>.</li>
+		<!-- <li><code>9$P</code> Matrix exponentiation; pops <code>n</code>,<code>A</code> and pushes <code>n^A</code>.</li> -->
+		<li><code>$1P </code> &nbsp;Row sums; pops <code>A</code> and pushes the sums of the rows of <code>A</code>.</li>
+		<li><code>$1$P</code> Column sums; pops <code>A</code> and pushes the sums of the columns of <code>A</code>.</li>
+		<li><code>$2P </code> &nbsp;Submatrix row slice; pops <code>q</code>,<code>p</code>,<code>A</code> and pushes rows <code>p</code> to <code>q</code> of <code>A</code>, inclusive and zero-indexed.</li>
+		<li><code>$2$P</code> Submatrix column slice; pops <code>q</code>,<code>p</code>,<code>A</code> and pushes columns <code>p</code> to <code>q</code> of <code>A</code>, inclusive and zero-indexed.</li>
+		<li><code>$3P </code> &nbsp;Row deletion; pops <code>n</code>,<code>A</code> and deletes row <code>n</code> of <code>A</code>, zero-indexed.</li>
+		<li><code>$3$P</code> Column deletion; pops <code>n</code>,<code>A</code> and deletes column <code>n</code> of <code>A</code>, zero-indexed.</li>
+		<!--<li><code>$4P </code> &nbsp;Spiral unwind; pops <code>A</code>, rearranges the elements of <code>A</code>.</li>
+		<li><code>$4$P</code> Spiral rewind; pops <code>A</code>, rearranges the elements of <code>A</code>.</li>-->
+	</ul>
+	
+	<strong>Grouped: Binary Operations</strong>
+	
+	<ul>
+		<li><code>0J </code> &nbsp;And; pops <code>b</code>,<code>a</code> and pushes <code>a&amp;b</code>.</li>
+		<li><code>1J </code> &nbsp;Or; pops <code>b</code>,<code>a</code> and pushes <code>a|b</code>.</li>
+		<li><code>2J </code> &nbsp;Xor; pops <code>b</code>,<code>a</code> and pushes <code>a^b</code>.</li>
+		<li><code>3J </code> &nbsp;Nand; pops <code>b</code>,<code>a</code> and pushes <code>not a&amp;b</code>.</li>
+		<li><code>4J </code> &nbsp;Nor; pops <code>b</code>,<code>a</code> and pushes <code>not a|b</code>.</li>
+		<li><code>5J </code> &nbsp;Xnor; pops <code>b</code>,<code>a</code> and pushes <code>not a^b</code>.</li>
+		<li><code>6J </code> &nbsp;Complement; pops <code>a</code> and pushes <code>~a</code>.</li>
+		<li><code>7J </code> &nbsp;If; pops <code>b</code>,<code>a</code> and pushes <code>b</code> if <code>a</code>, else <code>1</code>.</li>
+		<li><code>7$J</code> Not if; pops <code>b</code>,<code>a</code> and pushes <code>b</code> if not <code>a</code>, else <code>1</code>.</li>
+		<li><code>8J </code> &nbsp;Bitshift left once; pops <code>a</code> and pushes <code>a&lt;&lt;1</code>.</li>
+		<li><code>8$J</code> Bitshift left n times; pops <code>n</code>,<code>a</code> and pushes <code>a&lt;&lt;n</code>.</li>
+		<li><code>9J </code> &nbsp;Bitshift right once; pops <code>a</code> and pushes <code>a&gt;&gt;1</code>.</li>
+		<li><code>9$J</code> Bitshift left n times; pops <code>n</code>,<code>a</code> and pushes <code>a&gt;&gt;n</code>.</li>
+	</ul>
+	
+	<strong>Grouped: Itertools and Miscellaneous</strong>
+	
+	<ul>
+		<li><code>0Q </code> &nbsp;Pi; pushes <code>pi</code>.</li>
+		<li><code>0$Q</code> e (Euler's number); pushes <code>e</code>.</li>
 	</ul>
 </div>
