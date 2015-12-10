@@ -927,7 +927,8 @@ class Program:
                                     stack.append(i)
                                     count += 1
                                     if tos == 1: break
-                                    
+
+                            if not self.toggleFlag and count == 0: stack.append(-1)
                             if tos == 2: stack.append(count)
 
                         elif tos == 3 or tos == 4:

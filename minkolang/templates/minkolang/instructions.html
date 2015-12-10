@@ -235,8 +235,30 @@
 	<strong>Grouped: Lists and Strings</strong>
 	
 	<ul>
-		<li><code>0Z </code> &nbsp;Pi; pushes <code>pi</code>.</li>
-		<li><code>0$Z</code> e (Euler's number); pushes <code>e</code>.</li>
+		<li><code>0Z </code> &nbsp;Count single item; pops <code>a</code> and pushes how many instances of <code>a</code> are on the stack.</li>
+		<li><code>0$Z</code> Count multi item; pops <code>n</code>, then pops the next <code>n</code> elements and pushes how many instances of that list are on the stack.</li>
+		<li><code>1Z </code> &nbsp;Find first single item; pops <code>a</code> and pushes the first index of <code>a</code> on the stack. Pushes -1 if not found.</li>
+		<li><code>1$Z</code> Find first multi item; pops <code>n</code>, then pops the next <code>n</code> elements and pushes the first index of that list on the stack. Pushes -1 if not found.</li>
+		<li><code>2Z </code> &nbsp;Find all single item; pops <code>a</code> and pushes each index of <code>a</code> on the stack, along with the count. Pushes 0 if not found.</li>
+		<li><code>2$Z</code> Find all multi item; pops <code>n</code>, then pops the next <code>n</code> elements and pushes each index of that list on the stack, along with the count. Pushes 0 if not found.</li>
+		<li><code>3Z </code> &nbsp;Remove first single item; pops <code>a</code> and deletes the first occurence of <code>a</code> on the stack.</li>
+		<li><code>3$Z</code> Remove first multi item; pops <code>n</code>, then pops the next <code>n</code> elements and deletes the first occurrence of that list on the stack.</li>
+		<li><code>4Z </code> &nbsp;Remove all single item; pops <code>a</code> and deletes each occurrence of <code>a</code> on the stack.</li>
+		<li><code>4$Z</code> Remove all multi item; pops <code>n</code>, then pops the next <code>n</code> elements and deletes each occurrence of that list on the stack..</li>
+		<li><code>5Z </code> &nbsp;Replace first multi item; pops <code>b</code>,<code>a</code>, then pops the next <code>b</code> elements (<code>B</code>) and the next <code>a</code> elements (<code>A</code>), then replaces the first instance of <code>A</code> with <code>B</code>.</li>
+		<li><code>5$Z</code> Replace all multi item; pops <code>b</code>,<code>a</code>, then pops the next <code>b</code> elements (<code>B</code>) and the next <code>a</code> elements (<code>A</code>), then replaces every instance of <code>A</code> with <code>B</code>.</li>
+		<li><code>6Z </code> &nbsp;Convert number to string; pops <code>n</code> and pushes its string representation onto the stack.</li>
+		<li><code>6$Z</code> Convert string to number; pops the whole stack and pushes its numerical representation onto the stack.</li>
+		<li><code>7Z </code> &nbsp;Lowercase; lowercases all alphabetic characters.</li>
+		<li><code>7$Z</code> Uppercase; uppercases all alphabetic characters.</li>
+		<li><code>8Z </code> &nbsp;Is alphanumeric; pushes 1 if the whole stack has only alphanumeric characters, 0 otherwise.</li>
+		<li><code>8$Z</code> Switch case; switches all alphabetic characters from uppercase to lowercase and vice versa.</li>
+		<li><code>9Z </code> &nbsp;Is alpha; pushes 1 if the whole stack has only alphabetic characters, 0 otherwise.</li>
+		<li><code>9$Z</code> Is decimal; pushes 1 if the whole stack has only decimal characters, 0 otherwise.</li>
+		<li><code>lZ </code> &nbsp;Alphabet; pushes the uppercase and lowercase alphabet.</li>
+		<li><code>l$Z</code> Numbers; pushes the numeric digits.</li>
+		<li><code>jZ </code> &nbsp;Minimum; pushes the minimum of the stack.</li>
+		<li><code>j$Z</code> Maximum; pushes the maximum of the stack.</li>
 	</ul>
 	
 	<strong>Grouped: Matrices</strong>
