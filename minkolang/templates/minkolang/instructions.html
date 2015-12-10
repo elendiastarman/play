@@ -137,7 +137,9 @@
 		<li><code>D </code> &nbsp;Multi-duplicate; pops <code>n</code> and duplicates the top of stack <code>n</code> times.</li>
 		<li><code>$D</code> Multi-duplicate; pops <code>n</code> and duplicates whole stack <code>n</code> times.</li>
 		<li><code>g </code> &nbsp;Stack get; pops <code>n</code> and gets the stack's <code>n</code>th element and puts it on top of stack.</li>
+		<li><code>$g</code> Stack slice; pops <code>b</code>,<code>a</code> and puts <code>stack[a:b]</code> on top of stack.</li>
 		<li><code>G </code> &nbsp;Stack insert; pops <code>n</code>,<code>x</code> and inserts <code>x</code> at the <code>n</code>-th position (zero-indexed).</li>
+		<li><code>$G</code> Stack multi insert; pops <code>b</code>,<code>a</code> and inserts the top <code>b</code> elements at index <code>a</code>.</li>
 		<li><code>c </code> &nbsp;Stack copy; pops <code>n</code> and copies the <code>n</code>-th element to the top of stack.</li>
 		<li><code>$c</code> Stack copy-slice; pops <code>b</code>,<code>a</code> and copies <code>stack[a:b]</code> to the top of stack.</li>
 		<li><code>i </code> &nbsp;Gets loop's counter (0-based) and pushes it onto the stack.</li>
