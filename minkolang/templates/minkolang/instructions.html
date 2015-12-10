@@ -324,8 +324,20 @@
 	
 	<strong>Grouped: Itertools and Miscellaneous</strong>
 	
+	<p>
+		Note: for each itertool function (the first four), the input iterables are preceded by a number that denotes how many elements the iterable has. Each item in the output of each itertool function is preceded by a number that denotes its length, and the whole output by a number that denotes <em>its</em> length.
+	</p>
+	
 	<ul>
-		<li><code>0Q </code> &nbsp;Pi; pushes <code>pi</code>.</li>
-		<li><code>0$Q</code> e (Euler's number); pushes <code>e</code>.</li>
+		<li><code>0Q </code> &nbsp;All self Cartesian product; pops <code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code> and pushes <code>itertools.product(L, repeats=r)</code>.</li>
+		<li><code>0$Q</code> Nth self Cartesian product; pops <code>n</code>,<code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code> and pushes <code>itertools.product(L, repeats=r)[n]</code>.</li>
+		<li><code>1Q </code> &nbsp;All multi Cartesian product; pops <code>r</code>,<code>q</code>, then <code>q</code> times, pops <code>k</code> and pops the next <code>k</code> elements as <code>L#</code>, then pushes <code>itertools.product(L1, L2, L3, ..., repeats=r)</code>.</li>
+		<li><code>1$Q</code> Nth multi Cartesian product; pops <code>n</code>,<code>r</code>,<code>q</code>, then <code>q</code> times, pops <code>k</code> and pops the next <code>k</code> elements as <code>L#</code>, then pushes <code>itertools.product(L1, L2, L3, ..., repeats=r)[n]</code>.</li>
+		<li><code>2Q </code> &nbsp;All permutations; pops <code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.permutations(L)</code>.</li>
+		<li><code>2$Q</code> Nth permutation; pops <code>n</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.permutations(L)[n]</code>.</li>
+		<li><code>3Q </code> &nbsp;All combinations without replacement; pops <code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.combinations(L,r)</code>.</li>
+		<li><code>3$Q</code> Nth combination without replacement; pops <code>n</code>,<code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.combinations(L,r)[n]</code>.</li>
+		<li><code>4Q </code> &nbsp;All combinations with replacement; pops <code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.combinations_with_replacement(L,r)</code>.</li>
+		<li><code>4$Q</code> Nth combination with replacement; pops <code>n</code>,<code>r</code>,<code>k</code>, then pops the next <code>k</code> elements as <code>L</code>, then pushes <code>itertools.combinations_with_replacement(L,r)[n]</code>.</li>
 	</ul>
 </div>
