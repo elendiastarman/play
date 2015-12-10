@@ -23,7 +23,7 @@ def main_view(request, *args, **kwargs):
     if sys.platform == 'win32':
         path = os.path.join(os.getcwd(),"Spacewar","static","Spacewar")
     elif sys.platform == 'linux':
-        path = os.path.join(os.getcwd(),"webapps","play","play","Spacewar","static","Spacewar")
+        path = os.path.join("home","elendia","webapps","play","play","Spacewar","static","Spacewar")
 
     print(path)
     print(os.listdir(path))
