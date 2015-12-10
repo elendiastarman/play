@@ -40,7 +40,7 @@ def github_view(request, *args, **kwargs):
     data = json.loads(request.body.decode())
 
     if 'pusher' in data and sys.platform == 'linux':
-        if data['pusher']['name'] in ('elendiastarman',):
+        if data['pusher']['name'] in ('elendiastarman','ConorOBrien-Foxx'):
             try:
                 os.chdir("/home/elendia/webapps/maingit/repos/spacewar-js.git/")
                 attempt = subprocess.call("./pull-from-github")
