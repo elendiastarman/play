@@ -8,13 +8,6 @@ body {
 	padding: 0px;
 }
 
-svg {
-	background-color: #000;
-	width: 800px;
-	height: 600px;
-	margin: 0 auto;
-}
-
 table {
 	text-align: center;
 	border-collapse: collapse;

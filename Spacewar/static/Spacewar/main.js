@@ -11,13 +11,19 @@ var renderLoop;
 	});
 })(jQuery);
 
-window["red"] = {};
-window["blue"] = {};
-var field = d3.select('#field');
+var SCALE = 1.0;
+
+window["red"] = {"color":"red"};
+window["blue"] = {"color":"blue"};
+
+var field;
+var teams = [window["red"], window["blue"]];
+
 var missileTimeout = 2250;
 var fireRateLimit = 100;
 var fieldWidth = 800;
 var fieldHeight = 600;
+
 Math.radians = function(degrees) {
 	return degrees * Math.PI / 180;
 };
@@ -26,6 +32,29 @@ Math.degrees = function(radians) {
 };
 
 function setup() {
+	var svg = d3.select('#playfield').append("svg")
+		.attr("width",fieldWidth)
+		.attr("height",fieldHeight)
+		.attr("id","field");
+	field = d3.select('#field');
+	svg.append("rect")
+		.attr("width",fieldWidth)
+		.attr("height",fieldHeight)
+		.attr("fill","black");
+	
+	svg.append("circle") //sun
+		.attr("cx",fieldWidth/2)
+		.attr("cy",fieldHeight/2)
+		.attr("r", 5*SCALE)
+		.style("fill","white")
+		.attr("id","sun");
+	
+	d3.select('svg').selectAll(".ship").data(teams).enter().append("polygon")
+		.attr("points",-8*SCALE+","+16*SCALE+" 0,"+-8*SCALE+" "+8*SCALE+","+16*SCALE)
+		.attr("id", function(d){console.log(d.color); return d.color;})
+		.attr("fill", function(d){return d.color;})
+		.attr("class", "ship");
+	
 	red.x = 50;
 	red.y = Math.floor((fieldHeight-100)*Math.random())+50;
 	red.rot = 90;
@@ -33,8 +62,6 @@ function setup() {
 	red.yv = 0.0;
 	red.fireTime = new Date() - 1000;
 	red.missileReady = true;
-	updateGraphics("red");
-	//red.attr("transform","translate("+red.x+","+red.y+"),rotate("+red.rot+")");
 	
 	blue.x = fieldWidth-50;
 	blue.y = Math.floor((fieldHeight-100)*Math.random())+50;
@@ -43,25 +70,33 @@ function setup() {
 	blue.yv = 0.0;
 	blue.fireTime = new Date() - 1000;
 	blue.missileReady = true;
-	updateGraphics("blue");
-	//blue.attr("transform","translate("+blue.x+","+blue.y+"),rotate("+blue.rot+")");
+	
+	updateGraphics();
 }
 
-function updatePosition(team){
-	var teamObj = window[team];
-	if (teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv > 225){
-		teamObj.xv = 15.*teamObj.xv/Math.sqrt(teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv);
-		teamObj.yv = 15.*teamObj.yv/Math.sqrt(teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv);
-	}
-	teamObj.x += teamObj.xv;
-	teamObj.x = (teamObj.x+fieldWidth)%fieldWidth;
-	teamObj.y += teamObj.yv;
-	teamObj.y = (teamObj.y+fieldHeight)%fieldHeight;
+function updatePositions(){
+	teams.forEach(function(teamObj){
+		var speed = teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv;
+		if (speed > 225) {
+			teamObj.xv = 15.*teamObj.xv/Math.sqrt(speed);
+			teamObj.yv = 15.*teamObj.yv/Math.sqrt(speed);
+		} else if (speed < 0.1) {
+			teamObj.xv = 0;
+			teamObj.yv = 0;
+		}
+		
+		teamObj.x += teamObj.xv;
+		teamObj.x = (teamObj.x+fieldWidth)%fieldWidth;
+		teamObj.y += teamObj.yv;
+		teamObj.y = (teamObj.y+fieldHeight)%fieldHeight;
+	});
 }
 
 function updateGraphics(team){
-	var teamObj = window[team];
-	d3.select("#"+team).attr("transform","translate("+teamObj.x+","+teamObj.y+"),rotate("+teamObj.rot+")");
+	teams.forEach(function(teamObj){
+		// console.log(teamObj);
+		d3.select("#"+teamObj.color).attr("transform","translate("+teamObj.x+","+teamObj.y+"),rotate("+teamObj.rot+")");
+	});
 }
 
 function update() {
@@ -87,11 +122,8 @@ function update() {
 		dots.exit().remove();
 	}
 	
-	updatePosition("red");
-	updateGraphics("red");
-	
-	updatePosition("blue");
-	updateGraphics("blue");
+	updatePositions();
+	updateGraphics();
 }
 
 function teamMove(team,action) {

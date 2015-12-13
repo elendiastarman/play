@@ -15,11 +15,7 @@
 	
 		<h1>PPCG &ndash; Spacewar! King of the Hill</h1>
 		
-		<svg id="field">
-			<polygon id="red" fill="red" points="-10,20 0,-10 10,20" transform="translate(-20,-20)"/>
-			<polygon id="blue" fill="blue" points="-8,16 0,-8 8,16" transform="translate(-30,-20)"/>
-			<circle cx="400" cy="300" r="5" style="fill:white" id="sun"></circle>
-		</svg>
+		<div id="playfield"></div>
 		
 		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button> (Also, ESC to stop the animation, ENTER to resume.)</p>
 		
