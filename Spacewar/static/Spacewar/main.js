@@ -11,24 +11,57 @@ var renderLoop;
 	});
 })(jQuery);
 
-var red = d3.select("#red");
-var blue = d3.select("#blue");
+window["red"] = {};
+window["blue"] = {};
 var field = d3.select('#field');
+var missileTimeout = 2250;
+var fireRateLimit = 100;
+var fieldWidth = 800;
+var fieldHeight = 600;
+Math.radians = function(degrees) {
+	return degrees * Math.PI / 180;
+};
+Math.degrees = function(radians) {
+	return radians * 180 / Math.PI;
+};
 
 function setup() {
-	red.x = 50.;
-	red.y = Math.floor(500*Math.random())+50;
+	red.x = 50;
+	red.y = Math.floor((fieldHeight-100)*Math.random())+50;
 	red.rot = 90;
 	red.xv = 0.0;
 	red.yv = 0.0;
-	red.attr("transform","translate("+red.x+","+red.y+"),rotate("+red.rot+")");
+	red.fireTime = new Date() - 1000;
+	red.missileReady = true;
+	updateGraphics("red");
+	//red.attr("transform","translate("+red.x+","+red.y+"),rotate("+red.rot+")");
 	
-	blue.x = 800-50.;
-	blue.y = Math.floor(500*Math.random())+50;
+	blue.x = fieldWidth-50;
+	blue.y = Math.floor((fieldHeight-100)*Math.random())+50;
 	blue.rot = -90;
 	blue.xv = 0.0;
 	blue.yv = 0.0;
-	blue.attr("transform","translate("+blue.x+","+blue.y+"),rotate("+blue.rot+")");
+	blue.fireTime = new Date() - 1000;
+	blue.missileReady = true;
+	updateGraphics("blue");
+	//blue.attr("transform","translate("+blue.x+","+blue.y+"),rotate("+blue.rot+")");
+}
+
+function updatePosition(team){
+	var teamObj = window[team];
+	if (teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv > 225){
+		teamObj.xv = 15.*teamObj.xv/Math.sqrt(teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv);
+		teamObj.yv = 15.*teamObj.yv/Math.sqrt(teamObj.xv*teamObj.xv + teamObj.yv*teamObj.yv);
+	}
+	teamObj.x += teamObj.xv;
+	teamObj.x = (teamObj.x+fieldWidth)%fieldWidth;
+	teamObj.y += teamObj.yv;
+	teamObj.y = (teamObj.y+fieldHeight)%fieldHeight;
+}
+
+function updateGraphics(team){
+	var teamObj = window[team];
+	d3.select("#"+team).attr("transform","translate("+teamObj.x+","+teamObj.y+"),rotate("+teamObj.rot+")");
 }
 
 function update() {
@@ -38,12 +71,13 @@ function update() {
 		var filteredMissiles = [];
 		for (var i=0; i<missiles.length; i++) {
 			var m = missiles[i];
-			m.x += m.xv;
-			m.x = (m.x+800)%800;
-			m.y += m.yv;
-			m.y = (m.y+600)%600;
-			// if (m.time
-			filteredMissiles.push(m);
+			if (new Date() - m.time < missileTimeout){
+				m.x += m.xv;
+				m.x = (m.x+fieldWidth)%fieldWidth;
+				m.y += m.yv;
+				m.y = (m.y+fieldHeight)%fieldHeight;
+				filteredMissiles.push(m);
+			}
 		}
 		missiles = filteredMissiles;
 		
@@ -53,69 +87,36 @@ function update() {
 		dots.exit().remove();
 	}
 	
-	if (red.xv*red.xv + red.yv*red.yv > 400){
-		red.xv = 15.*red.xv/Math.sqrt(red.xv*red.xv + red.yv*red.yv);
-		red.yv = 15.*red.yv/Math.sqrt(red.xv*red.xv + red.yv*red.yv);
-	}
-	red.x += red.xv;
-	red.x = (red.x+800)%800;
-	red.y += red.yv;
-	red.y = (red.y+600)%600;
-	d3.select('#red').attr("transform","translate("+red.x+","+red.y+"),rotate("+red.rot+")");
+	updatePosition("red");
+	updateGraphics("red");
 	
-	if (blue.xv*blue.xv + blue.yv*blue.yv > 400){
-		blue.xv = 15.*blue.xv/Math.sqrt(blue.xv*blue.xv + blue.yv*blue.yv);
-		blue.yv = 15.*blue.yv/Math.sqrt(blue.xv*blue.xv + blue.yv*blue.yv);
-	}
-	blue.x += blue.xv;
-	blue.x = (blue.x+800)%800;
-	blue.y += blue.yv;
-	blue.y = (blue.y+600)%600;
-	d3.select('#blue').attr("transform","translate("+blue.x+","+blue.y+"),rotate("+blue.rot+")");
+	updatePosition("blue");
+	updateGraphics("blue");
 }
 
-function redMove(action) {
+function teamMove(team,action) {
+	var teamObj = window[team];
 	switch (action){
 		case "thrust":
-		red.xv += 0.5*Math.cos(Math.radians(red.rot-90));
-		red.yv += 0.5*Math.sin(Math.radians(red.rot-90));
-		break;
+			teamObj.xv += 0.5*Math.cos(Math.radians(teamObj.rot-90));
+			teamObj.yv += 0.5*Math.sin(Math.radians(teamObj.rot-90));
+			break;
 		case "fire":
-		fireMissile("red");
-		break;
+			fireMissile(team);
+			break;
 		case "turn right":
-		red.rot = red.rot + 5;
-		break;
+			teamObj.rot = teamObj.rot + 5;
+			break;
 		case "turn left":
-		red.rot = red.rot - 5;
-		break;
+			teamObj.rot = teamObj.rot - 5;
+			break;
 		case "hyperspace":
-		break;
-	}
-}
-
-function blueMove(action) {
-	switch (action){
-		case "thrust":
-		blue.xv += 0.5*Math.cos(Math.radians(blue.rot-90));
-		blue.yv += 0.5*Math.sin(Math.radians(blue.rot-90));
-		break;
-		case "fire":
-		fireMissile("blue");
-		break;
-		case "turn right":
-		blue.rot = blue.rot + 5;
-		break;
-		case "turn left":
-		blue.rot = blue.rot - 5;
-		break;
-		case "hyperspace":
-		break;
+			break;
 	}
 }
 
 var missiles = [];
-class Missile {
+/* class Missile {
 	constructor(x,y,xv,yv) {
 		this.x = x;
 		this.y = y;
@@ -128,33 +129,26 @@ class Missile {
 		}
 		this.name = "missile"+this.id;
 	}
-}
+} */
 
-function fireMissile(color) {
+function fireMissile(team) {
 	var mx,my,mxv,myv;
-	var p;
-	
-	switch (color) {
-		case "red":
-		p = red;
-		break;
-		case "blue":
-		p = blue;
-		break;
-	}
+	var p = window[team];
 	mx = p.x;
 	my = p.y;
 	mxv = p.xv + 10*Math.cos(Math.radians(p.rot-90));
 	myv = p.yv + 10*Math.sin(Math.radians(p.rot-90));
 	
-	missiles.push(new Missile(mx,my,mxv,myv));
+	// missiles.push(new Missile(mx,my,mxv,myv));
+	missiles.push({'x':mx, 'y':my, 'xv':mxv, 'yv':myv, 'time':new Date()});
+	missiles[missiles.length-1]['id'] = missiles.length;
 	
 	d3.select("#field").selectAll(".missile")
 		.data(missiles)
 	  .enter().append("circle")
 		.attr("cx", function(d){ return d.x; })
 		.attr("cy", function(d){ return d.y; })
-		.attr("r", 2)
+		.attr("r", 1.5)
 		.style("fill","white")
 		.attr("class", "missile");
 }
@@ -171,56 +165,70 @@ function handleInput(event) {
 		return;
 	}
 	
+	if (event.which == 191){ event.preventDefault(); };
+	
 	if (event.type == 'keydown'){ keystates[event.which] = true;  }
-	if (event.type == 'keyup')  { keystates[event.which] = false; }
+	if (event.type == 'keyup')  {
+		keystates[event.which] = false;
+		
+		if (event.which == 66) {
+			window["red"].missileReady = true;
+		} else if (event.which == 191) {
+			window["blue"].missileReady = true;
+		}
+	}
 }
 
-var keysOfInterest = [90,88,67,86,66, 78,77,188,190,191];
+var keysOfInterest = [
+			90,88,67,86,66,
+			78,77,188,190,191
+		     ];
 function checkKeys() {
 	keysOfInterest.forEach(function(k){
 		if (keystates[k]){
 			switch (k){
 				// RED
 				case 90:
-				redMove("turn left");
-				break;
+					teamMove("red","turn left");
+					break;
 				case 88:
-				redMove("turn right");
-				break;
+					teamMove("red","turn right");
+					break;
 				case 67:
-				redMove("hyperspace");
-				break;
+					teamMove("red","hyperspace");
+					break;
 				case 86:
-				redMove("thrust");
-				break;
+					teamMove("red","thrust");
+					break;
 				case 66:
-				redMove("fire");
-				break;
+					if (new Date() - window["red"].fireTime > fireRateLimit && window["red"].missileReady) {
+						teamMove("red","fire");
+						window["red"].fireTime = new Date();
+						window["red"].missileReady = false;
+					}
+					break;
 				
 				// BLUE
 				case 78:
-				blueMove("turn left");
-				break;
+					teamMove("blue","turn left");
+					break;
 				case 77:
-				blueMove("turn right");
-				break;
+					teamMove("blue","turn right");
+					break;
 				case 188:
-				blueMove("hyperspace");
-				break;
+					teamMove("blue","hyperspace");
+					break;
 				case 190:
-				blueMove("thrust");
-				break;
+					teamMove("blue","thrust");
+					break;
 				case 191:
-				blueMove("fire");
-				break;
+					if (new Date() - window["blue"].fireTime > fireRateLimit && window["blue"].missileReady) {
+						teamMove("blue","fire");
+						window["blue"].fireTime = new Date();
+						window["blue"].missileReady = false;
+					}
+					break;
 			}
 		}
 	});
 }
-
-Math.radians = function(degrees) {
-	return degrees * Math.PI / 180;
-};
-Math.degrees = function(radians) {
-	return radians * 180 / Math.PI;
-};
