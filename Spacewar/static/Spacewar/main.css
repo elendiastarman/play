@@ -14,3 +14,11 @@ svg {
 	height: 600px;
 	margin: 0 auto;
 }
+
+table {
+	text-align: center;
+	border-collapse: collapse;
+}
+td {
+	margin: 5px;
+}
