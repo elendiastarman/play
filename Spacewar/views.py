@@ -25,8 +25,8 @@ def main_view(request, *args, **kwargs):
     elif sys.platform == 'linux':
         path = os.path.join("/home","elendia","webapps","play","play","Spacewar","static","Spacewar","")
 
-    print(path)
-    print(os.listdir(path))
+##    print(path)
+##    print(os.listdir(path))
 
     scripts = []
     for filename in os.listdir(path):
@@ -50,3 +50,22 @@ def github_view(request, *args, **kwargs):
                 with open('spacewar-github-pull-error.txt','w') as f: f.write("Error: %s"%e) 
 
     return HttpResponse("OK")
+
+def intersectionTest_view(request, *args, **kwargs):
+
+    context = RequestContext(request)
+
+##    if sys.platform == 'win32':
+##        path = os.path.join(os.getcwd(),"Spacewar","static","Spacewar")
+##    elif sys.platform == 'linux':
+##        path = os.path.join("/home","elendia","webapps","play","play","Spacewar","static","Spacewar","")
+##
+##    print(path)
+##    print(os.listdir(path))
+##
+##    scripts = []
+##    for filename in os.listdir(path):
+##        if filename.endswith('.js'): scripts.append('Spacewar/'+filename)
+##    context['scripts'] = scripts
+
+    return render(request, 'Spacewar/intersectionTest.html', context_instance=context)
