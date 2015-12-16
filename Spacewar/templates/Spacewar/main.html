@@ -17,7 +17,7 @@
 		
 		<div id="playfield"></div>
 		
-		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button> (Also, ESC to stop the animation, ENTER to resume.) <button onclick="setup()">Reset</button> Gravity? <input type="checkbox" id="gravityCheck" checked></input> Intersections? <input type="checkbox" id="showIntersections" checked></input> </p>
+		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button> <button onclick="setup()">Reset</button> Gravity? <input type="checkbox" id="gravityCheck" checked></input> Intersections? <input type="checkbox" id="showIntersections" checked></input> </p>
 		
 		<table>
 			<tr>
@@ -49,6 +49,18 @@
 				<td>Fire missile</td>
 				<td>B</td>
 				<td>/</td>
+			</tr>
+			<tr>
+				<td>Reset field</td>
+				<td colspan=2>S</td>
+			</tr>
+			<tr>
+				<td>Stop anim</td>
+				<td colspan=2>ESC</td>
+			</tr>
+			<tr>
+				<td>Resume anim</td>
+				<td colspan=2>ENTER</td>
 			</tr>
 		</table>
 		
