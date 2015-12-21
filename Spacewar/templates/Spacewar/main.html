@@ -17,9 +17,13 @@
 		
 		<div id="playfield"></div>
 		
-		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button> <button onclick="setup()">Reset</button> Gravity? <input type="checkbox" id="gravityCheck" checked></input> Intersections? <input type="checkbox" id="showIntersections"></input> </p>
+		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button>
+		<button onclick="setupGame(0)">Reset</button>
+		<button onclick="setupGame(1)">Restart</button>
+		Gravity? <input type="checkbox" id="gravityCheck" checked></input>
+		Intersections? <input type="checkbox" id="showIntersections"></input> </p>
 		
-		<table>
+		<table id="action-table">
 			<tr>
 				<th>Action</th>
 				<th>Red</th>
@@ -27,31 +31,35 @@
 			</tr>
 			<tr>
 				<td>Turn left</td>
-				<td>Z</td>
-				<td>N</td>
+				<td id="red-turn-left">Z</td>
+				<td id="blue-turn-left">N</td>
 			</tr>
 			<tr>
 				<td>Turn right</td>
-				<td>X</td>
-				<td>M</td>
+				<td id="red-turn-right">X</td>
+				<td id="blue-turn-right">M</td>
 			</tr>
 			<tr>
 				<td>Hyperspace</td>
-				<td>C</td>
-				<td>,</td>
+				<td id="red-hyperspace">C</td>
+				<td id="blue-hyperspace">,</td>
 			</tr>
 			<tr>
 				<td>Fire engine</td>
-				<td>V</td>
-				<td>.</td>
+				<td id="red-fire-engine">V</td>
+				<td id="blue-fire-engine">.</td>
 			</tr>
 			<tr>
 				<td>Fire missile</td>
-				<td>B</td>
-				<td>/</td>
+				<td id="red-fire-missile">B</td>
+				<td id="blue-fire-missile">/</td>
 			</tr>
 			<tr>
 				<td>Reset field</td>
+				<td colspan=2>SPACEBAR</td>
+			</tr>
+			<tr>
+				<td>Restart game</td>
 				<td colspan=2>S</td>
 			</tr>
 			<tr>

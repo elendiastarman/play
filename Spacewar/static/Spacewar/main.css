@@ -15,3 +15,12 @@ table {
 td {
 	margin: 5px;
 }
+
+.redAction {
+	background-color: red;
+	color: white;
+}
+.blueAction {
+	background-color: blue;
+	color: white;
+}
