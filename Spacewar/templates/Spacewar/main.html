@@ -72,7 +72,31 @@
 			</tr>
 		</table>
 		
-		<p><strong>Special credit to PhiNotPi and BrainSteel of PPCG for invaluable testing and bug-fixing help.</strong></p>
+		<br/>
+		
+		<div id="userbot">
+			<pre>function userbot_setup(team) {
+    var botVars = {};</pre>
+			<textarea id="userbot-setup" class="codeinput" cols=80 rows=10></textarea>
+			<pre>    return botVars;
+}
+
+function userbot_getActions(gameInfo, botVars) {
+    var actions = [];</pre>
+			<textarea id="userbot-getactions" class="codeinput" cols=80 rows=20>if (gameInfo.blue_alive) {
+    if (Math.random() > 0.5) { actions.push("turn right") }
+    if (Math.random() > 0.5) { actions.push("fire engine") }
+    if (Math.random() > 0.8) { actions.push("fire missile") }
+}</textarea>
+			<pre>    return actions;
+}</pre>
+		</div>
+		
+		<br/>
+		
+		<button id="set-userbot" onclick="setUserBotCode()">Set userbot code</button>
+		
+		<p><strong>Special credit to PhiNotPi and BrainSteel of PPCG for invaluable testing and bug-fixing help, and to CᴏɴᴏʀO'Bʀɪᴇɴ for his contributions to code.</strong></p>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
@@ -80,6 +104,6 @@
 		{% for script in scripts %}
 			<script src="{% static script %}"></script>
 		{% endfor %}
-		<p style="display:none">{{scripts}}</p>
+		<p style="display:none" id="script-names">{{scripts}}</p>
 	</body>
 </html>

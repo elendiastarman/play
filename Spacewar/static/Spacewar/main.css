@@ -24,3 +24,14 @@ td {
 	background-color: blue;
 	color: white;
 }
+
+#userbot > pre {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.codeinput {
+	margin: 0px;
+	margin-left: 28px;
+	margin-top: 8px;
+	padding: 0px;
+}
