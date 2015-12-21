@@ -35,3 +35,7 @@ td {
 	margin-top: 8px;
 	padding: 0px;
 }
+
+#playfield {
+	outline: none;
+}
