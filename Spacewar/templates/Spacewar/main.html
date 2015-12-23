@@ -77,13 +77,13 @@
 		<div id="userbot">
 			<pre>function userbot_setup(team) {
     var botVars = {};</pre>
-			<textarea id="userbot-setup" class="codeinput" cols=80 rows=10></textarea>
+			<textarea id="userbot-setup" class="codeinput" cols=80 rows=10>botVars["color"] = team;</textarea>
 			<pre>    return botVars;
 }
 
 function userbot_getActions(gameInfo, botVars) {
     var actions = [];</pre>
-			<textarea id="userbot-getactions" class="codeinput" cols=80 rows=20>if (gameInfo.blue_alive) {
+			<textarea id="userbot-getactions" class="codeinput" cols=80 rows=20>if (gameInfo[botVars["color"]+"_alive"]) {
     if (Math.random() > 0.5) { actions.push("turn right") }
     if (Math.random() > 0.5) { actions.push("fire engine") }
     if (Math.random() > 0.8) { actions.push("fire missile") }

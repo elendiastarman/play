@@ -39,3 +39,16 @@ td {
 #playfield {
 	outline: none;
 }
+
+.redHighlight {
+	fill: "red";
+}
+.blueHighlight {
+	fill: "blue";
+}
+.yellowHighlight {
+	fill: "yellow";
+}
+.picked {
+	fill: "white";
+}
