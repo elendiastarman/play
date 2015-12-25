@@ -17,12 +17,6 @@
 		
 		<div id="playfield" tabindex="1"></div>
 		
-		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button>
-		<button onclick="setupGame(0)">Reset</button>
-		<button onclick="setupGame(1)">Restart</button>
-		Gravity? <input type="checkbox" id="gravityCheck" checked></input>
-		Intersections? <input type="checkbox" id="showIntersections"></input> </p>
-		
 		<table id="action-table">
 			<tr>
 				<th>Action</th>
@@ -71,6 +65,14 @@
 				<td colspan=2>ENTER</td>
 			</tr>
 		</table>
+		
+		<br/>
+		
+		<p><button onclick="clearInterval(renderLoop); renderLoop=false;">Stop the animation!</button>
+		<button onclick="setupGame(0)">Reset</button>
+		<button onclick="setupGame(1)">Restart</button>
+		Gravity? <input type="checkbox" id="gravityCheck" checked></input>
+		Intersections? <input type="checkbox" id="showIntersections"></input> </p>
 		
 		<br/>
 		
