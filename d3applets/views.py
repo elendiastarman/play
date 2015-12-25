@@ -15,3 +15,8 @@ def dotandcross_view(request, **kwargs):
     context = RequestContext(request)
 
     return render(request, 'd3applets/dotandcross.html', context_instance=context)
+
+def radiansDemo_view(request, **kwargs):
+    context = RequestContext(request)
+
+    return render(request, 'd3applets/radiansDemo.html', context_instance=context)
