@@ -1097,7 +1097,47 @@ class Program:
                             stack.append(len(array3))
                             
                         elif tos == 3 or tos == 4: #matrix mul, div
-                            pass
+                            if not self.toggleFlag:
+                                yB = stack.pop() if stack else 0
+                                xB = stack.pop() if stack else 0
+                                arrayB = [[(stack.pop() if stack else 0) for i in range(xB)] for j in range(yB)]
+
+                                if tos == 4: arrayB = matrixInverse(arrayB)
+                            else:
+                                B = stack.pop() if stack else 0
+
+                                if tos == 4: B = 1/B
+                            
+                            yA = stack.pop() if stack else 0
+                            xA = stack.pop() if stack else 0
+                            arrayA = [[(stack.pop() if stack else 0) for i in range(xA)] for j in range(yA)]
+
+                            if not self.toggleFlag:
+                                if xA != yB:
+                                    raise ValueError("Dimension mismatch; cannot multiply matrices with dimensions %dx%d and %dx%d"%(yA,xA,yB,xB))
+                                else:
+                                    yDim = yA
+                                    xDim = xB
+                            else:
+                                yDim = yA
+                                xDim = xA
+
+                            array3 = []
+
+                            for j in range(yDim):
+                                row = []
+                                for i in range(xDim):
+                                    if not self.toggleFlag:
+                                        s = [arrayA[j][k] * arrayB[k][i] for k in range(yB)]
+                                        row.append(sum(s))
+                                    else:
+                                        row.append(B * arrayA[j][i])
+
+                                array3.append(row)
+
+                            for row in array3[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array3[0]))
+                            stack.append(len(array3))
 
                         elif tos == 5: #Transpose/rotate/flip
                             k = stack.pop()%8 if stack and self.toggleFlag else 0

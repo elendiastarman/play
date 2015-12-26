@@ -285,9 +285,9 @@
 		<li><code>2P </code> &nbsp;Matrix subtraction; pops <code>B</code>,<code>A</code> and pushes <code>A-B</code>. A mismatch in dimensions throws an error.</li>
 		<li><code>2$P</code> Matrix subtraction, loose; pops <code>B</code>,<code>A</code> and pushes <code>A-B</code>. Matrices are padded with zeros if dimensions don't match.</li>
 		<li><code>3P </code> &nbsp;Matrix multiplication; pops <code>B</code>,<code>A</code> and pushes <code>AB</code>. A mismatch in dimensions throws an error.</li>
-		<li><code>3$P</code> Scalar multiplication, loose; pops <code>b</code>,<code>A</code> and pushes <code>bA</code>.</li>
+		<li><code>3$P</code> Scalar multiplication; pops <code>b</code>,<code>A</code> and pushes <code>bA</code>.</li>
 		<li><code>4P </code> &nbsp;Matrix division; pops <code>B</code>,<code>A</code> and pushes <code>A*inverse(B)</code>. A mismatch in dimensions throws an error.</li>
-		<li><code>4$P</code> Scalar division, loose; pops <code>b</code>,<code>A</code> and pushes <code>A/b</code>.</li>
+		<li><code>4$P</code> Scalar division; pops <code>b</code>,<code>A</code> and pushes <code>A/b</code>.</li>
 		<li><code>5P </code> &nbsp;Matrix transpose; pops <code>A</code> and pushes the transpose of <code>A</code>.</li>
 		<li><code>5$P</code> Matrix rotate/flip; pops <code>n</code>,<code>A</code> and rotates <code>A</code> <code>n*90</code> degrees clockwise, transposing first if <code>n > 3</code>.</li>
 		<li><code>6P </code> &nbsp;Identity matrix; pops <code>n</code> and pushes the <code>n</code> by <code>n</code> identity matrix.</li>
