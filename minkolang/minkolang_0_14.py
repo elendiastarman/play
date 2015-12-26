@@ -1166,20 +1166,6 @@ class Program:
                             stack.append(len(array3[0]))
                             stack.append(len(array3))
 
-                        elif tos == 6: #Row/column sums
-                            y = stack.pop() if stack else 0
-                            x = stack.pop() if stack else 0
-
-                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
-                            
-                            if not self.toggleFlag: #rows
-                                sums = [sum(row) for row in array]
-                            else: #columns
-                                sums = [sum([array[j][i] for j in range(y)]) for i in range(x)]
-
-                            stack.extend(sums[::-1])
-                            stack.append(len(sums))
-
                         elif tos == 7: #Determinant
                             y = stack.pop() if stack else 0
                             x = stack.pop() if stack else 0
@@ -1199,33 +1185,57 @@ class Program:
                             stack.append(len(invA[0]))
                             stack.append(len(invA))
 
-                        elif tos == 9: #Submatrices
-                            if not self.toggleFlag: #contiguous
-                                y2 = stack.pop() if stack else 0
-                                x2 = stack.pop() if stack else 0
-                                y1 = stack.pop() if stack else 0
-                                x1 = stack.pop() if stack else 0
-                            else: #Minus a row and column
-                                b = stack.pop() if stack else 0
-                                a = stack.pop() if stack else 0
-                            
+                        elif tos == 11: #Row/column sums
                             y = stack.pop() if stack else 0
                             x = stack.pop() if stack else 0
-                            
+
                             array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
                             
-                            if not self.toggleFlag: #contiguous
-                                array2 = [row[x1:x2+1] for row in array[y1:y2+1]]
-                            else: #Minus a row and column
-                                array2 = [row[:a]+row[a+1:] for row in (array[:b]+array[b+1:])]
+                            if not self.toggleFlag: #rows
+                                sums = [sum(row) for row in array]
+                            else: #columns
+                                sums = [sum([array[j][i] for j in range(y)]) for i in range(x)]
+
+                            stack.extend(sums[::-1])
+                            stack.append(len(sums))
+
+                        elif tos == 12: #Submatrix slice
+                            q = stack.pop() if stack else 0
+                            p = stack.pop() if stack else 0
+                            
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0                            
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+                            
+                            if not self.toggleFlag: #rows
+                                array2 = array[p:q+1]
+                            else: #columns
+                                array2 = [row[p:q+1] for row in array]
                             
                             for row in array2[::-1]: stack.extend(row[::-1])
                             stack.append(len(array2[0]))
                             stack.append(len(array2))
-                        elif tos == 10: #Cartesian product
-                            if not self.toggleFlag: #all products
+
+                        elif tos == 12: #Row/col deletion
+                            n = stack.pop() if stack else 0
+                            
+                            y = stack.pop() if stack else 0
+                            x = stack.pop() if stack else 0                            
+                            array = [[(stack.pop() if stack else 0) for i in range(x)] for j in range(y)]
+                            
+                            if not self.toggleFlag: #row
+                                array2 = array[:n]+array[n+1:]
+                            else: #column
+                                array2 = [row[:n]+row[n+1:] for row in array]
+                            
+                            for row in array2[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array2[0]))
+                            stack.append(len(array2))
+                            
+                        elif tos == 13: #Matrix spiral
+                            if not self.toggleFlag: #spiral unwind
                                 pass
-                            else: #nth product
+                            else: #spiral wind
                                 pass
 
                         else:
