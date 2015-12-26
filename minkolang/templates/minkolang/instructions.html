@@ -70,6 +70,13 @@
 
 	<ul>
 		<li><code>0...9,l,j</code> Pushes the corresponding digit onto the stack (where the lowercase L <code>l</code> is 10 and <code>j</code> is <code>sqrt(-1)</code>).</li>
+		<li><code>$1...$6</code> Pushes the corresponding numbers 11 through 16 onto the stack.</li>
+		<li><code>$0</code> Pushes 0.1 onto the stack.</li>
+		<li><code>$7</code> Pushes 0.5 onto the stack.</li>
+		<li><code>$8</code> Pushes phi (the golden ratio) onto the stack.</li>
+		<li><code>$9</code> Pushes sqrt(2) onto the stack.</li>
+		<li><code>$l</code> Pushes 100 onto the stack.</li>
+		<li><code>$j</code> Pushes (1/sqrt(2) + 1/sqrt(2)j) onto the stack.</li>
 		<li><code>"..." </code> &nbsp;String literal; Minkolang is smart enough to reverse this before pushing on the stack.</li>
 		<li><code>$"..."</code> String literal with escapes; all escape sequences are converted before pushing on the stack.</li>
 		<li><code>'...' </code> &nbsp;Number literal; does the work of multiplying by 10 and adding the next digit.</li>

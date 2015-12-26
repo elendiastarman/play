@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from minkolang.minkolang_0_14 import Program
+from minkolang.minkolang_0_15 import Program
 from minkolang.minkolang_09 import Program as Program_old
 
 import os
@@ -136,7 +136,14 @@ def main_view(request, **kwargs):
                     data['inputstr'] = V['inputStr']
                     data['output'] = "<br/>".join(V['output'].replace('<','&lt;').replace('>','&gt;').split('\n'))
 
-                    if V['strMode']:
+                    if V['ignoreFlag'] and V['ignoreFlag'][0] != " ":
+                        c = V['ignoreFlag']
+                        print("<%s>"%V['ignoreFlag'])
+                        kinds = {"C":"comment","[":"empty loop","t":"ternary"}
+                        if c in kinds:
+                            data['currchar'] = "<code>%s </code> &nbsp;Comment mode: <code>%s</code> - %s" % (c,c,kinds[c])
+                            
+                    elif V['strMode'] and not V['ignoreFlag']:
                         if V['currChar'] == '"':
                             data['currchar'] = "<code>\" </code> &nbsp;Starts a string literal."
                         else:
@@ -144,7 +151,7 @@ def main_view(request, **kwargs):
                     elif V['currChar'] == '"':
                         data['currchar'] = "<code>\" </code> &nbsp;Closes a string literal and \
                                             pushes the characters onto the stack in reverse order."
-                    elif V['numMode']:
+                    elif V['numMode'] and not V['ignoreFlag']:
                         if V['currChar'] == "'":
                             data['currchar'] = "<code>' </code> &nbsp;Starts a number literal."
                         else:
@@ -153,12 +160,19 @@ def main_view(request, **kwargs):
                         data['currchar'] = "<code>' </code> &nbsp;Closes a string literal and \
                                             pushes the number onto the stack."
                     else:
-                        if "0" <= V['currChar'] <= "9" and len(V['currChar']) == 1:
+                        if "0" <= V['currChar'] <= "9" and len(V['currChar']) == 1 and not V['oldToggle']:
                             data['currchar'] = "<code>%d </code> &nbsp;Pushes a %d onto the stack." % ((int(V['currChar']),)*2)
-                        elif V['currChar'] == "l":
+                        elif V['currChar'] == "l" and not V['oldToggle']:
                             data['currchar'] = "<code>l </code> &nbsp;Pushes a 10 onto the stack."
+                        elif V['currChar'] == "j" and not V['oldToggle']:
+                            data['currchar'] = "<code>j </code> &nbsp;Pushes 1j = sqrt(-1) onto the stack."
+                        elif "1" <= V['currChar'] <= "6" and len(V['currChar']) == 1 and V['oldToggle']:
+                            data['currchar'] = "<code>$%d</code> Pushes 1%d onto the stack." % ((int(V['currChar']),)*2)
                         else:
                             data['currchar'] = V['oldToggle']*'$' + V['currChar']
+
+                            if V['groupedNum'] != None:
+                                data['currchar'] = (V['groupedNum']>9)*"$" + str(V['groupedNum']%10) + data['currchar']
 
                     data['register'] = V['register']
 

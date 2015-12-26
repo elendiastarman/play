@@ -109,7 +109,7 @@ function updateStuff(response) {
 	var cc = response['currchar'];
 	if (cc == "$ ") {cc = "  ";}
 	
-	if (cc.length == 1) { cc = cc+" "; }
+	if (cc.length == 1 || cc[cc.length-2] !== "$") { cc = cc+" "; }
 	var found = 0;
 	
 	$('#instructions li').each( function(i,e) {
