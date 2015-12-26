@@ -1166,6 +1166,20 @@ class Program:
                             stack.append(len(array3[0]))
                             stack.append(len(array3))
 
+                        elif tos == 6: #Identity/matrix fill
+                            if not self.toggleFlag:
+                                n = stack.pop() if stack else 0
+                                array3 = [[int(i==j) for i in range(n)] for j in range(n)]
+                            else:
+                                y = stack.pop() if stack else 0
+                                x = stack.pop() if stack else 0
+                                n = stack.pop() if stack else 0
+                                array3 = [[n for i in range(x)] for j in range(y)]
+
+                            for row in array3[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array3[0]))
+                            stack.append(len(array3))
+
                         elif tos == 7: #Determinant
                             y = stack.pop() if stack else 0
                             x = stack.pop() if stack else 0
@@ -1216,7 +1230,7 @@ class Program:
                             stack.append(len(array2[0]))
                             stack.append(len(array2))
 
-                        elif tos == 12: #Row/col deletion
+                        elif tos == 13: #Row/col deletion
                             n = stack.pop() if stack else 0
                             
                             y = stack.pop() if stack else 0
@@ -1232,7 +1246,7 @@ class Program:
                             stack.append(len(array2[0]))
                             stack.append(len(array2))
                             
-                        elif tos == 13: #Matrix spiral
+                        elif tos == 14: #Matrix spiral
                             if not self.toggleFlag: #spiral unwind
                                 pass
                             else: #spiral wind
