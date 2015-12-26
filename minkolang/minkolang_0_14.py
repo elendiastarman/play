@@ -1059,7 +1059,43 @@ class Program:
                                     self.output += '\n'
                                     
                         elif tos == 1 or tos == 2: #matrix add, sub
-                            pass
+                            yB = stack.pop() if stack else 0
+                            xB = stack.pop() if stack else 0
+                            arrayB = [[(stack.pop() if stack else 0) for i in range(xB)] for j in range(yB)]
+                            
+                            yA = stack.pop() if stack else 0
+                            xA = stack.pop() if stack else 0
+                            arrayA = [[(stack.pop() if stack else 0) for i in range(xA)] for j in range(yA)]
+
+                            array3 = []
+
+                            for j in range(max([yA,yB])):
+                                row = []
+                                for i in range(max([xA,xB])):
+                                    try:
+                                        a = arrayA[j][i]
+                                    except IndexError:
+                                        if self.toggleFlag:
+                                            a = 0
+                                        else:
+                                            raise ValueError("Dimensions must match!")
+                                    try:
+                                        b = arrayB[j][i]
+                                    except IndexError:
+                                        if self.toggleFlag:
+                                            b = 0
+                                        else:
+                                            raise ValueError("Dimensions must match!")
+
+                                    c = a+b if tos == 1 else a-b
+                                    row.append(c)
+
+                                array3.append(row)
+
+                            for row in array3[::-1]: stack.extend(row[::-1])
+                            stack.append(len(array3[0]))
+                            stack.append(len(array3))
+                            
                         elif tos == 3 or tos == 4: #matrix mul, div
                             pass
 
