@@ -25,12 +25,12 @@ def main_view(request, *args, **kwargs):
     elif sys.platform == 'linux':
         path = os.path.join("/home","elendia","webapps","play","play","Spacewar","static","Spacewar","")
 
-##    print(path)
-##    print(os.listdir(path))
+    paths = [(path,""), (os.path.join(path,"bots"),"bots/")]
 
     scripts = []
-    for filename in os.listdir(path):
-        if filename.endswith('.js'): scripts.append('Spacewar/'+filename)
+    for path, plus in paths:
+        for filename in os.listdir(path):
+            if filename.endswith('.js'): scripts.append('Spacewar/'+plus+filename)
     context['scripts'] = scripts
 
     return render(request, 'Spacewar/main.html', context_instance=context)
