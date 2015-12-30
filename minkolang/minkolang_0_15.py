@@ -4,6 +4,7 @@ import json
 import math
 import cmath
 import random
+import resource
 import itertools
 from copy import deepcopy
 
@@ -26,6 +27,10 @@ class Program:
     def __init__(self, code, inputStr="", debugFlag=0, outfile=sys.stdout):
         global debug
         debug = debugFlag
+
+        if sys.platform == 'linux': #memory limit
+            soft,hard = resource.getrlimit(resource.RLIMIT_AS)
+            resource.setrlimit(resource.RLIMIT_AS, (1, hard))
         
         self.code = []
         for layer in filter(bool, code.split("$$$\n")):
