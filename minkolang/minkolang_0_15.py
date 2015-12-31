@@ -4,7 +4,7 @@ import json
 import math
 import cmath
 import random
-import resource
+if sys.platform == 'linux': import resource
 import itertools
 from copy import deepcopy
 
@@ -30,6 +30,7 @@ class Program:
 
         if sys.platform == 'linux': #memory limit
             soft,hard = resource.getrlimit(resource.RLIMIT_AS)
+            print("Soft,hard = ",(soft,hard))
             resource.setrlimit(resource.RLIMIT_AS, (1, hard))
         
         self.code = []
