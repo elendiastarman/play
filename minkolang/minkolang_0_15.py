@@ -28,10 +28,10 @@ class Program:
         global debug
         debug = debugFlag
 
-        if sys.platform == 'linux': #memory limit
-            soft,hard = resource.getrlimit(resource.RLIMIT_AS)
-            print("Soft,hard = ",(soft,hard))
-            resource.setrlimit(resource.RLIMIT_AS, (1, hard))
+##        if sys.platform == 'linux': #memory limit
+##            soft,hard = resource.getrlimit(resource.RLIMIT_AS)
+##            print("Soft,hard = ",(soft,hard))
+##            resource.setrlimit(resource.RLIMIT_AS, (1, hard))
         
         self.code = []
         for layer in filter(bool, code.split("$$$\n")):
