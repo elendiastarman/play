@@ -27,6 +27,12 @@
 			<li><strong>Dot and Cross Product</strong> - blah.</li>
 			<li><strong>Radians</strong> - blah.</li>
 		</ul>
+		
+		<ul>
+			{% for H, D, L in applets %}
+			<li><a href="{% url 'other' L %}" target="_blank"><strong>{{H}}</strong></a> &ndash; {{D}}</li>
+			{% endfor %}
+		</ul>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
