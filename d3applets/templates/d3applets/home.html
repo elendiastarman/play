@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<title>Serious Fun</title>
 		
 		{% load staticfiles %}
 		<link rel="stylesheet" type="text/css" href="{% static 'd3applets/home.css' %}" />
@@ -16,17 +17,12 @@
 		
 		<h2>Stand-alone projects</h2>
 		
-		<p><strong>Minkolang</strong> - Inspired by Befunge and ><>, and by the golfing comptetitions and languages at
-		<a href="http://codegolf.stackexchange.com/">Programming Puzzles and Code Golf</a>, I designed and implemented Minkolang, a (2+1)D Minkowskian stack-based semi-golfing language. The Python interpreter is on <a href="https://github.com/elendiastarman/Minkolang" target="_blank">GitHub</a> and the official online interpreter is here: <a href="http://play.starmaninnovations.com/minkolang/">Minkolang Online Interpreter</a>.</p>
+		<p><a href="{% url 'minkolang:main' %}" target="_blank"><strong>Minkolang</strong></a> &ndash; Inspired by Befunge and ><>, and by the golfing comptetitions and languages at
+		<a href="http://codegolf.stackexchange.com/" target="_blank">Programming Puzzles and Code Golf</a>, I designed and implemented Minkolang, a (2+1)D Minkowskian stack-based semi-golfing language. The Python interpreter is on <a href="https://github.com/elendiastarman/Minkolang" target="_blank">GitHub</a> and the official online interpreter is here: .</p>
 		
-		<p><strong>Spacewar! - PPCG King of the Hill</strong> - Spacewar! was one of the very first computer games, and I recreated it for a PPCG King of the Hill challenge.</p>
+		<p><a href="{% url 'spacewar:main' %}" target="_blank"><strong>Spacewar! - PPCG King of the Hill</strong></a> &ndash; Spacewar! was one of the very first computer games, and I recreated it for <a href="http://codegolf.stackexchange.com/q/67560/12914" target="_blank">this PPCG King of the Hill challenge</a>. You can pit any two of about 20 AI bots against each other or play against one yourself!</p>
 		
 		<h2>D3 Applets</h2>
-		
-		<ul>
-			<li><strong>Dot and Cross Product</strong> - blah.</li>
-			<li><strong>Radians</strong> - blah.</li>
-		</ul>
 		
 		<ul>
 			{% for H, D, L in applets %}
