@@ -51,6 +51,10 @@ function initGrid() {
 		}
 		grid.push(row);
 	}
+	
+	d3.select('#field')
+		.attr('width', cellSize*(gridW+0))
+		.attr('height', cellSize*(gridH+1))
 }
 
 function update() {
