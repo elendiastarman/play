@@ -19,8 +19,15 @@
 			<rect width="600" height="600" fill="black" />
 			<!--<circle cx="200" cy="200" r="100" stroke="black" fill="white" id="base-circle" />-->
 			<g id="lines"></g>
-			<circle cx="300" cy="200" r="5" fill="white" id="sun" />
+			<g id="gravBodies"></g>
+			<!-- <circle cx="300" cy="200" r="5" fill="white" id="sun" class=".gravBody" /> -->
 		</svg>
+		
+		<p><button onclick="addOne()">Add one</button>
+		Frozen? <input type="checkbox" id="frozen" checked />
+		Show vector field? <input type="checkbox" id="showVectors" checked /></p>
+		
+		<div id="sunStuff"></div>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>

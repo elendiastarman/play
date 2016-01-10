@@ -44,4 +44,4 @@ var drag = d3.behavior.drag()
 	d3.select(this).attr("cx",d3.event.x).attr("cy",d3.event.y);
 	d3.select("#lines").selectAll("line").each(realign);
   });
-d3.select('svg').selectAll('circle').call(drag);
+d3.select('svg').selectAll('.gravBody').call(drag);
