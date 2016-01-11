@@ -24,7 +24,10 @@ function setRenderLoop() {
 	renderLoop = setInterval(update, fastMode ? 1 : $('#mspt').val());
 }
 
-function start() { setRenderLoop(); }
+function start() {
+	if (steps === 0) { steps = -1; }
+	setRenderLoop();
+}
 function stop() { clearInterval(renderLoop); renderLoop = false; }
 
 var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3]}];
@@ -69,6 +72,7 @@ function clearGrid() {
 			grid[j][i][2] = 0;
 		}
 	}
+	generations = -1;
 	steps = 1;
 	update();
 	stop();
@@ -158,6 +162,8 @@ function updateGraphics() {
 			if (!fastMode) { d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']); }
 		}
 	}
+	
+	$('#generationCounter').text(generations);
 }
 
 function toggleCell() {
