@@ -200,9 +200,7 @@ function changeCell() {
 		}
 	} else if (which === "paint") {
 		var num = parseInt($('.picked:first').attr('id').substr(4,100));
-		console.log(cell);
 		cell[0] = num-1;
-		console.log(cell);
 	}
 	
 	var rule = rules[cell[0]];
