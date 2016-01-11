@@ -1,7 +1,6 @@
 "use strict";
 
 var renderLoop = false;
-var clearIt = false;
 $(function(){
 	$('#tps').on('change', function(){
 		$('#mspt').val(Math.round(1000/$('#tps').val()));
@@ -67,9 +66,10 @@ function clearGrid() {
 			grid[j][i][2] = 0;
 		}
 	}
-	if (!renderLoop){ update(); }
+	if (!renderLoop){ update(); stop(); }
 }
 
+function step(){update()}
 function update() {
 	updateGrid();
 	updateGraphics();
@@ -167,7 +167,15 @@ function changeRules() {
 }
 
 function addRule() {
-	//
+	var n = rules.length+1;
+	var div = $('.rule:last').clone();
+	div.attr('id','rule'+n);
+	var R = new RegExp('(id=".*?)'+rules.length+'(.*?")', 'g');
+	console.log(R.exec(div.html()));
+	div.html( div.html().replace(R, '$1'+n+'$2') );
+	console.log(div)
+	$('#rules').append(div);
+	rules.push(rules[rules.length-1]);
 }
 
 function removeRule() {

@@ -24,6 +24,7 @@
 		
 		<p><button onclick="start()">Start</button>
 		<button onclick="stop()">Stop</button>
+		<button onclick="step()">Step</button>
 		<button onclick="clearGrid()">Clear</button> <br/>
 		Ticks per second: <input type="text" id="tps" value="5" size="1"/> &ndash; Milliseconds per tick: <input type="text" id="mspt" value="200" size="1"/>
 		<br/>
@@ -33,7 +34,7 @@
 		<h2>Rules</h2>
 		
 		<p><div id="rules">
-			<div id="rule1">
+			<div id="rule1" class="rule">
 				Rule: <input type="text" id="rule1text" value="B3/S23" />
 				<br/>
 				Dead color: <input type="text" id="rule1dead" value="#000000" size="6"/>
