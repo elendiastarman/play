@@ -14,6 +14,9 @@ $(function(){
 		toroidal = this.checked;
 	});
 	
+	$('#width').on('change', resize);
+	$('#height').on('change', resize);
+	
 	$('#rules').on('change', 'input[type=text]', changeRules);
 	$('#rules').on('click', '.rule', function(){
 		$('.picked').removeClass('picked');
@@ -50,6 +53,8 @@ var mouseDown = false;
 var toggleTo = -1;
 
 function initGrid() {
+	grid = [];
+	
 	for (var j=0; j<gridH; j++) {
 		var row = [];
 		for (var i=0; i<gridW; i++) {
@@ -205,7 +210,27 @@ function changeCell() {
 }
 
 function resize() {
-	//
+	var oldGrid = $.extend(true, [], grid);
+	var oldW = gridW;
+	var oldH = gridH;
+	
+	gridW = parseInt($('#width').val());
+	gridH = parseInt($('#height').val());
+	
+	// console.log(oldGrid);
+	d3.selectAll(".block").remove();
+	initGrid();
+	// console.log(oldGrid);
+	
+	for (var j=0; j<Math.min(oldH,gridH); j++) {
+		for (var i=0; i<Math.min(oldW,gridW); i++) {
+			for (var k=0; k<3; k++) {
+				grid[j][i][k] = oldGrid[j][i][k];
+			}
+		}
+	}
+	
+	updateGraphics();
 }
 
 var regex = new RegExp('.*([0-9]+)(.*)');
