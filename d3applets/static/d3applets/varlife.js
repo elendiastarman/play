@@ -139,13 +139,14 @@ function resize() {
 
 var regex = new RegExp('.*([0-9]+)(.*)');
 function changeRules() {
-	console.log(this);
 	var R = regex.exec($(this).attr('id'));
 	var num = R[1];
 	var kind = R[2];
 	
 	if (kind === "text") {
-		//split
+		var s = $(this).val().split('/').map(function(x){ return x.substr(1,x.length-1).split('').map(Number); });
+		rules[num-1]["birth"] = s[0];
+		rules[num-1]["survive"] = s[1];
 	} else if (kind === "alive" || kind === "dead") {
 		rules[num-1][kind] = $(this).val();
 		d3.select('#'+$(this).attr('id')+'color').style("background-color",$(this).val());
