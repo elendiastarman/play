@@ -168,14 +168,16 @@ function changeRules() {
 
 function addRule() {
 	var n = rules.length+1;
+	
 	var div = $('.rule:last').clone();
 	div.attr('id','rule'+n);
-	var R = new RegExp('(id=".*?)'+rules.length+'(.*?")', 'g');
-	console.log(R.exec(div.html()));
+	
+	var R = new RegExp('(id=".*?)'+rules.length+'(.*?")', 'g'); //these two lines do a find-and-replace on rules[n-1]whatever -> rules[n]whatever
 	div.html( div.html().replace(R, '$1'+n+'$2') );
-	console.log(div)
+	
 	$('#rules').append(div);
-	rules.push(rules[rules.length-1]);
+	
+	rules.push( $.extend(true, {}, rules[rules.length-1]) ); //http://stackoverflow.com/a/5164215/1473772
 }
 
 function removeRule() {
