@@ -39,13 +39,14 @@
 			<button onclick="stop()">Stop</button>
 			<button onclick="step()">Step</button>
 			<button onclick="clearGrid()">Clear</button> ||
-			<input type="text" id="numSteps" value="1" size="10"/>
+			<input type="number" id="numSteps" value="10" min="1" max="1000" />
 			<button onclick="fast()">Fast</button>
 			<button onclick="slow()">Slow</button>
 			
 			<br/>
 			
-			Ticks per second: <input type="text" id="tps" value="5" size="1"/> &ndash; Milliseconds per tick: <input type="text" id="mspt" value="200" size="1"/>
+			Ticks per second: <input type="number" id="tps" value="5" min="1" max="100" /> &ndash;
+			Milliseconds per tick: <input type="number" id="mspt" value="200" min="10" max="1000" />
 			
 			<br/>
 			
