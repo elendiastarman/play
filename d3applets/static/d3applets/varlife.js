@@ -27,9 +27,6 @@ function setRenderLoop() {
 
 function start() { setRenderLoop(); }
 function stop() { clearInterval(renderLoop); renderLoop = false; }
-function clear() {
-	console.log("clear");
-	clearIt = true; if (!renderLoop){ update(); } }
 
 var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3]}];
 var grid = [];
@@ -70,17 +67,12 @@ function clearGrid() {
 			grid[j][i][2] = 0;
 		}
 	}
+	if (!renderLoop){ update(); }
 }
 
 function update() {
-	console.log(clearIt);
-	if (clearIt) {
-		clearGrid();
-		stop();
-	} else {
-		updateGrid();
-		updateGraphics();
-	}
+	updateGrid();
+	updateGraphics();
 }
 
 function updateGrid() {
