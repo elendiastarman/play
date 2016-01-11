@@ -20,6 +20,9 @@ $(function(){
 		$(this).addClass('picked');
 	});
 	
+	// $('#field').on('mousedown', function(){ console.log("down"); mouseDown = true; });
+	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
+	
 	initGrid();
 });
 
@@ -43,6 +46,8 @@ var toroidal = false;
 var steps = -1;
 var generations = 0;
 var fastMode = false;
+var mouseDown = false;
+var toggleTo = -1;
 
 function initGrid() {
 	for (var j=0; j<gridH; j++) {
@@ -59,7 +64,11 @@ function initGrid() {
 				.attr('stroke-width','1px')
 				.attr('id','b_'+i+'_'+j)
 				.attr('class','block')
-				.on('click', changeCell)
+				.on('mousedown', function(){
+					mouseDown = true;
+					d3.select(this).call(changeCell.bind(this));
+				})
+				.on('mouseover', changeCell)
 		}
 		grid.push(row);
 	}
@@ -76,9 +85,9 @@ function clearGrid() {
 			grid[j][i][2] = 0;
 		}
 	}
-	generations = -1;
-	steps = 1;
-	update();
+	generations = 0;
+	steps = 0;
+	updateGraphics();
 	stop();
 }
 
@@ -171,20 +180,28 @@ function updateGraphics() {
 }
 
 function changeCell() {
+	if (!mouseDown){ return; }
+	
 	var coords = d3.select(this).attr('id').split('_').map(Number);
 	var cell = grid[coords[2]][coords[1]];
 	var which = $('input[name="paintKind"]:checked').val();
 	
 	if (which === "toggle") {
-		var state = 1 - cell[1];
-		cell[1] = state;
+		if (toggleTo+1) {
+			cell[1] = toggleTo;
+		} else {
+			cell[1] = 1 - cell[1];
+			toggleTo = cell[1];
+		}
 	} else if (which === "paint") {
-		var num = $('.picked:first').attr('id').substr(4,100);
+		var num = parseInt($('.picked:first').attr('id').substr(4,100));
+		console.log(cell);
 		cell[0] = num-1;
+		console.log(cell);
 	}
 	
 	var rule = rules[cell[0]];
-	d3.select(this).attr('fill', rule[state ? 'alive' : 'dead']);
+	d3.select(this).attr('fill', rule[cell[1] ? 'alive' : 'dead']);
 }
 
 function resize() {
