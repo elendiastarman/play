@@ -53,8 +53,8 @@ function initGrid() {
 	}
 	
 	d3.select('#field')
-		.attr('width', cellSize*(gridW+0))
-		.attr('height', cellSize*(gridH+1))
+		.attr('width', cellSize*gridW)
+		.attr('height', cellSize*gridH);
 }
 
 function update() {
@@ -124,13 +124,9 @@ function toggleCell() {
 	var cell = grid[coords[2]][coords[1]];
 	var state = 1 - cell[1];
 	
-	if (renderLoop) {
-		cell[2] = state; //flip state
-	} else {
-		cell[1] = state;
-		var rule = rules[cell[0]];
-		d3.select(this).attr('fill', rule[state ? 'alive' : 'dead']);
-	}
+	cell[1] = state;
+	var rule = rules[cell[0]];
+	d3.select(this).attr('fill', rule[state ? 'alive' : 'dead']);
 }
 
 function setRules() {
