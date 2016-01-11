@@ -1,6 +1,7 @@
 "use strict";
 
 var renderLoop = false;
+var clearIt = false;
 $(function(){
 	$('#tps').on('change', function(){
 		$('#mspt').val(Math.round(1000/$('#tps').val()));
@@ -26,6 +27,9 @@ function setRenderLoop() {
 
 function start() { setRenderLoop(); }
 function stop() { clearInterval(renderLoop); renderLoop = false; }
+function clear() {
+	console.log("clear");
+	clearIt = true; if (!renderLoop){ update(); } }
 
 var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3]}];
 var grid = [];
@@ -59,9 +63,24 @@ function initGrid() {
 		.attr('height', cellSize*gridH);
 }
 
+function clearGrid() {
+	for (var j=0; j<gridH; j++) {
+		for (var i=0; i<gridW; i++) {
+			grid[j][i][1] = 0;
+			grid[j][i][2] = 0;
+		}
+	}
+}
+
 function update() {
-	updateGrid();
-	updateGraphics();
+	console.log(clearIt);
+	if (clearIt) {
+		clearGrid();
+		stop();
+	} else {
+		updateGrid();
+		updateGraphics();
+	}
 }
 
 function updateGrid() {
