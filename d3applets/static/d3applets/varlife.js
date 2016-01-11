@@ -3,16 +3,18 @@
 var renderLoop = false;
 $(function(){
 	$('#tps').on('change', function(){
-		$('#mspt').val(Math.round(1000/this.val()));
+		$('#mspt').val(Math.round(1000/$('#tps').val()));
 		if (renderLoop) { setRenderLoop(); }
 	});
 	$('#mspt').on('change', function(){
-		$('#tps').val(Math.round(1000/this.val()));
+		$('#tps').val(Math.round(1000/$('#mspt').val()));
 		if (renderLoop) { setRenderLoop(); }
 	});
 	$('#toroidal').on('change', function(){
 		toroidal = this.checked;
 	});
+	
+	$('#rules').on('change', 'input[type=text]', changeRules);
 	
 	initGrid();
 });
@@ -113,7 +115,9 @@ function updateGraphics() {
 		for (var i=0; i<gridW; i++) {
 			var cell = grid[j][i];
 			var rule = rules[cell[0]];
-			cell[1] = cell[2];
+			
+			if (renderLoop){ cell[1] = cell[2]; }
+			
 			d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']);
 		}
 	}
@@ -129,14 +133,31 @@ function toggleCell() {
 	d3.select(this).attr('fill', rule[state ? 'alive' : 'dead']);
 }
 
-function setRules() {
-	//
-}
-
 function resize() {
 	//
 }
 
+var regex = new RegExp('.*([0-9]+)(.*)');
+function changeRules() {
+	console.log(this);
+	var R = regex.exec($(this).attr('id'));
+	var num = R[1];
+	var kind = R[2];
+	
+	if (kind === "text") {
+		//split
+	} else if (kind === "alive" || kind === "dead") {
+		rules[num-1][kind] = $(this).val();
+		d3.select('#'+$(this).attr('id')+'color').style("background-color",$(this).val());
+		
+		if (!renderLoop){ updateGraphics(); }
+	}
+}
+
 function addRule() {
+	//
+}
+
+function removeRule() {
 	//
 }

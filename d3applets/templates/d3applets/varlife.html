@@ -32,22 +32,20 @@
 		
 		<h2>Rules</h2>
 		
-		<p>
-		Rule: <input type="text" id="rule1" value="B3/S23" />
-		<br/>
-		Dead color: <input type="text" id="rule1dead" value="#000000" size="6"/>
-		<span style="background-color: #000000" id="rule1deadcolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-		<br/>
-		Alive color: <input type="text" id="rule1alive" value="#FFFFFF" size="6"/>
-		<span style="background-color: #FFFFFF" id="rule1alivecolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-		<br/>
-		
-		<br/>
+		<p><div id="rules">
+			<div id="rule1">
+				Rule: <input type="text" id="rule1text" value="B3/S23" />
+				<br/>
+				Dead color: <input type="text" id="rule1dead" value="#000000" size="6"/>
+				<span style="background-color: #000000" id="rule1deadcolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<br/>
+				Alive color: <input type="text" id="rule1alive" value="#FFFFFF" size="6"/>
+				<span style="background-color: #FFFFFF" id="rule1alivecolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<br/>
+			</div>
+		</div></p>
 		
 		<button onclick="addRule()">Add rule</button>
-		</p>
-		
-		<div id="sunStuff"></div>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
