@@ -10,6 +10,13 @@
 		<style>
 			input { margin: 5px; }
 			span { border: 1px solid black; }
+			.rule {
+				border: 1px solid transparent;
+				width: 200px;
+				padding: 3px;
+			}
+			.rule:hover { border: 1px solid gray; background-color: #FFFFCC; }
+			.picked { border: 1px solid black; background-color: #FFFFAA; }
 		</style>
 	</head>
 	
@@ -23,11 +30,16 @@
 		</svg>
 		
 		<p>
+			<label for="onOffToggle">Live/dead toggle</label> <input type="radio" id="onOffToggle" name="paintKind" value="toggle" checked />
+			<label for="rulePick">Rule pick</label> <input type="radio" id="rulePick" name="paintKind" value="paint" />
+			
+			<br/>
+			
 			<button onclick="start()">Start</button>
 			<button onclick="stop()">Stop</button>
+			<button onclick="step()">Step</button>
 			<button onclick="clearGrid()">Clear</button> ||
-			<button onclick="step()">Step</button> &nbsp;
-			<input type="text" id="numSteps" value="1" size="1"/>
+			<input type="text" id="numSteps" value="1" size="10"/>
 			<button onclick="fast()">Fast</button>
 			<button onclick="slow()">Slow</button>
 			
@@ -44,8 +56,8 @@
 		
 		<h2>Rules</h2>
 		
-		<p><div id="rules">
-			<div id="rule1" class="rule">
+		<div id="rules">
+			<p id="rule1" class="rule picked">
 				Rule: <input type="text" id="rule1text" value="B3/S23" />
 				<br/>
 				Dead color: <input type="text" id="rule1dead" value="#000000" size="6"/>
@@ -54,8 +66,8 @@
 				Alive color: <input type="text" id="rule1alive" value="#FFFFFF" size="6"/>
 				<span style="background-color: #FFFFFF" id="rule1alivecolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 				<br/>
-			</div>
-		</div></p>
+			</p>
+		</div>
 		
 		<button onclick="addRule()">Add rule</button>
 	

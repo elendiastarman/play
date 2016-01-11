@@ -15,6 +15,10 @@ $(function(){
 	});
 	
 	$('#rules').on('change', 'input[type=text]', changeRules);
+	$('#rules').on('click', '.rule', function(){
+		$('.picked').removeClass('picked');
+		$(this).addClass('picked');
+	});
 	
 	initGrid();
 });
@@ -55,7 +59,7 @@ function initGrid() {
 				.attr('stroke-width','1px')
 				.attr('id','b_'+i+'_'+j)
 				.attr('class','block')
-				.on('click', toggleCell)
+				.on('click', changeCell)
 		}
 		grid.push(row);
 	}
@@ -166,12 +170,19 @@ function updateGraphics() {
 	$('#generationCounter').text(generations);
 }
 
-function toggleCell() {
+function changeCell() {
 	var coords = d3.select(this).attr('id').split('_').map(Number);
 	var cell = grid[coords[2]][coords[1]];
-	var state = 1 - cell[1];
+	var which = $('input[name="paintKind"]:checked').val();
 	
-	cell[1] = state;
+	if (which === "toggle") {
+		var state = 1 - cell[1];
+		cell[1] = state;
+	} else if (which === "paint") {
+		var num = $('.picked:first').attr('id').substr(4,100);
+		cell[0] = num-1;
+	}
+	
 	var rule = rules[cell[0]];
 	d3.select(this).attr('fill', rule[state ? 'alive' : 'dead']);
 }
@@ -202,6 +213,7 @@ function addRule() {
 	var n = rules.length+1;
 	
 	var div = $('.rule:last').clone();
+	div.removeClass('picked');
 	div.attr('id','rule'+n);
 	
 	var R = new RegExp('(id=".*?)'+rules.length+'(.*?")', 'g'); //these two lines do a find-and-replace on rules[n-1]whatever -> rules[n]whatever
