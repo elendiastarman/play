@@ -243,6 +243,7 @@ function changeRules() {
 		rules[num-1]["survive"] = s[1];
 	} else if (kind === "alive" || kind === "dead") {
 		rules[num-1][kind] = $(this).val();
+		$(this).attr("value",$(this).val());
 		var newCol;
 		
 		if ($(this).val() === "#") {
@@ -253,11 +254,15 @@ function changeRules() {
 		if (!newCol) { newCol = "#000000"; }
 		
 		$('#'+$(this).attr('id')+'color').val(newCol);
+		$('#'+$(this).attr('id')+'color').attr("value",newCol);
 		
 		if (!renderLoop){ updateGraphics(); }
 	} else if (kind === "alivecolor" || kind === "deadcolor") {
 		rules[num-1][kind.substring(0,kind.length-5)] = $(this).val();
+		$(this).attr("value",$(this).val());
+		
 		$('#'+R[0].substring(0,R[0].length-5)).val($(this).val());
+		$('#'+R[0].substring(0,R[0].length-5)).attr("value",$(this).val());
 		
 		if (!renderLoop){ updateGraphics(); }
 	}
