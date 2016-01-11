@@ -21,7 +21,7 @@ $(function(){
 
 function setRenderLoop() {
 	if (renderLoop) { clearInterval(renderLoop); }
-	renderLoop = setInterval(update, $('#mspt').val());
+	renderLoop = setInterval(update, fastMode ? 1 : $('#mspt').val());
 }
 
 function start() { setRenderLoop(); }
@@ -33,6 +33,9 @@ var gridW = 20;
 var gridH = 20;
 var cellSize = 10;
 var toroidal = false;
+var steps = -1;
+var generations = 0;
+var fastMode = false;
 
 function initGrid() {
 	for (var j=0; j<gridH; j++) {
@@ -66,12 +69,35 @@ function clearGrid() {
 			grid[j][i][2] = 0;
 		}
 	}
-	if (!renderLoop){ update(); stop(); }
+	steps = 1;
+	update();
+	stop();
 }
 
-function step(){update()}
 function update() {
-	updateGrid();
+	if (!renderLoop && !fastMode) { start(); }
+	
+	if (steps === 0) {
+		clearInterval(renderLoop);
+		renderLoop = false;
+		fastMode = false;
+	} else {
+		generations += 1;
+		steps -= 1;
+		updateGrid();
+		updateGraphics();
+	}
+}
+function step(){steps = 1; update();}
+
+function slow() {
+	steps = $('#numSteps').val();
+	start();
+}
+function fast(){
+	fastMode = true;
+	steps = parseInt($('#numSteps').val());
+	while (fastMode) { update(); }
 	updateGraphics();
 }
 
@@ -127,9 +153,9 @@ function updateGraphics() {
 			var cell = grid[j][i];
 			var rule = rules[cell[0]];
 			
-			if (renderLoop){ cell[1] = cell[2]; }
+			if (renderLoop || fastMode){ cell[1] = cell[2]; }
 			
-			d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']);
+			if (!fastMode) { d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']); }
 		}
 	}
 }

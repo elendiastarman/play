@@ -22,13 +22,22 @@
 			<g id="blocks"></g>
 		</svg>
 		
-		<p><button onclick="start()">Start</button>
-		<button onclick="stop()">Stop</button>
-		<button onclick="step()">Step</button>
-		<button onclick="clearGrid()">Clear</button> <br/>
-		Ticks per second: <input type="text" id="tps" value="5" size="1"/> &ndash; Milliseconds per tick: <input type="text" id="mspt" value="200" size="1"/>
-		<br/>
-		<label for="toroidal">Toroidal?</label> <input type="checkbox" id="toroidal"/>
+		<p>
+			<button onclick="start()">Start</button>
+			<button onclick="stop()">Stop</button>
+			<button onclick="clearGrid()">Clear</button> ||
+			<button onclick="step()">Step</button> &nbsp;
+			<input type="text" id="numSteps" value="1" size="1"/>
+			<button onclick="fast()">Fast</button>
+			<button onclick="slow()">Slow</button>
+			
+			<br/>
+			
+			Ticks per second: <input type="text" id="tps" value="5" size="1"/> &ndash; Milliseconds per tick: <input type="text" id="mspt" value="200" size="1"/>
+			
+			<br/>
+			
+			<label for="toroidal">Toroidal?</label> <input type="checkbox" id="toroidal"/>
 		</p>
 		
 		<h2>Rules</h2>
