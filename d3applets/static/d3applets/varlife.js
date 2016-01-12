@@ -56,7 +56,7 @@ $(function(){
 	
 	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
 	
-	initGrid();
+	loadPermalink();
 });
 
 function setRenderLoop() {
@@ -322,23 +322,150 @@ function changeRules() {
 	}
 }
 
-function addRule() {
-	var n = rules.length+1;
+function addRule(append) {
+	var n = (append+1) ? append : rules.length+1;
 	
 	var div = $('.rule:last').clone();
 	div.removeClass('picked');
 	div.attr('id','rule'+n);
 	
-	var R = new RegExp('(id=".*?)'+rules.length+'(.*?")', 'g'); //these two lines do a find-and-replace on rules[n-1]whatever -> rules[n]whatever
+	var R = new RegExp('(id=".*?)'+(n-1)+'(.*?")', 'g'); //these two lines do a find-and-replace on rules[n-1]whatever -> rules[n]whatever
 	div.html( div.html().replace(R, '$1'+n+'$2') );
 	
 	$('#rules').append(div);
+	$('#rule'+n+'random').prop('checked', $('#rule'+(n-1)+'random').prop('checked') )
 	
-	rules.push( $.extend(true, {}, rules[rules.length-1]) ); //http://stackoverflow.com/a/5164215/1473772
+	if (append == -1){ rules.push( $.extend(true, {}, rules[rules.length-1]) ); } //http://stackoverflow.com/a/5164215/1473772
 }
 
 function removeRule() {
 	//
+}
+
+
+function setPermalink() {
+	//
+	var data = {};
+	data['rules'] = rules;
+	data['mspt'] = $('#mspt').val();
+	data['width'] = gridW;
+	data['height'] = gridH;
+	data['cellSize'] = cellSize;
+	data['toroidalH'] = toroidalH;
+	data['toroidalV'] = toroidalV;
+	
+	var gridNums = [];
+	var gridNum = 0;
+	var blockNum = 0;
+	for (var j=gridH-1; j>-1; j--) {
+		for (var i=gridW-1; i>-1; i--) {
+			if (gridNum * 2*rules.length > Math.pow(2,24)) {
+				gridNums.push(blockNum);
+				gridNums.push(gridNum);
+				blockNum = 0;
+				gridNum = 0;
+			}
+			
+			blockNum += 1;
+			gridNum *= 2;
+			gridNum += grid[j][i][1];
+			gridNum *= rules.length;
+			gridNum += grid[j][i][0];
+		}
+	}
+	gridNums.push(blockNum);
+	gridNums.push(gridNum);
+	
+	data['gridNums'] = gridNums;
+	var dataString = JSON.stringify(data);
+	console.log(dataString);
+	location.hash = '#data='+dataString;
+	$('#permalink').attr('href','#data='+dataString);
+}
+
+function loadPermalink() {
+	if (!location.hash || location.hash === '#'){ initGrid(); return; }
+	
+	var dataString = location.hash.slice(6);
+	var data = JSON.parse(dataString);
+	
+	$('#mspt').val(data['mspt']);
+	$('#tps').val(Math.round(1000/data['mspt']));
+	
+	toroidalH = data['toroidalH'];
+	toroidalV = data['toroidalV'];
+	$('#toroidalH').prop('checked', toroidalH);
+	$('#toroidalV').prop('checked', toroidalV);
+	$('#toroidal').prop('checked', toroidalH || toroidalV);
+	
+	rules = data['rules'];
+	var tempRule = $('.rule:first').detach();
+	$('#rules').empty();
+	$('#rules').append(tempRule);
+	console.log(rules);
+	for (var k=0; k<rules.length; k++) {
+		if (k){ addRule(k+1); }
+		var prefix = '#rule'+(k+1);
+		var rule = rules[k];
+		
+		console.log(rule);
+		console.log(rule['birth']);
+		console.log(rule['birth'].join(''));
+		
+		console.log($(prefix+'text').attr('value'));
+		$(prefix+'text').val('B'+rule['birth'].join('')+'/S'+rule['survive'].join(''));
+		console.log($(prefix+'text').val());
+		
+		var a = rule['alive'];
+		$(prefix+'alive').val(a);
+		$(prefix+'alive').attr('value',a);
+		$(prefix+'alivecolor').val(colorNameToHex(a) || a);
+		$(prefix+'alivecolor').attr('value',colorNameToHex(a) || a);
+		
+		var d = rule['dead'];
+		$(prefix+'dead').val(d);
+		$(prefix+'dead').attr('value',d);
+		$(prefix+'deadcolor').val(colorNameToHex(d) || d);
+		$(prefix+'deadcolor').attr('value',colorNameToHex(d) || d);
+		
+		$(prefix+'random').prop('checked', rule['random']);
+		$(prefix+'birthprob').prop('disabled', !rule['random']);
+		$(prefix+'surviveprob').prop('disabled', !rule['random']);
+		$(prefix+'birthprob').val(rule['birthprob']);
+		$(prefix+'surviveprob').val(rule['surviveprob']);
+	}
+	$('.rule:first').addClass('picked');
+	
+	gridW = data['width'];
+	gridH = data['height'];
+	cellSize = data['cellSize'];
+	$('#width').val(gridW);
+	$('#height').val(gridH);
+	$('#cellSize').val(cellSize);
+	
+	d3.selectAll('.block').remove();
+	initGrid();
+	var blockNum;
+	var gridNum;
+	
+	var i = 0;
+	var j = 0;
+	while (data['gridNums'].length) {
+		gridNum = data['gridNums'].pop();
+		blockNum = data['gridNums'].pop();
+		
+		for (var k=0; k<blockNum; k++) {
+			grid[j][i][0] = gridNum % rules.length;
+			gridNum = (gridNum - grid[j][i][0]) / rules.length;
+			grid[j][i][1] = gridNum % 2;
+			gridNum = (gridNum - grid[j][i][1]) / 2;
+			
+			i += 1;
+			if (i >= gridW){ j += 1; i=0; }
+		}
+	}
+	
+	updateGraphics();
 }
 
 ///////////

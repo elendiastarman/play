@@ -63,6 +63,12 @@
 			<label for="toroidalV">Vertical</label> <input type="checkbox" id="toroidalV"/> )
 			<br/>
 			Generation: <span id="generationCounter" style="border: 1px solid transparent">0</span>
+			
+			<br/><br/>
+			
+			<button onclick="setPermalink()">Set permalink</button>
+			<a href="#" id="permalink">Permalink</a> <br/>
+			<button onclick="loadPermalink()">Reload from permalink</button>
 		</p>
 		
 		<h2>Rules</h2>
@@ -86,7 +92,7 @@
 			</p>
 		</div>
 		
-		<button onclick="addRule()">Add rule</button>
+		<button onclick="addRule(-1)">Add rule</button>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
