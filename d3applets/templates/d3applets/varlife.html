@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<title>Variations of Life</title>
 		
 		{% load staticfiles %}
 		<!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" /> -->
@@ -38,7 +39,8 @@
 			<button onclick="start()">Start</button>
 			<button onclick="stop()">Stop</button>
 			<button onclick="step()">Step</button>
-			<button onclick="clearGrid()">Clear</button> ||
+			<button onclick="clearGrid(0)">Clear</button>
+			<button onclick="clearGrid(1)">Reset</button> ||
 			<input type="number" id="numSteps" value="10" min="1" max="1000" />
 			<button onclick="fast()">Fast</button>
 			<button onclick="slow()">Slow</button>
@@ -51,11 +53,14 @@
 			<br/>
 			
 			Width: <input type="number" id="width" min="1" max="999" value="20" />
-			Height: <input type="number" id="height" min="1" max="999" value="20" /> 
+			Height: <input type="number" id="height" min="1" max="999" value="20" />
+			Cell size: <input type="number" id="cellSize" min="4" max="100" value="10" />
 			
 			<br/>
 			
 			<label for="toroidal">Toroidal?</label> <input type="checkbox" id="toroidal"/>
+			( <label for="toroidalH">Horizontal</label> <input type="checkbox" id="toroidalH"/>
+			<label for="toroidalV">Vertical</label> <input type="checkbox" id="toroidalV"/> )
 			<br/>
 			Generation: <span id="generationCounter" style="border: 1px solid transparent">0</span>
 		</p>

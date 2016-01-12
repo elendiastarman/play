@@ -10,12 +10,33 @@ $(function(){
 		$('#tps').val(Math.round(1000/$('#mspt').val()));
 		if (renderLoop) { setRenderLoop(); }
 	});
+	
 	$('#toroidal').on('change', function(){
-		toroidal = this.checked;
+		toroidalH = this.checked;
+		toroidalV = this.checked;
+		$('#toroidalH').prop('checked', toroidalH);
+		$('#toroidalV').prop('checked', toroidalV);
+	});
+	$('#toroidalH').on('change', function(){
+		toroidalH = this.checked;
+		if (toroidalH && !$('#toroidal').prop('checked')) {
+			$('#toroidal').prop('checked', true);
+		} else if (!toroidalH && $('#toroidal').prop('checked') && !toroidalV) {
+			$('#toroidal').prop('checked', false)
+		}
+	});
+	$('#toroidalV').on('change', function(){
+		toroidalV = this.checked;
+		if (toroidalV && !$('#toroidal').prop('checked')) {
+			$('#toroidal').prop('checked', true);
+		} else if (!toroidalV && $('#toroidal').prop('checked') && !toroidalH) {
+			$('#toroidal').prop('checked', false)
+		}
 	});
 	
 	$('#width').on('change', resize);
 	$('#height').on('change', resize);
+	$('#cellSize').on('change', resize);
 	
 	$('#rules').on('change', 'input', changeRules);
 	$('#rules').on('click', '.rule', function(){
@@ -45,7 +66,8 @@ var grid = [];
 var gridW = 20;
 var gridH = 20;
 var cellSize = 10;
-var toroidal = false;
+var toroidalV = false;
+var toroidalH = false;
 var steps = -1;
 var generations = 0;
 var fastMode = false;
@@ -83,9 +105,10 @@ function initGrid() {
 		.attr('height', cellSize*gridH);
 }
 
-function clearGrid() {
+function clearGrid(resetRules) {
 	for (var j=0; j<gridH; j++) {
 		for (var i=0; i<gridW; i++) {
+			if (resetRules) { grid[j][i][0] = 0; }
 			grid[j][i][1] = 0;
 			grid[j][i][2] = 0;
 		}
@@ -132,7 +155,7 @@ function updateGrid() {
 				var j2 = j+dj;
 				
 				if (j2 < 0 || j2 >= gridH) {
-					if (toroidal) {
+					if (toroidalV) {
 						j2 = (j2+gridH)%gridH;
 					} else {
 						continue;
@@ -143,7 +166,7 @@ function updateGrid() {
 					var i2 = i+di;
 					
 					if (i2 < 0 || i2 >= gridW) {
-						if (toroidal) {
+						if (toroidalH) {
 							i2 = (i2+gridW)%gridW;
 						} else {
 							continue;
@@ -208,27 +231,45 @@ function changeCell() {
 }
 
 function resize() {
-	var oldGrid = $.extend(true, [], grid);
-	var oldW = gridW;
-	var oldH = gridH;
-	
-	gridW = parseInt($('#width').val());
-	gridH = parseInt($('#height').val());
-	
-	// console.log(oldGrid);
-	d3.selectAll(".block").remove();
-	initGrid();
-	// console.log(oldGrid);
-	
-	for (var j=0; j<Math.min(oldH,gridH); j++) {
-		for (var i=0; i<Math.min(oldW,gridW); i++) {
-			for (var k=0; k<3; k++) {
-				grid[j][i][k] = oldGrid[j][i][k];
+	var cs = parseInt($('#cellSize').val());
+	if (cs !== cellSize) {
+		cellSize = cs;
+		for (var j=0; j<gridH; j++) {
+			for (var i=0; i<gridW; i++) {
+				d3.select('#b_'+i+'_'+j)
+					.attr('x',i*cs)
+					.attr('y',j*cs)
+					.attr('width',cs)
+					.attr('height',cs)
 			}
 		}
+		d3.select('#field')
+			.attr('width', cs*gridW)
+			.attr('height', cs*gridH);
+			
+	} else {
+		var oldGrid = $.extend(true, [], grid);
+		var oldW = gridW;
+		var oldH = gridH;
+		
+		gridW = parseInt($('#width').val());
+		gridH = parseInt($('#height').val());
+		
+		// console.log(oldGrid);
+		d3.selectAll(".block").remove();
+		initGrid();
+		// console.log(oldGrid);
+		
+		for (var j=0; j<Math.min(oldH,gridH); j++) {
+			for (var i=0; i<Math.min(oldW,gridW); i++) {
+				for (var k=0; k<3; k++) {
+					grid[j][i][k] = oldGrid[j][i][k];
+				}
+			}
+		}
+		
+		updateGraphics();
 	}
-	
-	updateGraphics();
 }
 
 var regex = new RegExp('.*([0-9]+)(.*)');
