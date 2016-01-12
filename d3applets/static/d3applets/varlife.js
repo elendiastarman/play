@@ -43,8 +43,17 @@ $(function(){
 		$('.picked').removeClass('picked');
 		$(this).addClass('picked');
 	});
+	$('#rules').on('change', 'input[type=checkbox]', function(){
+		var R = RegExp('.*?([0-9]+).*?').exec($(this).attr('id'));
+		var num = parseInt(R[1])-1;
+		rules[num]['random'] = this.checked;
+		$('#'+R[0]+'birthprob').prop("disabled", !this.checked);
+		$('#'+R[0]+'surviveprob').prop("disabled", !this.checked);
+		
+		rules[num]['birthprob'] = this.checked ? parseFloat($('#'+R[0]+'birthprob').val()) : 1;
+		rules[num]['surviveprob'] = this.checked ? parseFloat($('#'+R[0]+'surviveprob').val()) : 1; 
+	});
 	
-	// $('#field').on('mousedown', function(){ console.log("down"); mouseDown = true; });
 	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
 	
 	initGrid();
@@ -61,7 +70,7 @@ function start() {
 }
 function stop() { clearInterval(renderLoop); renderLoop = false; }
 
-var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3]}];
+var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3], 'birthprob':1, 'surviveprob':1, 'random':false}];
 var grid = [];
 var gridW = 20;
 var gridH = 20;
@@ -181,10 +190,11 @@ function updateGrid() {
 			
 			var cell = grid[j][i];
 			var part = rules[cell[0]][cell[1] ? 'survive' : 'birth'];
+			var prob = rules[cell[0]][cell[1] ? 'surviveprob' : 'birthprob'];
 			
 			cell[2] = 0;
 			for (var k=0; k<part.length; k++) {
-				if (total === part[k]) {
+				if (total === part[k] && Math.random() < prob) {
 					cell[2] = 1;
 				}
 			}
@@ -275,15 +285,15 @@ function resize() {
 var regex = new RegExp('.*([0-9]+)(.*)');
 function changeRules() {
 	var R = regex.exec($(this).attr('id'));
-	var num = R[1];
+	var num = R[1]-1;
 	var kind = R[2];
 	
 	if (kind === "text") {
 		var s = $(this).val().split('/').map(function(x){ return x.substr(1,x.length-1).split('').map(Number); });
-		rules[num-1]["birth"] = s[0];
-		rules[num-1]["survive"] = s[1];
+		rules[num]["birth"] = s[0];
+		rules[num]["survive"] = s[1];
 	} else if (kind === "alive" || kind === "dead") {
-		rules[num-1][kind] = $(this).val();
+		rules[num][kind] = $(this).val();
 		$(this).attr("value",$(this).val());
 		var newCol;
 		
@@ -299,13 +309,16 @@ function changeRules() {
 		
 		if (!renderLoop){ updateGraphics(); }
 	} else if (kind === "alivecolor" || kind === "deadcolor") {
-		rules[num-1][kind.substring(0,kind.length-5)] = $(this).val();
+		rules[num][kind.substring(0,kind.length-5)] = $(this).val();
 		$(this).attr("value",$(this).val());
 		
 		$('#'+R[0].substring(0,R[0].length-5)).val($(this).val());
 		$('#'+R[0].substring(0,R[0].length-5)).attr("value",$(this).val());
 		
 		if (!renderLoop){ updateGraphics(); }
+	} else if (kind === "birthprob" || kind === "surviveprob") {
+		rules[num]['birthprob'] = parseFloat($('#'+R[0]).val());
+		rules[num]['surviveprob'] = parseFloat($('#'+R[0]).val());
 	}
 }
 
