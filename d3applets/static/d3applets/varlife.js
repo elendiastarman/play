@@ -386,7 +386,7 @@ function setPermalink() {
 function loadPermalink() {
 	if (!location.hash || location.hash === '#'){ initGrid(); return; }
 	
-	var dataString = location.hash.slice(6);
+	var dataString = decodeURI(location.hash).slice(6);
 	var data = JSON.parse(dataString);
 	
 	$('#mspt').val(data['mspt']);
