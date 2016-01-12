@@ -71,14 +71,22 @@ function start() {
 function stop() { clearInterval(renderLoop); renderLoop = false; }
 
 var rules = [{'dead':'#000000', 'alive':'#FFFFFF', 'birth':[3], 'survive':[2,3], 'birthprob':1, 'surviveprob':1, 'random':false}];
+
 var grid = [];
 var gridW = 20;
 var gridH = 20;
 var cellSize = 10;
+
+var savedGrid = [];
+var savedW = 20;
+var savedH = 20;
+
 var toroidalV = false;
 var toroidalH = false;
+
 var steps = -1;
 var generations = 0;
+
 var fastMode = false;
 var mouseDown = false;
 var toggleTo = -1;
@@ -265,10 +273,8 @@ function resize() {
 		gridW = parseInt($('#width').val());
 		gridH = parseInt($('#height').val());
 		
-		// console.log(oldGrid);
 		d3.selectAll(".block").remove();
 		initGrid();
-		// console.log(oldGrid);
 		
 		for (var j=0; j<Math.min(oldH,gridH); j++) {
 			for (var i=0; i<Math.min(oldW,gridW); i++) {
@@ -278,6 +284,34 @@ function resize() {
 			}
 		}
 		
+		updateGraphics();
+	}
+}
+
+function saveGrid() {
+	savedGrid = $.extend(true, [], grid);
+	savedW = gridW;
+	savedH = gridH;
+}
+
+function loadGrid() {
+	gridW = savedW;
+	gridH = savedH;
+	
+	d3.selectAll(".block").remove();
+	initGrid();
+	
+	for (var j=0; j<Math.min(savedH,gridH); j++) {
+		for (var i=0; i<Math.min(savedW,gridW); i++) {
+			for (var k=0; k<3; k++) {
+				grid[j][i][k] = savedGrid[j][i][k];
+			}
+		}
+	}
+	
+	if (renderLoop) {
+		// updateGrid();
+	} else {
 		updateGraphics();
 	}
 }
@@ -378,7 +412,6 @@ function setPermalink() {
 	
 	data['gridNums'] = gridNums;
 	var dataString = JSON.stringify(data);
-	console.log(dataString);
 	location.hash = '#data='+dataString;
 	$('#permalink').attr('href','#data='+dataString);
 }
@@ -402,19 +435,13 @@ function loadPermalink() {
 	var tempRule = $('.rule:first').detach();
 	$('#rules').empty();
 	$('#rules').append(tempRule);
-	console.log(rules);
+	
 	for (var k=0; k<rules.length; k++) {
 		if (k){ addRule(k+1); }
 		var prefix = '#rule'+(k+1);
 		var rule = rules[k];
 		
-		console.log(rule);
-		console.log(rule['birth']);
-		console.log(rule['birth'].join(''));
-		
-		console.log($(prefix+'text').attr('value'));
 		$(prefix+'text').val('B'+rule['birth'].join('')+'/S'+rule['survive'].join(''));
-		console.log($(prefix+'text').val());
 		
 		var a = rule['alive'];
 		$(prefix+'alive').val(a);
