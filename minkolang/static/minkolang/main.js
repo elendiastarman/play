@@ -1,6 +1,6 @@
 function encodeURL(S) {
 	var U = encodeURIComponent(S);
-	return U.replace(/(/g,'%28').replace(/)/g,'%29').replace(/./g,'%2E');
+	return U.replace(/\(/g,'%28').replace(/\)/g,'%29').replace(/\./g,'%2E');
 }
 
 // Taken from https://mths.be/punycode
