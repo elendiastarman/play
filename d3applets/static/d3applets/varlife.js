@@ -216,9 +216,13 @@ function updateGraphics() {
 			var cell = grid[j][i];
 			var rule = rules[cell[0]];
 			
-			if (renderLoop || fastMode){ cell[1] = cell[2]; }
+			if (!renderLoop) {
+				d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']);
+			} else if (!fastMode && cell[1] !== cell[2]) {
+				d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[2] ? 'alive' : 'dead']);
+			}
 			
-			if (!fastMode) { d3.select("#blocks").select('#b_'+i+'_'+j).attr('fill', rule[cell[1] ? 'alive' : 'dead']); }
+			if (renderLoop || fastMode){ cell[1] = cell[2]; }
 		}
 	}
 	
