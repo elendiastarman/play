@@ -4,13 +4,13 @@ import json
 import math
 import cmath
 import random
-if sys.platform == 'linux': import resource
+##if sys.platform == 'linux': import resource
 import itertools
 from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.14.py", ".", "c2"]
+    sys.argv = ["minkolang_0.15.py", ".", "c2"]
     debug = 1
     numSteps = 100
 

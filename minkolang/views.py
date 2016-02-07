@@ -120,11 +120,17 @@ def main_view(request, **kwargs):
                         name="program run")
                     
                     prgmT[uid].start()
+
+                    print("Process id:",prgmT[uid].pid)
+
+                    if sys.platform == 'linux':
+                        subprocess.call("/home/elendia/minkolangWatchdog %s" % prgmT[uid].pid)
+                    
                     prgmT[uid].join(60) #time limit of 1 minute
 
                     if prgmT[uid].is_alive():
                         prgmT[uid].terminate()
-                        proxy_prgm.stop()
+                    proxy_prgm.stop()
 
                     V = json.loads(proxy_prgm.getVarsJson())
                     
