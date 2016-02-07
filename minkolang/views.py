@@ -124,7 +124,7 @@ def main_view(request, **kwargs):
                     print("Process id:",prgmT[uid].pid)
 
                     if sys.platform == 'linux':
-                        subprocess.call("/home/elendia/minkolangWatchdog %s" % prgmT[uid].pid)
+                        subprocess.call("./minkolangWatchdog %s" % prgmT[uid].pid)
                     
                     prgmT[uid].join(60) #time limit of 1 minute
 
