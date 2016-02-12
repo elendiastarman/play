@@ -56,6 +56,8 @@ def other_view(request, **kwargs):
 
 @csrf_exempt
 def varlife_renderGif(request, **kwargs):
+
+    print("???")
     context = RequestContext(request)
 
     gridData = ast.literal_eval(request.POST['gridData'])

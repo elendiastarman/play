@@ -20,7 +20,7 @@ def createGif(gridData, colorData, width, height, cellSize, frameDuration, filep
     ### https://www.w3.org/Graphics/GIF/spec-gif89a.txt
     fileString += 'F' + hex(ceil(log(paletteSize,2))-1)[2:]
 
-    fileString += hex(numColors)[2:].zfill(2) #background color is n+1
+    fileString += hex(numColors)[2:].zfill(2) #background color is n+2 (black)
     fileString += '00' #default pixel aspect ratio
 
 ##    fileString += '000000' #color #1, black
@@ -104,12 +104,12 @@ def createGif(gridData, colorData, width, height, cellSize, frameDuration, filep
 
     frameStart += '04' #4 bytes of GCE data follow
 
-    frameStart += '08' #restore to background color
+    frameStart += '00' #no action taken
     
     F = hex(frameDuration//10)[2:].zfill(4)
     F = F[2:4] + F[:2]
     frameStart += F #delay for animation in multiples of 0.01 sec
-    frameStart += hex(numColors)[2:].zfill(2) #color n+1 is transparent
+    frameStart += '00' #no transparency #hex(numColors)[2:].zfill(2) #color n+1 is transparent
     frameStart += '00' #end of GCE block
 
     frameStart += '2C' #Image Descriptor

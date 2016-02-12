@@ -164,6 +164,9 @@ function fast(){
 }
 
 function renderGif(){
+	$('#renderGif').prop('disabled',true);
+	$('#rendered-gif').prepend($('<p>Rendering...</p>'));
+	
 	fastMode = true;
 	steps = parseInt($('#renderSteps').val());
 	var gridData = [];
@@ -205,17 +208,22 @@ function renderGif(){
 	}
 	
 	$.ajax({
-		url: window.location+'rendergif',
+		url: '/varlife/rendergif',
 		type: 'post',
 		data: {'gridData':JSON.stringify(gridData), 'colorData':JSON.stringify(colorData),
 			   'width':gridW, 'height':gridH, 'cellSize':cellSize, 'frameDuration':$('#mspt').val()},
 		dataType: 'html',
 		success: function(response) {
+			$('#renderGif').prop('disabled',false);
 			console.log(response);
 			$('#rendered-gif').children().remove();
 			$('#rendered-gif').append($('<img src="/static/d3applets/renders/'+response+'"/>'));
 		},
-		failure: function(response) { console.log(response); }
+		failure: function(response) {
+			$('#renderGif').prop('disabled',false);
+			console.log(response);
+			$('#rendered-gif').append($('<p>Something went wrong! :('));
+		}
 	});
 }
 
