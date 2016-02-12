@@ -5,10 +5,17 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from django.template import Context, RequestContext, TemplateDoesNotExist
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_exempt
 
 import os
 import re
+import ast
 import sys
+import random
+import string
+import traceback
+
+from d3applets.varlife_renderGif import createGif
 
 # Create your views here.
 def home_view(request, **kwargs):
@@ -47,17 +54,27 @@ def other_view(request, **kwargs):
     except TemplateDoesNotExist:
         raise Http404
 
-def dotandcross_view(request, **kwargs):
+@csrf_exempt
+def varlife_renderGif(request, **kwargs):
     context = RequestContext(request)
 
-    return render(request, 'd3applets/dotandcross.html', context_instance=context)
+    gridData = ast.literal_eval(request.POST['gridData'])
+    colorData = ast.literal_eval(request.POST['colorData'])
+    width = int(request.POST['width'])
+    height = int(request.POST['height'])
+    cellSize = int(request.POST['cellSize'])
+    frameDuration = int(request.POST['frameDuration'])
+    filename = ''.join(random.choice(string.ascii_letters) for _ in range(10))+'.gif'
 
-def radiansDemo_view(request, **kwargs):
-    context = RequestContext(request)
+    if sys.platform == 'win32':
+        filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","renders",filename)
+    elif sys.platform == 'linux':
+        filepath = os.path.join("/home","elendia","webapps","static","d3applets","renders",filename)
 
-    return render(request, 'd3applets/radiansDemo.html', context_instance=context)
+    try:
+        createGif(gridData, colorData, width, height, cellSize, frameDuration, filepath)
+    except Exception as e:
+        traceback.print_exc(file=sys.stderr)
+        raise e
 
-def gravity_view(request, **kwargs):
-    context = RequestContext(request)
-
-    return render(request, 'd3applets/gravity.html', context_instance=context)
+    return HttpResponse(filename, content_type="text/plain")
