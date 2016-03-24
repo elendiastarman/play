@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>PPCG Convos</title>
+		
+		{% load staticfiles %}
+		
+		{% block styling %}
+			<link rel="stylesheet" type="text/css" href="{% static 'PPCG/convos.css' %}" />
+			<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		{% endblock %}
+	</head>
+	
+	<body>
+		<h1>PPCG main chat conversations v0.1</h1>
+		
+		<p>Date: <input type="text" id="datepicker"> <button onclick='fetchConvos()'>Fetch</button></p>
+	
+		<div id="body">
+			{% block body %}{% endblock %}
+		</div>
+
+		{% block scripts %}
+			<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+			<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+			<script>
+				$(function(){ $("#datepicker").datepicker(); });
+				
+				function fetchConvos(){
+					date = $('#datepicker').val().split('/').map(Number);
+					$.ajax({
+						url: window.location,
+						type: 'get',
+						data: {'room':240, 'year':date[2], 'month':date[0], 'day':date[1]},
+						//dataType: 'json',
+						success: function(response) {
+							console.log(response);
+							$('#body').children().remove();
+							$('#body').append(response);
+						},
+						failure: function(response) { console.log(response); }
+					});
+				};
+			</script>
+		{% endblock %}
+	</body>
+</html>
