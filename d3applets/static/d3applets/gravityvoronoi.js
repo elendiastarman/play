@@ -1,3 +1,6 @@
+var N = 3;
+
+
 var linesList = [];
 var spacing = 20;
 for (var i=spacing; i<600; i+=spacing) {
