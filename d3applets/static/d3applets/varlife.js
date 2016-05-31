@@ -446,15 +446,28 @@ function removeRule() {
 
 
 function setPermalink() {
-	//
 	var data = {};
-	data['rules'] = rules;
 	data['mspt'] = $('#mspt').val();
-	data['width'] = gridW;
-	data['height'] = gridH;
-	data['cellSize'] = cellSize;
-	data['toroidalH'] = toroidalH;
-	data['toroidalV'] = toroidalV;
+	data['w'] = gridW;
+	data['h'] = gridH;
+	data['cs'] = cellSize;
+	data['tH'] = toroidalH;
+	data['tV'] = toroidalV;
+    
+	data['r'] = [];
+    for (var k=0; k<rules.length; k++) {
+        var r = rules[k];
+        data['r'].push({'b': r['birth'],
+                        's': r['survive'],
+                        'a': r['alive'],
+                        'd': r['dead']});
+        
+        if (r['random']){
+            data['r'][k]['rand'] = r['random'];
+            data['r'][k]['bp'] = r['birthprob'];
+            data['r'][k]['sp'] = r['surviveprob'];
+        }
+    }
 	
 	var gridNums = [];
 	var gridNum = 0;
@@ -478,7 +491,7 @@ function setPermalink() {
 	gridNums.push(blockNum);
 	gridNums.push(gridNum);
 	
-	data['gridNums'] = gridNums;
+	data['gN'] = gridNums;
 	var dataString = JSON.stringify(data);
 	location.hash = '#data='+dataString;
 	$('#permalink').attr('href','#data='+dataString);
@@ -493,47 +506,53 @@ function loadPermalink() {
 	$('#mspt').val(data['mspt']);
 	$('#tps').val(Math.round(1000/data['mspt']));
 	
-	toroidalH = data['toroidalH'];
-	toroidalV = data['toroidalV'];
+	var toroidalH = data['tH'] || data['toroidalH'];
+	var toroidalV = data['tV'] || data['toroidalV'];
 	$('#toroidalH').prop('checked', toroidalH);
 	$('#toroidalV').prop('checked', toroidalV);
 	$('#toroidal').prop('checked', toroidalH || toroidalV);
 	
-	rules = data['rules'];
+	rules = data['r'] || data['rules'];
 	var tempRule = $('.rule:first').detach();
 	$('#rules').empty();
 	$('#rules').append(tempRule);
 	
 	for (var k=0; k<rules.length; k++) {
-		if (k){ addRule(k+1); }
+        if (k){ addRule(k+1); }
 		var prefix = '#rule'+(k+1);
 		var rule = rules[k];
 		
-		$(prefix+'text').val('B'+rule['birth'].join('')+'/S'+rule['survive'].join(''));
+        var rb = rule['birth'] = rule['b'] || rule['birth'];
+        var rs = rule['survive'] = rule['s'] || rule['survive'];
+		$(prefix+'text').val('B'+rb.join('')+'/S'+rs.join(''));
 		
-		var a = rule['alive'];
+		var a = rule['alive'] = rule['a'] || rule['alive'];
 		$(prefix+'alive').val(a);
 		$(prefix+'alive').attr('value',a);
 		$(prefix+'alivecolor').val(colorNameToHex(a) || a);
 		$(prefix+'alivecolor').attr('value',colorNameToHex(a) || a);
 		
-		var d = rule['dead'];
+        var d = rule['dead'] = rule['d'] || rule['dead'];
 		$(prefix+'dead').val(d);
 		$(prefix+'dead').attr('value',d);
 		$(prefix+'deadcolor').val(colorNameToHex(d) || d);
 		$(prefix+'deadcolor').attr('value',colorNameToHex(d) || d);
 		
-		$(prefix+'random').prop('checked', rule['random']);
-		$(prefix+'birthprob').prop('disabled', !rule['random']);
-		$(prefix+'surviveprob').prop('disabled', !rule['random']);
-		$(prefix+'birthprob').val(rule['birthprob']);
-		$(prefix+'surviveprob').val(rule['surviveprob']);
+        var rand = rule['random'] = rule['rand'] || rule['random'] || 0;
+		$(prefix+'random').prop('checked', rand);
+		$(prefix+'birthprob').prop('disabled', !rand);
+		$(prefix+'surviveprob').prop('disabled', !rand);
+        
+        var bp = rule['birthprob'] = rule['bp'] || rule['birthprob'] || 1;
+        var sp = rule['surviveprob'] = rule['sp'] || rule['surviveprob'] || 1;
+		$(prefix+'birthprob').val(bp);
+		$(prefix+'surviveprob').val(sp);
 	}
 	$('.rule:first').addClass('picked');
 	
-	gridW = data['width'];
-	gridH = data['height'];
-	cellSize = data['cellSize'];
+	gridW = data['w'] || data['width'];
+	gridH = data['h'] || data['height'];
+	cellSize = data['cs'] || data['cellSize'];
 	$('#width').val(gridW);
 	$('#height').val(gridH);
 	$('#cellSize').val(cellSize);
@@ -545,9 +564,10 @@ function loadPermalink() {
 	
 	var i = 0;
 	var j = 0;
-	while (data['gridNums'].length) {
-		gridNum = data['gridNums'].pop();
-		blockNum = data['gridNums'].pop();
+    var gridNums = data['gN'] || data['gridNums'];
+	while (gridNums.length) {
+		gridNum = gridNums.pop();
+		blockNum = gridNums.pop();
 		
 		for (var k=0; k<blockNum; k++) {
 			grid[j][i][0] = gridNum % rules.length;
