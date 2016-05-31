@@ -506,8 +506,8 @@ function loadPermalink() {
 	$('#mspt').val(data['mspt']);
 	$('#tps').val(Math.round(1000/data['mspt']));
 	
-	var toroidalH = data['tH'] || data['toroidalH'];
-	var toroidalV = data['tV'] || data['toroidalV'];
+	toroidalH = data['tH'] || data['toroidalH'];
+	toroidalV = data['tV'] || data['toroidalV'];
 	$('#toroidalH').prop('checked', toroidalH);
 	$('#toroidalV').prop('checked', toroidalV);
 	$('#toroidal').prop('checked', toroidalH || toroidalV);
