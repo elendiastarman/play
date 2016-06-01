@@ -69,11 +69,11 @@ def varlife_renderGif(request, **kwargs):
     filename = ''.join(random.choice(string.ascii_letters) for _ in range(10))+'.gif'
     
     with open('renderGif_info.txt','w') as f:
-        f.writeline(filename)
-        f.writeline(str(gridData))
-        f.writeline(str(len(gridData)))
-        f.writeline(str(colorData))
-        f.writeline(str(width)+", "+str(height)+", "+str(cellSize)+"; "+str(frameDuration))
+        f.write(filename+'\n')
+        f.write(str(gridData)+'\n')
+        f.write(str(len(str(gridData)))+'\n')
+        f.write(str(colorData)+'\n')
+        f.write(str(width)+", "+str(height)+", "+str(cellSize)+"; "+str(frameDuration)+'\n')
 
     if sys.platform == 'win32':
         filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","renders",filename)
