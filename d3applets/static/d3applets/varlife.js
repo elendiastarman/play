@@ -222,7 +222,7 @@ function renderGif(){
 		failure: function(response) {
 			$('#renderGif').prop('disabled',false);
 			console.log(response);
-			$('#rendered-gif').append($('<p>Something went wrong! :('));
+			$('#rendered-gif').append($('<p>Something went wrong! :(</p>'));
 		}
 	});
 }
