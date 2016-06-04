@@ -79,7 +79,10 @@ def varlife_shortenURL(request, **kwargs):
         filepath = os.path.join("/home","elendia","webapps","static","d3applets","shorturls",filename)
     
     try:
-        with open(filepath, 'w') as f: f.write(request.POST['data'][0])
+        data = request.POST['data']
+        if type(data) == list: data = data[0]
+        
+        with open(filepath, 'w') as f: f.write(data)
     except Exception as e:
         traceback.print_exc(file=sys.stderr)
         raise e
