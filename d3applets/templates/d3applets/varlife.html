@@ -10,7 +10,6 @@
 		<!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" /> -->
 		<style>
 			input { margin: 5px; }
-			span { border: 1px solid black; }
 			.rule {
 				border: 1px solid transparent;
 				display: inline-block;
@@ -67,15 +66,16 @@
 			( <label for="toroidalH">Horizontal</label> <input type="checkbox" id="toroidalH"/>
 			<label for="toroidalV">Vertical</label> <input type="checkbox" id="toroidalV"/> )
 			<br/>
-			Generation: <span id="generationCounter" style="border: 1px solid transparent">0</span>
+			Generation: <span id="generationCounter">0</span>
 			
 			<br/><br/>
 			
 			<button onclick="setPermalink()">Set permalink</button>
 			<a href="#" id="permalink">Permalink</a> <br/>
 			<button onclick="loadPermalink()">Reload from permalink</button> <br/><br/>
+            <button onclick="shortenURL()" id="shortenURL">Generate short URL</button> <span id="shorturl"></span> <a id="shorturl-link"></a> <br/><br/>
 			<button onclick="renderGif()" id="renderGif">Render to gif</button> Steps:<input type="number" id="renderSteps" min="1" max="100" value="10"/> <br/>
-			<div id="rendered-gif"></div>
+			<span id="rendered-gif"></span>
 		</p>
 		
 		<h2>Rules</h2>
@@ -86,11 +86,9 @@
 				<br/>
 				Dead color: <input type="text" id="rule1dead" value="#000000" size="6"/>
 				<input type="color" id="rule1deadcolor" value="#000000" />
-				<!-- <span style="background-color: #000000" id="rule1deadcolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
 				<br/>
 				Alive color: <input type="text" id="rule1alive" value="#FFFFFF" size="6"/>
 				<input type="color" id="rule1alivecolor" value="#FFFFFF" />
-				<!-- <span style="background-color: #FFFFFF" id="rule1alivecolor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
 				<br/>
 				Random/stochastic? <input type="checkbox" id="rule1random" />
 				<br/>
@@ -100,6 +98,8 @@
 		</div>
 		
 		<button onclick="addRule(-1)">Add rule</button>
+        
+        {% if info %}<p style="display:none" id="shorturl-info">{{info}}</p>{% endif %}
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>

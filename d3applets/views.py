@@ -47,12 +47,44 @@ def home_view(request, **kwargs):
 
 def other_view(request, **kwargs):
     context = RequestContext(request)
-    print(kwargs['name'])
+    
+    if 'code' in kwargs:
+        kwargs['name'] = 'varlife'
+        
+        if sys.platform == 'win32':
+            filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","shorturls",kwargs["code"]+'.txt')
+        elif sys.platform == 'linux':
+            filepath = os.path.join("/home","elendia","webapps","static","d3applets","shorturls",kwargs["code"]+'.txt')
+        
+        try:
+            context['info'] = open(filepath,'r').read()
+        except FileNotFoundError:
+            print("Aww bummer...")
+            print("Filepath:",filepath)
+            context['info'] = ''
 
     try:
         return render(request, 'd3applets/'+kwargs['name']+'.html', context_instance=context)
     except TemplateDoesNotExist:
         raise Http404
+
+@csrf_exempt
+def varlife_shortenURL(request, **kwargs):
+    context = RequestContext(request)
+    filename = ''.join(random.choice(string.ascii_letters) for _ in range(10))+'.txt'
+    
+    if sys.platform == 'win32':
+        filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","shorturls",filename)
+    elif sys.platform == 'linux':
+        filepath = os.path.join("/home","elendia","webapps","static","d3applets","shorturls",filename)
+    
+    try:
+        with open(filepath, 'w') as f: f.write(request.POST['data'][0])
+    except Exception as e:
+        traceback.print_exc(file=sys.stderr)
+        raise e
+
+    return HttpResponse(filename[:-4], content_type="text/plain")
 
 @csrf_exempt
 def varlife_renderGif(request, **kwargs):

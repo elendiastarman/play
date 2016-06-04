@@ -227,6 +227,32 @@ function renderGif(){
 	});
 }
 
+function shortenURL(){
+	$('#shortenURL').prop('disabled',true);
+	$('#shorturl').text("Generating short URL...");
+	
+	$.ajax({
+		url: '/varlife/shortenurl',
+		type: 'post',
+		data: {'data':setPermalink(1)},
+		dataType: 'html',
+		success: function(response) {
+			$('#shortenURL').prop('disabled',false);
+			console.log(response);
+            $('#shorturl').text("");
+            
+            var url = location.origin+'/varlife/'+response;
+			$('#shorturl-link').attr('href',url);
+            $('#shorturl-link').text(url);
+		},
+		failure: function(response) {
+			$('#shortenURL').prop('disabled',false);
+			console.log(response);
+			$('#shorturl').text("<p>Something's borked!</p>");
+		}
+	});
+}
+
 function updateGrid() {
 	for (var j=0; j<gridH; j++) {
 		for (var i=0; i<gridW; i++) {
@@ -445,7 +471,7 @@ function removeRule() {
 }
 
 
-function setPermalink() {
+function setPermalink(tofile) {
 	var data = {};
 	data['mspt'] = $('#mspt').val();
 	data['w'] = gridW;
@@ -493,14 +519,31 @@ function setPermalink() {
 	
 	data['gN'] = gridNums;
 	var dataString = JSON.stringify(data);
-	location.hash = '#data='+dataString;
-	$('#permalink').attr('href','#data='+dataString);
+    
+    if (!tofile){
+        location.hash = '#data='+dataString;
+        $('#permalink').attr('href','#data='+dataString);
+    } else {
+        return dataString;
+    }
 }
 
 function loadPermalink() {
-	if (!location.hash || location.hash === '#'){ initGrid(); return; }
-	
-	var dataString = decodeURI(location.hash).slice(6);
+    var dataString;
+    
+	if (!location.hash || location.hash === '#'){
+        initGrid();
+        var info = $('#shorturl-info');
+        
+        if (!info){
+            return;
+        } else {
+            dataString = info.text();
+        }
+    } else {
+        dataString = decodeURI(location.hash).slice(6);
+    }
+    
 	var data = JSON.parse(dataString);
 	
 	$('#mspt').val(data['mspt']);
