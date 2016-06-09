@@ -1618,20 +1618,20 @@ class Program:
     def stop(self): self.stopNow = True
 
 def getPrimes_parallelized(): #uses sieve of Sundaram
-        yield 2
-        yield 3
-        P = [[4,1]]
-        i = 2
-        while 1:
-            if P[0][0] <= i:
-                while P[0][0] <= i:
-                    P[0][0] += 2*P[0][1]+1
-                    P.sort()
-            elif P[0][0] > i:
-                yield 2*i+1
-                P.append([2*(i+i*i), i])
+    yield 2
+    yield 3
+    P = [[4,1]]
+    i = 2
+    while 1:
+        if P[0][0] <= i:
+            while P[0][0] <= i:
+                P[0][0] += 2*P[0][1]+1
                 P.sort()
-            i += 1
+        elif P[0][0] > i:
+            yield 2*i+1
+            P.append([2*(i+i*i), i])
+            P.sort()
+        i += 1
 
 def gcd(a,b):
     while 1:

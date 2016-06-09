@@ -92,7 +92,6 @@ def varlife_shortenURL(request, **kwargs):
 @csrf_exempt
 def varlife_renderGif(request, **kwargs):
 
-    print("???")
     context = RequestContext(request)
 
     gridData = ast.literal_eval(request.POST['gridData'])
@@ -103,12 +102,12 @@ def varlife_renderGif(request, **kwargs):
     frameDuration = int(request.POST['frameDuration'])
     filename = ''.join(random.choice(string.ascii_letters) for _ in range(10))+'.gif'
     
-    with open('renderGif_info.txt','w') as f:
-        f.write(filename+'\n')
-        f.write(str(gridData)+'\n')
-        f.write(str(len(str(gridData)))+'\n')
-        f.write(str(colorData)+'\n')
-        f.write(str(width)+", "+str(height)+", "+str(cellSize)+"; "+str(frameDuration)+'\n')
+    # with open('renderGif_info.txt','w') as f:
+        # f.write(filename+'\n')
+        # f.write(str(gridData)+'\n')
+        # f.write(str(len(str(gridData)))+'\n')
+        # f.write(str(colorData)+'\n')
+        # f.write(str(width)+", "+str(height)+", "+str(cellSize)+"; "+str(frameDuration)+'\n')
 
     if sys.platform == 'win32':
         filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","renders",filename)
