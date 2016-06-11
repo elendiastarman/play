@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+		<title>QFTASM Interpreter</title>
+		
+		{% load staticfiles %}
+		<style>
+			input { margin: 5px; }
+            th { border: 2px solid black; padding: 3px; text-align: center; }
+            table { border-collapse: collapse; font-family: monospace; text-align: right; }
+            td.asm { text-align: left; }
+            textarea { width: 100%; height: 20em; }
+		</style>
+	</head>
+	
+	<body style="margin-left: 20px">
+	
+		<h1>QFTASM Interpreter</h1>
+		<p id="desc">An interpreter for QFTASM (Quest For Tetris Assembly).</p>
+        
+        <textarea id="asm-code">0. MLZ -1 -42 2;
+1. MLZ -1 10 0; begin0_loop
+2. MLZ 0 0 0;
+3. ADD A2 1 2;
+4. MLZ -1 8 0; begin1_inner_loop
+5. ADD A2 20 1;
+6. XOR A2 2 2;
+7. ADD A2 20 1;
+8. MLZ A1 6 0; end1_inner_loop
+9. MLZ 0 0 0;
+10. MNZ A2 3 0; end0_loop
+11. MLZ 0 0 0;</textarea>
+        <p>
+            <button id="set-code" onclick="set_code()">Set code</button>
+        </p>
+        <!-- <br/> -->
+        <table id="machine-code">
+            <tr>
+                <th colspan=2 rowspan=2>ASM</th>
+                <th colspan=2 rowspan=2>Opcode</th>
+                <th colspan=2>Address 1</th>
+                <th colspan=2>Address 2</th>
+                <th colspan=2>Address 3</th>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Location</th>
+            </tr>
+        </table>
+        
+        <br/><br/>
+		
+		<svg id="field">
+			<g id="blocks"></g>
+		</svg>
+		
+		
+	
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script src="{% static 'd3applets/qftasm.js' %}"></script>
+		
+	</body>
+</html>
