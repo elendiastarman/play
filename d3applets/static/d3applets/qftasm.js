@@ -1,5 +1,5 @@
 var program = [];
-var PC = 0;
+var PC = [0,1];
 var PCset = 0;
 var stepnum = 0;
 var RAM = [];
@@ -19,7 +19,7 @@ function RAMwrite(addr, val) {
     addRAMslots(addr);
     
     if (val < 0) { val = (65535^-val)+1; }
-    if (addr === 0) { PC = val; PCset = 1; }
+    if (addr === 0) { PC[1] = val; }
     
     RAM[addr][0] = val;
     RAM[addr][2]++;
@@ -53,7 +53,7 @@ function set_code() {
     var lines = code.split("\n");
     new_program = [];
     
-    PC = 0;
+    PC = [0, 1];
     PCset = 0;
     RAM = [];
     $($('#machine-code tr').slice(2)).remove();
@@ -105,15 +105,17 @@ function set_code() {
 }
 
 function step_code() {
-    if (PC >= program.length) {
+    if (PC[0] >= program.length) {
         $('#error').text("Program finished!");
         $('#step-code').prop('disabled', true);
         return;
     }
     
     stepnum++;
-    var inst = program[PC];
+    var inst = program[PC[0]];
     var vals = [];
+    
+    $($('#machine-code tr')[PC[0]+2]).removeClass('highlight');
     
     for (var i=0; i<3; i++) {
         var val = inst["add"+(i+1)+"_loc"];
@@ -125,17 +127,11 @@ function step_code() {
         vals.push(val);
     }
     
-    $($('#machine-code tr')[PC+2]).removeClass('highlight');
+    PC[0] = PC[1];
+    PC[1] = PC[0]+1;
     
     window[inst["opname"]](vals[0], vals[1], vals[2]);
     
-    if (!PCset) {
-        PC++;
-        RAMwrite(0, PC);
-    } else {
-        PCset = 0;
-    }
-    
-    $('#pc').text(PC);
-    $($('#machine-code tr')[PC+2]).addClass('highlight');
+    $('#pc').text(PC[0]);
+    $($('#machine-code tr')[PC[0]+2]).addClass('highlight');
 }
