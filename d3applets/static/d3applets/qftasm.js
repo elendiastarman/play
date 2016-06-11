@@ -42,9 +42,15 @@ function MNZ(test, val, dest){ if (test){ RAMwrite(dest, val); } }
 function MLZ(test, val, dest){ if (test<0 || test>=32768){ RAMwrite(dest, val); } }
 function ADD(val1, val2, dest){ RAMwrite(dest, val1+val2); }
 function SUB(val1, val2, dest){ RAMwrite(dest, val1-val2); }
+function AND(val1, val2, dest){ RAMwrite(dest, val1&val2); }
+function OR(val1, val2, dest){ RAMwrite(dest, val1|val2); }
 function XOR(val1, val2, dest){ RAMwrite(dest, val1^val2); }
+function ANT(val1, val2, dest){ RAMwrite(dest, val1&!val2); }
+function SHL(val1, val2, dest){ RAMwrite(dest, val1<<val2); }
+function SHR(val1, val2, dest){ RAMwrite(dest, val1>>val2); }
+function SRA(val1, val2, dest){ RAMwrite(dest, val1>>val2 + (val1>=32768?32768:0)); }
 
-var opnames = ["MNZ","MLZ","ADD","SUB","XOR"];
+var opnames = ["MNZ","MLZ","ADD","SUB","AND","OR","XOR","ANT"];
 
 $(document).ready(function(){ set_code(); });
 
