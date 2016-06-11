@@ -9,10 +9,11 @@
 		{% load staticfiles %}
 		<style>
 			input { margin: 5px; }
+            textarea { width: 100%; height: 20em; }
             th { border: 2px solid black; padding: 3px; text-align: center; }
             table { border-collapse: collapse; font-family: monospace; text-align: right; }
             td.asm { text-align: left; }
-            textarea { width: 100%; height: 20em; }
+            tr.highlight > td { background-color: #FF8; }
 		</style>
 	</head>
 	
@@ -34,9 +35,16 @@
 10. MNZ A2 3 0; end0_loop
 11. MLZ 0 0 0;</textarea>
         <p>
-            <button id="set-code" onclick="set_code()">Set code</button>
+            <button id="set-code" onclick="set_code()">Set code</button> | 
+            <button id="step-code" onclick="step_code()" disabled>Step code</button>
         </p>
-        <!-- <br/> -->
+        
+        <hr/>
+        
+        <p id="error" style="color: red;"></p>
+        
+        <p>Program counter: <span id="pc">0</span></p>
+        
         <table id="machine-code">
             <tr>
                 <th colspan=2 rowspan=2>ASM</th>
@@ -52,6 +60,19 @@
                 <th>Location</th>
                 <th>Type</th>
                 <th>Location</th>
+            </tr>
+        </table>
+        
+        <br/>
+        
+        <table id="ram-bank">
+            <tr>
+                <th>Address (decimal)</th>
+                <th>Address (binary)</th>
+                <th>Data (decimal)</th>
+                <th>Data (binary)</th>
+                <th>Reads</th>
+                <th>Writes</th>
             </tr>
         </table>
         
