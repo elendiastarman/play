@@ -1,5 +1,6 @@
 var program = [];
 var PC = 0;
+var PCset = 0;
 var stepnum = 0;
 var RAM = [];
 
@@ -18,7 +19,7 @@ function RAMwrite(addr, val) {
     addRAMslots(addr);
     
     if (val < 0) { val = (65535^-val)+1; }
-    if (addr === 0) { PC = val; }
+    if (addr === 0) { PC = val; PCset = 1; }
     
     RAM[addr][0] = val;
     RAM[addr][2]++;
@@ -53,6 +54,7 @@ function set_code() {
     new_program = [];
     
     PC = 0;
+    PCset = 0;
     RAM = [];
     $($('#machine-code tr').slice(2)).remove();
     $($('#ram-bank tr').slice(1)).remove();
@@ -127,8 +129,12 @@ function step_code() {
     
     window[inst["opname"]](vals[0], vals[1], vals[2]);
     
-    PC++;
-    RAMwrite(0, PC);
+    if (!PCset) {
+        PC++;
+        RAMwrite(0, PC);
+    } else {
+        PCset = 0;
+    }
     
     $('#pc').text(PC);
     $($('#machine-code tr')[PC+2]).addClass('highlight');
