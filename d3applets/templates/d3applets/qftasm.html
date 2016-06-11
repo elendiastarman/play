@@ -14,6 +14,7 @@
             table { border-collapse: collapse; font-family: monospace; text-align: right; margin: 10px; }
             td.asm { text-align: left; }
             tr.highlight > td { background-color: #FF8; }
+            tr.highlight2 > td { background-color: #FFA; }
 		</style>
 	</head>
 	
@@ -52,7 +53,12 @@
 27. MLZ 0 0 0;</textarea>
         <p>
             <button id="set-code" onclick="set_code()">Set code</button> | 
-            <button id="step-code" onclick="step_code()" disabled>Step code</button>
+            <button id="run-code" onclick="run_code()" disabled>Run</button>
+            <!-- <button id="stop-code" onclick="stop_code()" disabled hidden>Stop</button> -->
+            <button id="step-code" onclick="step_code()" disabled>Step</button>
+            <button id="slow-code" onclick="slow_code()" disabled>Slow</button> &ndash;
+            Ticks per sec: <input type="number" id="tps" value="5" min="1" max="100"/>;
+            Millisecs per tick: <input type="number" id="mspt" value="200" min="10" max="1000"/>
         </p>
         
         <hr/>

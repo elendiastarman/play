@@ -39,7 +39,7 @@ function RAMread(addr) {
 }
 
 function MNZ(test, val, dest){ if (test){ RAMwrite(dest, val); } }
-function MLZ(test, val, dest){ if (test<0){ RAMwrite(dest, val); } }
+function MLZ(test, val, dest){ if (test<0 || test>=32768){ RAMwrite(dest, val); } }
 function ADD(val1, val2, dest){ RAMwrite(dest, val1+val2); }
 function SUB(val1, val2, dest){ RAMwrite(dest, val1-val2); }
 function XOR(val1, val2, dest){ RAMwrite(dest, val1^val2); }
@@ -101,13 +101,14 @@ function set_code() {
     
     program = new_program;
     $($('#machine-code tr')[2]).addClass('highlight');
-    $('#step-code').prop('disabled', false);
+    $($('#machine-code tr')[3]).addClass('highlight2');
+    enable_buttons();
 }
 
 function step_code() {
     if (PC[0] >= program.length) {
         $('#error').text("Program finished!");
-        $('#step-code').prop('disabled', true);
+        disable_buttons();
         return;
     }
     
@@ -116,6 +117,7 @@ function step_code() {
     var vals = [];
     
     $($('#machine-code tr')[PC[0]+2]).removeClass('highlight');
+    $($('#machine-code tr')[PC[1]+2]).removeClass('highlight2');
     
     for (var i=0; i<3; i++) {
         var val = inst["add"+(i+1)+"_loc"];
@@ -134,4 +136,40 @@ function step_code() {
     
     $('#pc').text(PC[0]);
     $($('#machine-code tr')[PC[0]+2]).addClass('highlight');
+    $($('#machine-code tr')[PC[1]+2]).addClass('highlight2');
+}
+
+var code_timer;
+function run_code(){
+    if (!code_timer){
+        code_timer = setInterval(step_code, 1);
+        $('#run-code').html("Stop");
+    } else {
+        stop_code();
+        $('#run-code').html("Run");
+    }
+}
+function stop_code(){
+    clearInterval(code_timer);
+    code_timer = 0;
+}
+function slow_code(){
+    if (!code_timer){
+        code_timer = setInterval(step_code, $('#mspt').val());
+        $('#slow-code').html("Stop");
+    } else {
+        stop_code();
+        $('#slow-code').html("Slow");
+    }
+}
+
+function enable_buttons(){
+    $('#run-code').prop('disabled', false);
+    $('#step-code').prop('disabled', false);
+    $('#slow-code').prop('disabled', false);
+}
+function disable_buttons(){
+    $('#run-code').prop('disabled', true);
+    $('#step-code').prop('disabled', true);
+    $('#slow-code').prop('disabled', true);
 }
