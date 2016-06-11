@@ -46,11 +46,11 @@ function AND(val1, val2, dest){ RAMwrite(dest, val1&val2); }
 function OR(val1, val2, dest){ RAMwrite(dest, val1|val2); }
 function XOR(val1, val2, dest){ RAMwrite(dest, val1^val2); }
 function ANT(val1, val2, dest){ RAMwrite(dest, val1&!val2); }
-function SHL(val1, val2, dest){ RAMwrite(dest, val1<<val2); }
-function SHR(val1, val2, dest){ RAMwrite(dest, val1>>val2); }
+function SL(val1, val2, dest){ RAMwrite(dest, val1<<val2); }
+function SRL(val1, val2, dest){ RAMwrite(dest, val1>>val2); }
 function SRA(val1, val2, dest){ RAMwrite(dest, val1>>val2 + (val1>=32768?32768:0)); }
 
-var opnames = ["MNZ","MLZ","ADD","SUB","AND","OR","XOR","ANT"];
+var opnames = ["MNZ","MLZ","ADD","SUB","AND","OR","XOR","ANT","SL","SRL","SRA"];
 
 $(document).ready(function(){ set_code(); });
 
@@ -74,6 +74,9 @@ function set_code() {
         table_row.append($('<td colspan=2 class="asm">'+nocomment+'</td>'));
         
         var parts = nocomment.split(" ");
+        
+        if (opnames.indexOf(parts[1]) < 0){ $('#error').text("Command "+parts[1]+" on line "+i+" is invalid."); return; }
+        
         new_program.push({"line-num": parts[0].slice(0,parts[0].length-1),
                           "opname": parts[1],
                           "opcode": opnames.indexOf(parts[1]),
