@@ -3,6 +3,8 @@ var PC = [0,1];
 var PCset = 0;
 var stepnum = 0;
 var RAM = [];
+var bps_read = [];
+var bps_write = [];
 
 function bin(x) {
     return x >= 0 ? ("0000000000000000"+x.toString(2)).slice(-16) : ("1111111111111111"+((65535^-x)+1).toString(2)).slice(-16);
@@ -27,6 +29,8 @@ function RAMwrite(addr, val) {
     $(row[2]).text(val);
     $(row[3]).text(bin(val));
     $(row[5]).text(RAM[addr][2]);
+    
+    if (bps_write.indexOf(addr)>=0){ console.log(addr+", "+bps_write); stop_code(); }
 }
 
 function RAMread(addr) {
@@ -34,6 +38,8 @@ function RAMread(addr) {
     
     RAM[addr][1]++;
     $($('#ram-bank tr')[addr+1].children[4]).text(RAM[addr][1]);
+    
+    if (bps_read.indexOf(addr)>=0){ stop_code(); }
     
     return RAM[addr][0];
 }
@@ -155,12 +161,13 @@ function run_code(){
         $('#run-code').html("Stop");
     } else {
         stop_code();
-        $('#run-code').html("Run");
     }
 }
 function stop_code(){
     clearInterval(code_timer);
     code_timer = 0;
+    $('#run-code').html("Run");
+    $('#slow-code').html("Slow");
 }
 function slow_code(){
     if (!code_timer){
@@ -168,7 +175,6 @@ function slow_code(){
         $('#slow-code').html("Stop");
     } else {
         stop_code();
-        $('#slow-code').html("Slow");
     }
 }
 
@@ -181,4 +187,12 @@ function disable_buttons(){
     $('#run-code').prop('disabled', true);
     $('#step-code').prop('disabled', true);
     $('#slow-code').prop('disabled', true);
+}
+
+function set_breakpoints(){
+    var bpsr = $('#breakpoints-read').val();
+    var bpsw = $('#breakpoints-write').val();
+    
+    bps_read = bpsr ? bpsr.split(/[,]? /).map(Number) : [];
+    bps_write = bpsw ? bpsw.split(/[,]? /).map(Number) : [];
 }
