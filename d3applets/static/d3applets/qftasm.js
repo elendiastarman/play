@@ -1,10 +1,11 @@
 var program = [];
 var PC = [0,1];
-var PCset = 0;
 var stepnum = 0;
 var RAM = [];
 var bps_read = [];
 var bps_write = [];
+var bps_inst = [];
+var inst_break = 0;
 
 function bin(x) {
     return x >= 0 ? ("0000000000000000"+x.toString(2)).slice(-16) : ("1111111111111111"+((65535^-x)+1).toString(2)).slice(-16);
@@ -67,8 +68,9 @@ function set_code() {
     new_program = [];
     
     PC = [0, 1];
-    PCset = 0;
+    stepnum = 0;
     RAM = [];
+    inst_break = 0;
     $($('#machine-code tr').slice(2)).remove();
     $($('#ram-bank tr').slice(1)).remove();
     $('#error').text("");
@@ -129,10 +131,21 @@ function step_code() {
         return;
     }
     
+    if (bps_inst.indexOf(PC[0]) >= 0){
+        if (!inst_break){
+            stop_code();
+            inst_break = 1;
+            return;
+        } else {
+            inst_break -= 1;
+        }
+    }
+    
     stepnum++;
     var inst = program[PC[0]];
     var vals = [];
     
+    $('#stepnum').text(stepnum);
     $($('#machine-code tr')[PC[0]+2]).removeClass('highlight');
     $($('#machine-code tr')[PC[1]+2]).removeClass('highlight2');
     
@@ -191,10 +204,15 @@ function disable_buttons(){
     $('#slow-code').prop('disabled', true);
 }
 
-function set_breakpoints(){
-    var bpsr = $('#breakpoints-read').val();
-    var bpsw = $('#breakpoints-write').val();
-    
-    bps_read = bpsr ? bpsr.split(/[,]?[ ]*/).map(Number) : [];
-    bps_write = bpsw ? bpsw.split(/[,]?[ ]*/).map(Number) : [];
+function set_breakpoints(kind){
+    if (kind === 'inst'){
+        var bpsi = $('#breakpoints-inst').val();
+        bps_inst = bpsi ? bpsi.split(/(,| )[ ]*/).map(Number) : [];
+    } else if (kind === 'read'){
+        var bpsr = $('#breakpoints-read').val();
+        bps_read = bpsr ? bpsr.split(/(,| )[ ]*/).map(Number) : [];
+    } else if (kind === 'write'){
+        var bpsw = $('#breakpoints-write').val();
+        bps_write = bpsw ? bpsw.split(/(,| )[ ]*/).map(Number) : [];
+    }    
 }

@@ -64,7 +64,7 @@
         <hr/>
         
         <p id="error" style="color: red;"></p>
-        <p style="clear: both">Program counter: <span id="pc">0</span></p>
+        <p style="clear: both">Program counter: <span id="pc">0</span>; step number: <span id="stepnum">0</span></p>
         
         <table id="machine-code" style="float: left">
             <tr>
@@ -100,8 +100,9 @@
         <p>
             <fieldset id="breakpoints">
                 <legend>Breakpoints</legend>
-                Addresses to stop on when read from: <input type="text" id="breakpoints-read" onchange="set_breakpoints()"/> <br/>
-                Addresses to stop on when written to: <input type="text" id="breakpoints-write" onchange="set_breakpoints()"/>
+                Instruction: <input type="text" id="breakpoints-inst" onchange="set_breakpoints('inst')"/> <br/>
+                RAM read: <input type="text" id="breakpoints-read" onchange="set_breakpoints('read')"/> <br/>
+                RAM write: <input type="text" id="breakpoints-write" onchange="set_breakpoints('write')"/>
             </fieldset>
         </p>
         
