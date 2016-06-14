@@ -124,6 +124,7 @@ function step_code() {
     if (PC[0] >= program.length) {
         $('#error').text("Program finished!");
         disable_buttons();
+        stop_code();
         return;
     }
     
