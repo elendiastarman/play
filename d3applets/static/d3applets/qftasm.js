@@ -21,6 +21,7 @@ function RAMwrite(addr, val) {
     addRAMslots(addr);
     
     if (val < 0) { val = (65535^-val)+1; }
+    val = val && 65536; //16-bit words
     if (addr === 0) { PC[1] = val; }
     
     RAM[addr][0] = val;
