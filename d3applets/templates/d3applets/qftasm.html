@@ -98,15 +98,50 @@
         <div style="clear:both;"></div>
         
         <p>
-            Addresses to stop on when read from: <input type="text" id="breakpoints-read" onchange="set_breakpoints()"/> <br/>
-            Addresses to stop on when written to: <input type="text" id="breakpoints-write" onchange="set_breakpoints()"/>
+            <fieldset id="breakpoints">
+                <legend>Breakpoints</legend>
+                Addresses to stop on when read from: <input type="text" id="breakpoints-read" onchange="set_breakpoints()"/> <br/>
+                Addresses to stop on when written to: <input type="text" id="breakpoints-write" onchange="set_breakpoints()"/>
+            </fieldset>
         </p>
         
         <br/><br/>
+        
+        <h2>Documentation</h2>
+        
+        <p>
+            QFTASM is a very simple version of Assembly developed for the <a href="http://blog.phinotpi.com/2016/05/30/the-quest-for-tetris/">Quest For Tetris</a> project. To use this interpreter, put your code in the text box and click <kbd>Set code</kbd> to enable the flow control buttons. <kbd>Run</kbd> will execute the instructions as quickly as possible, <kbd>Step</kbd> will execute one instruction at a time, and <kbd>Slow</kbd> will execute instructions at a user-defined rate.
+            <br/><br/>
+            Each instruction should be formatted like this: <code>[number]: [INST] [arg1] [arg2] [arg3]</code>. Optional comments are also allowed, and are denoted by a semicolon. Here is a list of instructions along with their arguments:
+            
+            <ul>
+                <li><code>MNZ [test] [value] [dest]</code> &ndash; Move if not zero; sets <code>[dest]</code> to <code>[value]</code> if <code>[test]</code> is not zero.</li>
+                <li><code>MLZ [test] [value] [dest]</code> &ndash; Move if less than zero; sets <code>[dest]</code> to <code>[value]</code> if <code>[test]</code> is less than zero.</li>
+                <li><code>ADD [val1] [val2] [dest]</code> &ndash; Add; adds <code>[val1]</code> to <code>[val2]</code> and stores the result in <code>[dest]</code>.</li>
+                <li><code>SUB [val1] [val2] [dest]</code> &ndash; Subtract; subtracts <code>[val2]</code> from <code>[val1]</code> and stores the result in <code>[dest]</code>.</li>
+                <li><code>AND [val1] [val2] [dest]</code> &ndash; Bitwise AND; bitwise ANDs together <code>[val1]</code> and <code>[val2]</code> and stores the result in <code>[dest]</code>.</li>
+                <li><code>OR [val1] [val2] [dest]</code> &ndash; Bitwise OR; bitwise ORs together <code>[val1]</code> and <code>[val2]</code> and stores the result in <code>[dest]</code>.</li>
+                <li><code>XOR [val1] [val2] [dest]</code> &ndash; Bitwise XOR; bitwise XORs together <code>[val1]</code> and <code>[val2]</code> and stores the result in <code>[dest]</code>.</li>
+                <li><code>ANT [val1] [val2] [dest]</code> &ndash; Bitwise AND-NOT; bitwise ANDs together <code>[val1]</code> and (NOT <code>[val2]</code>) and stores the result in <code>[dest]</code>.</li>
+                <li><code>SL [val1] [val2] [dest]</code> &ndash; Shift left; shifts <code>[val1]</code> left by <code>[val2]</code> bits and stores the result in <code>[dest]</code>.</li>
+                <li><code>SRL [val1] [val2] [dest]</code> &ndash; Shift right (logical); shifts <code>[val1]</code> right by <code>[val2]</code> bits and stores the result in <code>[dest]</code>. Doesn't preserve sign.</li>
+                <li><code>SRA [val1] [val2] [dest]</code> &ndash; Shift right (arithmetic); shifts <code>[val1]</code> right by <code>[val2]</code> bits and stores the result in <code>[dest]</code>, while preserving sign.</li>
+            </ul>
+            
+            There are two formats for arguments: literal integers and references. Integers may either positive or negative, with the negative ones converted to two's complement (for example, -37 becomes 65573), and they are limited to the range 0&ndash;65535 (16 bits). For references, with the number of dereferences notated by one of <code>A, B, C</code>. For instance, <code>A37</code> will be replaced with the data in address 37 at execution time. <code>B37</code> will be replaced with the data in the address given by the data in address 37, and likewise, with one more level, for <code>C37</code>.
+            
+            <br/><br/>
+            
+            The first table shows the instructions and their machine code equivalents. In the <strong>ASM</strong> column is the code exactly as it appears in the input, sans comment. In the <strong>Opcode</strong> column is the code for that command. <strong>Type</strong> refers to the reference level, so <code>37</code> would have a type of <code>00</code> and <code>A37</code> would have a type of <code>01</code>. Finally, <strong>Location</strong> is just the value or address. Also, the highlights show the next two instructions to be executed.
+            
+            <br/><br/>
+            
+            The second table shows the RAM bank, and I think the columns are pretty self-explanatory. More RAM slots are added as needed (when an instruction reads from or writes to an address outside of the current range). The two text boxes directly below can be used to set breakpoints. Simply enter addresses separated by commas and/or spaces. Any of the following will work: <code>1,2,3</code>, <code>1, 2, 3</code>, <code>1 2 3</code>.
+        </p>
 		
-		<svg id="field">
+		<!-- <svg id="field">
 			<g id="blocks"></g>
-		</svg>
+		</svg> -->
 		
 		
 	

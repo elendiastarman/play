@@ -92,7 +92,7 @@ function set_code() {
                           "add3": parts[4]
                          });
         
-        table_row.append($('<td colspan=2>'+("00000"+new_program[i]["opcode"].toString(2)).slice(-5)+'</td>'));
+        table_row.append($('<td colspan=2>'+("0000"+new_program[i]["opcode"].toString(2)).slice(-4)+'</td>'));
         
         for (var j=0; j<3; j++) {
             var type = ['','A','B','C'].indexOf(parts[j+2].slice(0,1));
@@ -195,6 +195,6 @@ function set_breakpoints(){
     var bpsr = $('#breakpoints-read').val();
     var bpsw = $('#breakpoints-write').val();
     
-    bps_read = bpsr ? bpsr.split(/[,]? /).map(Number) : [];
-    bps_write = bpsw ? bpsw.split(/[,]? /).map(Number) : [];
+    bps_read = bpsr ? bpsr.split(/[,]?[ ]*/).map(Number) : [];
+    bps_write = bpsw ? bpsw.split(/[,]?[ ]*/).map(Number) : [];
 }
