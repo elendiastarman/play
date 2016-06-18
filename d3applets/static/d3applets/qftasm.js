@@ -53,7 +53,7 @@ function SUB(val1, val2, dest){ RAMwrite(dest, val1-val2); }
 function AND(val1, val2, dest){ RAMwrite(dest, val1&val2); }
 function OR(val1, val2, dest){ RAMwrite(dest, val1|val2); }
 function XOR(val1, val2, dest){ RAMwrite(dest, val1^val2); }
-function ANT(val1, val2, dest){ RAMwrite(dest, val1&!val2); }
+function ANT(val1, val2, dest){ RAMwrite(dest, val1&(val2^65535)); }
 function SL(val1, val2, dest){ RAMwrite(dest, val1<<val2); }
 function SRL(val1, val2, dest){ RAMwrite(dest, val1>>val2); }
 function SRA(val1, val2, dest){ RAMwrite(dest, val1>>val2 + (val1>=32768?32768:0)); }
