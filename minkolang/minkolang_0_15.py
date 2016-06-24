@@ -10,7 +10,7 @@ from copy import deepcopy
 
 debug = 0
 if "idlelib" in sys.modules:
-    sys.argv = ["minkolang_0.15.py", ".", "c2"]
+    sys.argv = ["minkolang_0.15.py", "\"'Z\"$O.", "c2"]
     debug = 1
     numSteps = 100
 
@@ -141,7 +141,9 @@ class Program:
                     if not self.ignoreFlag: stack.extend(list(map(ord,self.strLiteral[::-1])))
                     self.strLiteral = ""
                     self.escapeFlag = 0
-                    
+            
+            elif self.currChar == '"' and self.numMode: self.numLiteral += '"'
+            
             if self.currChar == "'" and not self.strMode:
                 self.fallable = not self.fallable
                 if not self.numMode:
@@ -167,6 +169,8 @@ class Program:
 
                     if not self.ignoreFlag: stack.append(result)
                     self.numLiteral = ""
+
+            elif self.currChar == "'" and self.strMode: self.strLiteral += "'"
 
             if self.currChar not in "'\"":
                 if not self.strMode and not self.numMode and not self.ignoreFlag:
