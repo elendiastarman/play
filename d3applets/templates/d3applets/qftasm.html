@@ -96,6 +96,9 @@
                 RAM read: <input type="text" id="breakpoints-read" onchange="set_breakpoints('read')"/> <br/>
                 RAM write: <input type="text" id="breakpoints-write" onchange="set_breakpoints('write')"/>
             </fieldset>
+            
+            Direct write to RAM &ndash; value: <input type="text" id="directWriteVal"/>, address: <input type="text" id="directWriteAddr"/>
+            <input type="checkbox" id="breakOnBlank"/><label for="breakOnBlank">Stop when value is empty</label>
         </p>
         
         <br/><br/>

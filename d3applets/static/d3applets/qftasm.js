@@ -32,10 +32,26 @@ function RAMwrite(addr, val) {
     $(row[3]).text(bin(val));
     $(row[5]).text(RAM[addr][2]);
     
-    if (bps_write.indexOf(addr)>=0){ console.log(addr+", "+bps_write); stop_code(); }
+    if (bps_write.indexOf(addr)>=0){ stop_code(); }
 }
 
 function RAMread(addr) {
+    directAddr = parseInt($('#directWriteAddr').val());
+    directVal = parseInt($('#directWriteVal').val());
+    console.log("directAddr:"+directAddr);
+    console.log("directVal:"+directVal);
+    if(addr === directAddr){
+        if(directVal){
+            RAMwrite(directAddr, directVal);
+            $('#directWriteVal').val("")
+        } else {
+            if($('#breakOnBlank').prop('checked')){
+                stop_code();
+                return;
+            }
+        }
+    }
+    
     addRAMslots(addr);
     
     RAM[addr][1]++;
