@@ -89,7 +89,7 @@
         
         <div style="clear:both;"></div>
         
-        <p>
+        <p style="margin-bottom: 0px;">
             <fieldset id="breakpoints">
                 <legend>Breakpoints</legend>
                 Instruction: <input type="text" id="breakpoints-inst" onchange="set_breakpoints('inst')"/> <br/>
@@ -98,10 +98,15 @@
             </fieldset>
             
             Direct write to RAM &ndash; value: <input type="text" id="directWriteVal"/>, address: <input type="text" id="directWriteAddr"/>
-            <input type="checkbox" id="breakOnBlank"/><label for="breakOnBlank">Stop when value is empty</label>
+            <input type="checkbox" id="breakOnBlank"/><label for="breakOnBlank">Stop when value is empty</label> <br/>
+            RAM addresses to display: <input type="text" id="RAMdisplay" onchange="set_RAMdisplay()"/> <br/><br/>
+            
+            <strong>RAM Display:</strong>
         </p>
         
-        <br/><br/>
+        <svg id="display" style="border: 1px solid black" width="340px" height="20"></svg>
+        
+        <hr/>
         
         <h2>Documentation</h2>
         
@@ -138,11 +143,6 @@
             
             The three text boxes directly below can be used to set breakpoints. Simply enter addresses separated by commas and/or spaces. Any of the following will work: <code>1,2,3</code>, <code>1, 2, 3</code>, <code>1 2 3</code>.
         </p>
-		
-		<!-- <svg id="field">
-			<g id="blocks"></g>
-		</svg> -->
-		
 		
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>

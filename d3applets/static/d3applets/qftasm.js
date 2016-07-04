@@ -6,6 +6,7 @@ var bps_read = [];
 var bps_write = [];
 var bps_inst = [];
 var inst_break = 0;
+var RAMdisplay = [];
 
 function bin(x) {
     return x >= 0 ? ("0000000000000000"+x.toString(2)).slice(-16) : ("1111111111111111"+((65535^-x)+1).toString(2)).slice(-16);
@@ -32,14 +33,14 @@ function RAMwrite(addr, val) {
     $(row[3]).text(bin(val));
     $(row[5]).text(RAM[addr][2]);
     
+    if (RAMdisplay.indexOf(addr)>=0){ update_display(addr); }
     if (bps_write.indexOf(addr)>=0){ stop_code(); }
 }
 
 function RAMread(addr) {
     directAddr = parseInt($('#directWriteAddr').val());
     directVal = parseInt($('#directWriteVal').val());
-    console.log("directAddr:"+directAddr);
-    console.log("directVal:"+directVal);
+    
     if(addr === directAddr){
         if(directVal){
             RAMwrite(directAddr, directVal);
@@ -177,6 +178,7 @@ function step_code() {
     
     PC[0] = PC[1];
     PC[1] = PC[0]+1;
+    if(RAMdisplay.indexOf(0) >= 0){ update_display(0); }
     
     window[inst["opname"]](vals[0], vals[1], vals[2]);
     
@@ -231,4 +233,68 @@ function set_breakpoints(kind){
         var bpsw = $('#breakpoints-write').val();
         bps_write = bpsw ? bpsw.split(/(,| )[ ]*/).map(Number) : [];
     }    
+}
+
+function set_RAMdisplay(){
+    var Rdisp = $('#RAMdisplay').val();
+    Rdisp = Rdisp ? Rdisp.split(/(,| )[ ]*/) : [];
+    RAMdisplay = [];
+    
+    for(var i=0; i<Rdisp.length; i++){
+        var dash = Rdisp[i].indexOf("-");
+        if(dash > -1){
+            var nums = Rdisp[i].split("-").map(Number);
+            for(var j=nums[0]; j<=nums[1]; j++){ RAMdisplay.push(j); }
+        } else {
+            var num = Number(Rdisp[i]);
+            if(num || Rdisp[i]==="0"){ RAMdisplay.push(num); }
+        }
+    }
+    
+    set_display();
+}
+
+function set_display(){
+    svg = d3.select('#display');
+    svg.selectAll('g').remove();
+    svg.attr('height',RAMdisplay.length*20);
+    
+    max = 0;
+    for(var i=0; i<RAMdisplay.length; i++){if(RAMdisplay[i] > max){max = RAMdisplay[i]}}
+    var offset = 12+8*max.toString().length;
+    svg.attr('width',16*20 + offset);
+    console.log("offset: "+offset);
+    
+    for(var i=0; i<RAMdisplay.length; i++){
+        var addr = RAMdisplay[i];
+        var row = svg.append('g').attr('class', 'row'+addr).attr('transform','translate(0,'+(i*20)+')');
+        row.append('text')
+          .text(addr)
+          .attr('x',5)
+          .attr('y',15);
+        
+        var val = addr < RAM.length ? RAM[addr][0] : 0;
+        for(var j=0; j<16; j++){
+            row.append('rect')
+              .attr('class','rect'+j)
+              .attr('fill',val & (1<<j) ? '#000' : '#FFF')
+              .attr('x',offset+j*20)
+              .attr('y',0)
+              .attr('width',20)
+              .attr('height',20)
+              .attr('stroke','#808080')
+              .attr('stroke-width','1px');
+        }
+    }
+}
+
+function update_display(addr){
+    var k = RAMdisplay.indexOf(addr);
+    var val = addr < RAM.length ? RAM[addr][0] : 0;
+    var row = d3.select('#display g.row'+addr);
+    
+    for(var j=0; j<16; j++){
+        row.select('.rect'+j)
+          .attr('fill',val & (1 << (15-j)) ? '#000' : '#FFF');
+    }
 }
