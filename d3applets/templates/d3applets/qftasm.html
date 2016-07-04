@@ -141,7 +141,15 @@
             
             <br/><br/>
             
-            The three text boxes directly below can be used to set breakpoints. Simply enter addresses separated by commas and/or spaces. Any of the following will work: <code>1,2,3</code>, <code>1, 2, 3</code>, <code>1 2 3</code>.
+            The three text boxes directly below can be used to set breakpoints. Simply enter addresses separated by commas and/or spaces. Any of the following will work: '<code>1,2,3</code>', '<code>1, 2, 3</code>', '<code>1 2 3</code>'.
+            
+            <br/><br/>
+            
+            Regarding the direct write to RAM line, that address will be set to that value when that address is read. Once that address is set, then the value box is blanked. Further reads of the same address will not do anything if the value box is blank. The accompanying checkbox is self-explanatory, with the caveat that if a value is entered and then the user resumes the interpreter, that address will be set to that value the <em>next</em> time it is read.
+            
+            <br/><br/>
+            
+            For specifying which addresses to display, the format should be something like <code>0 2-4 6</code>. Ranges of numbers are denoted by <code>a-b</code> (inclusive), with no spaces on either side of the dash. Separate numbers and ranges by commas and/or spaces.
         </p>
 		
 	
