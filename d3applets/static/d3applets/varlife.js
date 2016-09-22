@@ -55,7 +55,6 @@ $(function(){
 	});
 	
 	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
-    $('#field').on('mouseenter', function(){ $('#mouseHighlight').attr('stroke', '#FFF'); });
     $('#field').on('mouseleave', function(){ $('#mouseText').text(''); $('#mouseHighlight').attr('stroke', 'transparent'); });
 	
 	loadPermalink();
@@ -337,8 +336,8 @@ function changeCell() {
     $('#mouseText').text("| Mouse is over cell ("+coords[1]+", "+coords[2]+")");
     d3.select('#mouseHighlight')
         .attr('x', coords[1]*cellSize)
-        .attr('y', coords[2]*cellSize);
-        //.attr('stroke', '#FFF');
+        .attr('y', coords[2]*cellSize)
+        .attr('stroke', '#FFF');
     
 	if (!mouseDown){ return; }
 	
