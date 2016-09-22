@@ -55,7 +55,8 @@ $(function(){
 	});
 	
 	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
-    $('#field').on('mouseleave', function(){ $('#mouseText').text(''); });
+    $('#field').on('mouseenter', function(){ $('#mouseHighlight').attr('stroke', '#FFF'); });
+    $('#field').on('mouseleave', function(){ $('#mouseText').text(''); $('#mouseHighlight').attr('stroke', 'transparent'); });
 	
 	loadPermalink();
 });
@@ -113,7 +114,7 @@ function initGrid() {
 					mouseDown = true;
 					d3.select(this).call(changeCell.bind(this));
 				})
-				.on('mouseover', changeCell)
+				.on('mouseover', changeCell);
 		}
 		grid.push(row);
 	}
@@ -121,6 +122,17 @@ function initGrid() {
 	d3.select('#field')
 		.attr('width', cellSize*gridW)
 		.attr('height', cellSize*gridH);
+    
+	d3.select('#field').append('rect')
+        .attr('x',0)
+        .attr('y',0)
+        .attr('width',cellSize)
+        .attr('height',cellSize)
+        .attr('fill', 'none')
+        .attr('stroke','transparent')
+        .attr('stroke-width','2px')
+        .attr('id','mouseHighlight')
+        .attr('class','block');
 }
 
 function clearGrid(resetRules) {
@@ -322,7 +334,11 @@ function updateGraphics() {
 
 function changeCell() {
 	var coords = d3.select(this).attr('id').split('_').map(Number);
-    $('#mouseText').text("Mouse is over cell ("+coords[1]+", "+coords[2]+")");
+    $('#mouseText').text("| Mouse is over cell ("+coords[1]+", "+coords[2]+")");
+    d3.select('#mouseHighlight')
+        .attr('x', coords[1]*cellSize)
+        .attr('y', coords[2]*cellSize);
+        //.attr('stroke', '#FFF');
     
 	if (!mouseDown){ return; }
 	
@@ -337,7 +353,7 @@ function changeCell() {
 			toggleTo = cell[1];
 		}
 	} else if (which === "paint") {
-		var num = parseInt($('.picked:first').attr('id').substr(4,100));
+		var num = parseInt($('.picked:first').attr('id').substring(4));
 		cell[0] = num-1;
 	}
 	
@@ -361,6 +377,10 @@ function resize() {
 		d3.select('#field')
 			.attr('width', cs*gridW)
 			.attr('height', cs*gridH);
+        
+        d3.select('#mouseHighlight')
+            .attr('width', cs)
+            .attr('height', cs);
 			
 	} else {
 		var oldGrid = $.extend(true, [], grid);
