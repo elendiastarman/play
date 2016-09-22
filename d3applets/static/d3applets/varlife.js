@@ -55,6 +55,7 @@ $(function(){
 	});
 	
 	$('#field').on('mouseup', function(){ mouseDown = false; toggleTo = -1; });
+    $('#field').on('mouseleave', function(){ $('#mouseText').text(''); });
 	
 	loadPermalink();
 });
@@ -320,9 +321,11 @@ function updateGraphics() {
 }
 
 function changeCell() {
+	var coords = d3.select(this).attr('id').split('_').map(Number);
+    $('#mouseText').text("Mouse is over cell ("+coords[1]+", "+coords[2]+")");
+    
 	if (!mouseDown){ return; }
 	
-	var coords = d3.select(this).attr('id').split('_').map(Number);
 	var cell = grid[coords[2]][coords[1]];
 	var which = $('input[name="paintKind"]:checked').val();
 	
