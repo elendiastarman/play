@@ -131,7 +131,8 @@ function initGrid() {
         .attr('stroke','transparent')
         .attr('stroke-width','2px')
         .attr('id','mouseHighlight')
-        .attr('class','block');
+        .attr('class','block')
+        .attr('style','pointer-events: none');
 }
 
 function clearGrid(resetRules) {
