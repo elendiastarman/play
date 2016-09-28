@@ -43,10 +43,10 @@
                 var accy = +(acc.y).toFixed(2);
                 d3.select('#X')
                     .attr('x', accx > 0 ? 150-15*accx : 150)
-                    .attr('width', accx < 0 ? -15*accx : 0);
+                    .attr('width', 15*Math.abs(accx));
                 d3.select('#Y')
                     .attr('y', accy < 0 ? 150+15*accy : 150)
-                    .attr('height', accy > 0 ? 15*accy : 0);
+                    .attr('height', 15*Math.abs(accy));
                 $('#xtilt').text(accx);
                 $('#ytilt').text(accy);
             }
