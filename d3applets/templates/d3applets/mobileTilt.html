@@ -28,10 +28,10 @@
             Y tilt: <span id="ytilt"></span>
         </p>
 		
-		<svg id="field" width="400px" height="400px">
-			<circle cx="200px" cy="200px" r="3px" fill="#00F"/>
-            <rect x="200px" y="190px" width="0px" height="20px" fill="#0F0" id="X"/>
-            <rect x="190px" y="200px" width="20px" height="0px" fill="#F00" id="Y"/>
+		<svg id="field" width="300px" height="300px">
+			<circle cx="150px" cy="150px" r="3px" fill="#00F"/>
+            <rect x="150px" y="140px" width="0px" height="20px" fill="#0F0" id="X"/>
+            <rect x="140px" y="150px" width="20px" height="0px" fill="#F00" id="Y"/>
 		</svg>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -39,10 +39,16 @@
 		<script> <!-- with thanks to https://github.com/altermarkive/Learning-Sensor-Access-in-JS/blob/master/sensors.html -->
             function motion(event){
                 var acc = event.accelerationIncludingGravity;
-                d3.select('#X').attr('width', 20*acc.x);
-                d3.select('#Y').attr('height', 20*acc.y);
-                $('#xtilt').text(acc.x);
-                $('#ytilt').text(acc.y);
+                var accx = Math.round(acc.x,2)
+                var accy = Math.round(acc.y,2)
+                d3.select('#X')
+                    .attr('x', accx > 0 : 20*accx ? 150)
+                    .attr('width', accx < 0 : -20*accx ? 0);
+                d3.select('#Y')
+                    .attr('y', accy < 0 : -20*accy ? 150)
+                    .attr('height', accy > 0 : 20*accy ? 0);
+                $('#xtilt').text(accx);
+                $('#ytilt').text(accy);
             }
             
             $(function(){
