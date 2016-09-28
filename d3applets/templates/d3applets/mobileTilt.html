@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mobile Tilt</title>
+		
+		{% load staticfiles %}
+		<!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" /> -->
+		<style>
+			#field {
+                border: 1px solid black;
+                margin: 0 auto;
+            }
+		</style>
+	</head>
+	
+	<body style="margin-left: 20px">
+	
+		<h1>Mobile Tilt</h1>
+		<p id="desc">A simple test of using the accelerometer JavaScript event. Meant for mobile devices.</p>
+		
+		<svg id="field" width="400px" height="400px">
+			<circle cx="200px" cy="200px" r="3px" fill="#00F"/>
+            <rect x="200px" y="190px" width="0px" height="20px" fill="#0F0" id="X"/>
+            <rect x="190px" y="200px" width="20px" height="0px" fill="#F00" id="Y"/>
+		</svg>
+	
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script> <!-- with thanks to https://github.com/altermarkive/Learning-Sensor-Access-in-JS/blob/master/sensors.html -->
+            $(function(){
+                if (window.DeviceMotionEvent){
+                    window.addEventListener("devicemotion", motion, false);
+                } else {
+                    console.log("Nope, not supported.");
+                }
+            }
+            
+            function motion(event){
+                var acc = event.accelerationIncludingGravity;
+                d3.select('X').attr('width', 20/acc.x);
+                d3.select('Y').attr('height', 20/acc.y);
+            }
+        </script>
+	</body>
+</html>
