@@ -39,8 +39,8 @@
 		<script> <!-- with thanks to https://github.com/altermarkive/Learning-Sensor-Access-in-JS/blob/master/sensors.html -->
             function motion(event){
                 var acc = event.accelerationIncludingGravity;
-                var accx = Math.round(acc.x,2)
-                var accy = Math.round(acc.y,2)
+                var accx = Math.round(acc.x,2);
+                var accy = Math.round(acc.y,2);
                 d3.select('#X')
                     .attr('x', accx > 0 : 20*accx ? 150)
                     .attr('width', accx < 0 : -20*accx ? 0);
