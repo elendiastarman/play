@@ -28,14 +28,14 @@
                 <div class="expandable"><strong>Space</strong> &ndash; the collection of game states <em>Note: many of these attributes are independent, so they can be mixed and matched at will.</em></div>
             
                 <ul>
-                    <li><div class="expandable"><strong>Granularity</strong></div>
+                    <li><div class="expandable"><strong>Granularity</strong> &ndash; the level of detail present in the coordinate system</div>
                         <ul>
                             <li><strong>Discrete</strong> &ndash; there is a clear discontinuity between two coordinates as close together as possible</li>
                             <li><strong>Continuous</strong> &ndash; for every point P, there is at least one other point in an arbitrarily small neighborhood centered on P</li>
                         </ul>
                     </li>
                     
-                    <li><div class="expandable"><strong>Layout &ndash; how the coordinates of the space relate to one another</strong></div>
+                    <li><div class="expandable"><strong>Layout</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
                         <ul>
                             <li><div class="expandable"><strong>Grid-based</strong> &ndash; coordinates are located relative to each other in a regular, repeated pattern</div>
                                 <ul>
@@ -52,9 +52,9 @@
                     
                     <li><div class="expandable"><strong>Connectedness</strong> &ndash; the global nature</div>
                         <ul>
-                            <li><strong>Without holes</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
-                            <li><strong>With holes</strong> &ndash; At least one point that is in the space and within the boundary (if it exists) is not playable</li>
-                            <li><strong>Disjoint [network layout too]</strong> &ndash; Two or more areas cannot be reached solely by moving between adjacent points</li>
+                            <li><strong>Without holes [grid-based]</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
+                            <li><strong>With holes [grid-based]</strong> &ndash; At least one point that is in the space and within the boundary (if it exists) is not playable</li>
+                            <li><strong>Disjoint</strong> &ndash; Two or more areas cannot be reached solely by moving between adjacent points</li>
                         </ul>
                     </li>
                     
