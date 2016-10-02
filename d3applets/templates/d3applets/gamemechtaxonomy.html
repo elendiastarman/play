@@ -25,7 +25,7 @@
         
         <ul id="root">
             <li>
-                <div class="expandable"><strong>Space</strong> &ndash; the collection of game states <em>Note: many of these attributes are independent, so they can be mixed and matched at will.</em></div>
+                <div class="expandable"><strong>Space</strong> &ndash; a collection of game states <em>Note: many of these attributes are independent, so they can be mixed and matched at will. Exceptions are noted in [brackets].</em></div>
             
                 <ul>
                     <li><div class="expandable"><strong>Granularity</strong> &ndash; the level of detail present in the coordinate system</div>
@@ -62,6 +62,7 @@
                         <ul>
                             <li><strong>Bounded</strong> &ndash; the playable area is finite</li>
                             <li><strong>Partially bounded</strong> &ndash; the playable area is infinite in one or more directions</li>
+                            <li><strong>Toroidal</strong> &ndash; areas adjacent to the boundary are joined to non-adjacent areas</li>
                             <li><strong>Unbounded</strong> &ndash; the playable area is infinite in all directions</li>
                         </ul>
                     </li>
@@ -76,13 +77,26 @@
                     </li>
                 </ul>
             </li>
-            <li>Actors</li>
-            <li>Actions</li>
-            <li>Transitions</li>
-            <li>Interactions</li>
-            <li>Knowledge</li>
-            <li>Mystery</li>
-            <li>Goal</li>
+            
+            <li><div class="expandable"><strong>Actor</strong> &ndash; an entity that performs actions</div>
+                <ul>
+                    <li><strong>Sentient</strong> &ndash; an entity that acts toward the goal(s) based on the information available to it</li>
+                    <li><strong>Rational</strong> &ndash; an entity that chooses actions based on the information available to it</li>
+                    <li><strong>Irrational</strong> &ndash; an entity that performs a set, repeated pattern of actions</li>
+                </ul>
+            </li>
+            
+            <li><strong>Action</strong> &ndash; causes one or more transitions between game states</li>
+            
+            <li><strong>Transition</strong> &ndash; a rule controlling movement between game states</li>
+            
+            <li><strong>Interaction</strong> &ndash; a rule for how actors affect each other</li>
+            
+            <li><strong>Knowledge</strong> &ndash; the information available to an actor</li>
+            
+            <li><strong>Mystery</strong> &ndash; the information <em>not</em> available to an actor</li>
+            
+            <li><strong>Goal</strong> &ndash; the aim of the game</li>
         </ul>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
