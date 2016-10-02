@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Taxonomy of Game Mechanics</title>
+		
+		{% load staticfiles %}
+		<!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" /> -->
+		<style>
+            ul {
+                list-style-type: none;
+            }
+		</style>
+	</head>
+	
+	<body style="margin-left: 20px">
+	
+		<h1>Taxonomy of Game Mechanics</h1>
+		<p id="desc">An ongoing attempt to boil down game mechanics to their core fundamentals.</p>
+		
+		This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest.
+        
+        <ul id="root">
+            <li>
+                <div class="expandable"><strong>Space</strong> <em>Note: most of these attributes are independent, so they can be mixed and matched at will.</em></div>
+            
+                <ul>
+                    <li><div class="expandable"><strong>Layout</strong></div>
+                        <ul>
+                            <li><div class="expandable"><strong>Grid-based</strong>
+                                <ul>
+                                    <li><div class="expandable"><strong>Tesselation or tiling</strong>
+                                        <ul>
+                                            <li>Rectangular</li>
+                                            <li>Hexagonal</li>
+                                            <li>Triangular</li>
+                                            <li>Other</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><strong>Network</strong></li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable"><strong>Continuity</strong></div>
+                        <ul>
+                            <li>Continuous</li>
+                            <li>Discontinuous</li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable"><strong>Bounds</strong></div>
+                        <ul>
+                            <li>Bounded</li>
+                            <li>Partially bounded</li>
+                            <li>Unbounded</li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable"><strong>Cohesiveness</strong></div>
+                        <ul>
+                            <li>Without holes</li>
+                            <li>With holes</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>Actors</li>
+            <li>Actions</li>
+            <li>Transitions</li>
+            <li>Interactions</li>
+            <li>Knowledge</li>
+            <li>Mystery</li>
+            <li>Goal</li>
+        </ul>
+	
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script>
+            $(function(){
+                $('.expandable').siblings().filter('ul').hide();
+                $('#root').children().show();
+                
+                $('.expandable').each(function(){
+                    //console.log(this);
+                    $(this).html("<code>[+]</code> "+$(this).html());
+                });
+                
+                $('.expandable').on("click", function(){
+                    //console.log("click!");
+                    //console.log(this);
+                    $(this).siblings().filter('ul').toggle();
+                    
+                    var H = $(this).html();
+                    var c;
+                    if(H.includes('+')){
+                        c = "-";
+                    } else {
+                        c = "+";
+                    }
+                    
+                    $(this).html(H.replace(/[+-]/,c));
+                });
+            });
+        </script>
+	</body>
+</html>
