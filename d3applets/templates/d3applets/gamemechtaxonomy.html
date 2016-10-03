@@ -71,7 +71,7 @@
                         <ul>
                             <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
                             <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
-                            <li><strong>Hyperbolic</strong> &ndash; negative curvature; hard to visualize, very rare</li>
+                            <li><strong>Hyperbolic</strong> &ndash; negative curvature like a saddle; hard to visualize, very rare</li>
                             <li><strong>Other</strong> &ndash; some combination of the above, like a torus, which has both positive and negative curvature</li>
                         </ul>
                     </li>
@@ -80,21 +80,35 @@
             
             <li><div class="expandable"><strong>Actor</strong> &ndash; an entity that performs actions</div>
                 <ul>
-                    <li><strong>Sentient</strong> &ndash; an entity that acts toward the goal(s) based on the information available to it</li>
+                    <li><div class="expandable"><strong>Sentient</strong> &ndash; an entity that acts toward the goal(s) based on the information available to it</div>
+                        <ul>
+                            <li><strong>Human</strong> &ndash; A human player</li>
+                            <li><strong>Computer</strong> &ndash; A computer/AI player of any level of intelligence</li>
+                        </ul>
+                    </li>
                     <li><strong>Rational</strong> &ndash; an entity that chooses actions based on the information available to it</li>
                     <li><strong>Irrational</strong> &ndash; an entity that performs a set, repeated pattern of actions</li>
+                    <li><strong>Random</strong> &ndash; a random-number generator</li>
                 </ul>
             </li>
             
             <li><strong>Action</strong> &ndash; causes one or more transitions between game states</li>
             
-            <li><strong>Transition</strong> &ndash; a rule controlling movement between game states</li>
+            <li><strong>Transition</strong> &ndash; a rule determining how to get from one game state to another</li>
             
             <li><strong>Interaction</strong> &ndash; a rule for how actors affect each other</li>
             
             <li><strong>Knowledge</strong> &ndash; the information available to an actor</li>
             
-            <li><strong>Mystery</strong> &ndash; the information <em>not</em> available to an actor</li>
+            <li><div class="expandable"><strong>Mystery</strong> &ndash; the information <em>not</em> available to an actor</div>
+                <ul>
+                    <li><strong>Future actions</strong> &ndash; the actions that actors will make</li>
+                    <li><strong>Undiscovered</strong> &ndash; knowable in theory, but takes time and/or effort to discover</li>
+                    <li><strong>Hidden</strong> &ndash; unknowable unless revealed by another actor</li>
+                </ul>
+            </li>
+            
+            <li><strong>Discovery</strong> &ndash; a rule determining how information moves from mystery to knowledge (or vice versa)</li>
             
             <li><strong>Goal</strong> &ndash; the aim of the game</li>
         </ul>
