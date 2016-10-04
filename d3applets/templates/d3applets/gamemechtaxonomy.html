@@ -87,34 +87,31 @@
                 </ul>
             </li>
             
-            <li><div class="expandable"><strong>Actor</strong> &ndash; an entity that performs actions</div>
+            <li><div class="expandable"><strong>Player</strong> &ndash; an external entity that makes choices</div>
                 <ul>
-                    <li><div class="expandable"><strong>Decision-making process</strong> &ndash; how the actor makes decisions</div>
+                    <li><div class="expandable"><strong>Sentient</strong> &ndash; an entity that acts toward the goal(s) based on the information available to it</div>
                         <ul>
-                            <li><div class="expandable"><strong>Rational</strong> &ndash; an entity that chooses actions based on the information available to it</div>
-                                <ul>
-                                    <li><div class="expandable"><strong>Sentient</strong> &ndash; an entity that acts toward the goal(s) based on the information available to it</div>
-                                        <ul>
-                                            <li><strong>Human</strong> &ndash; A human player</li>
-                                            <li><strong>Computer</strong> &ndash; A computer/AI player of any level of intelligence</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Dumb</strong> &ndash; an entity that does not actively work towards any goal</li>
-                                </ul>
-                            </li>
-                            <li><strong>Irrational</strong> &ndash; an entity that performs a set, repeated pattern of actions</li>
-                            <li><strong>Random</strong> &ndash; a random-number generator</li>
+                            <li><strong>Human</strong> &ndash; A human player</li>
+                            <li><strong>Computer</strong> &ndash; A computer/AI player of any level of intelligence</li>
                         </ul>
                     </li>
+                    <li><strong>Random</strong> &ndash; a random-number generator</li>
                     
-                    <li><div class="expandable attr"><strong>Friendliness</strong> &ndash; the relation of one actor towards another insofar as pursuing the same goal</div>
+                    <li><div class="expandable attr"><strong>Friendliness</strong> &ndash; the relation of one player towards another insofar as pursuing the same goal</div>
                         <ul>
-                            <li><strong>Allied</strong> &ndash; helps the actor</li>
-                            <li><strong>Neutral</strong> &ndash; neither helps nor hurts the actor</li>
-                            <li><strong>Hostile</strong> &ndash; hurts the actor</li>
-                            <li><strong>Varied</strong> &ndash; sometimes helps or hurts the actor</li>
+                            <li><strong>Allied</strong> &ndash; the players pursue the goal together</li>
+                            <li><strong>Neutral</strong> &ndash; the players pursue the goal independently</li>
+                            <li><strong>Hostile</strong> &ndash; the players pursue the goal while working against each other</li>
+                            <li><strong>Varied</strong> &ndash; the players pursue the goal in different ways at different times</li>
                         </ul>
                     </li>
+                </ul>
+            </li>
+            
+            <li><div class="expandable"><strong>Object</strong> &ndash; an internal entity that is acted upon</div>
+                <ul>
+                    <li><strong>Mobile</strong> &ndash; capable of movement</li>
+                    <li><strong>Fixed</strong> &ndash; stationary</li>
                 </ul>
             </li>
             
@@ -122,7 +119,7 @@
             
             <li><div class="expandable"><strong>Transition</strong> &ndash; a rule determining how to get from one game state to another</div>
                 <ul>
-                    <li><div class="expandable"><strong>Movement</strong> &ndash; an actor goes from one game space coordinate to another</div>
+                    <li><div class="expandable"><strong>Movement</strong> &ndash; an object goes from one game space coordinate to another</div>
                         <ul>
                             <li><div class="expandable"><strong>Continuity</strong> &ndash; whether the path taken has gaps</div>
                                 <ul>
@@ -150,15 +147,15 @@
                 </ul>
             </li>
             
-            <li><strong>Interaction</strong> &ndash; a rule for how actors affect each other</li>
+            <li><strong>Interaction</strong> &ndash; a rule for how objects affect each other</li>
             
-            <li><strong>Knowledge</strong> &ndash; the information available to an actor</li>
+            <li><strong>Knowledge</strong> &ndash; the information available to a player</li>
             
-            <li><div class="expandable"><strong>Mystery</strong> &ndash; the information <em>not</em> available to an actor</div>
+            <li><div class="expandable"><strong>Mystery</strong> &ndash; the information <em>not</em> available to a player</div>
                 <ul>
-                    <li><strong>Future actions</strong> &ndash; the actions that actors will make</li>
+                    <li><strong>Future choices</strong> &ndash; the choices that players will make</li>
                     <li><strong>Undiscovered</strong> &ndash; knowable in theory, but takes time and/or effort to discover</li>
-                    <li><strong>Hidden</strong> &ndash; unknowable unless revealed by another actor</li>
+                    <li><strong>Hidden</strong> &ndash; unknowable unless revealed by another player</li>
                 </ul>
             </li>
             
