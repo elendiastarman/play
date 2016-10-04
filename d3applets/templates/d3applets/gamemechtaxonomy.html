@@ -28,7 +28,9 @@
 		<h1>Taxonomy of Game Mechanics</h1>
 		<p id="desc">An ongoing attempt to boil down game mechanics to their core fundamentals.</p>
 		
-		This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest. Independent attributes are <span class="attr">colored</span> to set them apart.
+		<p>This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest. Independent attributes are <span class="attr">colored</span> to set them apart.</p>
+        
+        <p id="toggleall" style="color:#00B" onclick="toggleall()"><strong>[Expand all]</strong></p>
         
         <ul id="root">
             <li>
@@ -185,8 +187,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 		<script>
             $(function(){
-                $('.expandable').siblings().filter('ul').hide();
-                $('#root').children().show();
+                $('.expandable').not('#root > .expandable').siblings().filter('ul').hide();
                 
                 $('.expandable').each(function(){
                     //console.log(this);
@@ -196,19 +197,40 @@
                 $('.expandable').on("click", function(){
                     //console.log("click!");
                     //console.log(this);
-                    $(this).siblings().filter('ul').toggle();
-                    
-                    var H = $(this).html();
-                    var c;
-                    if(H.includes('+')){
-                        c = "-";
-                    } else {
-                        c = "+";
-                    }
-                    
-                    $(this).html(H.replace(/[+-]/,c));
+                    toggleelement(this, "toggle");
                 });
             });
+            
+            function toggleelement(elem, kind){
+                var uls = $(elem).siblings().filter('ul');
+                if (kind === "toggle"){
+                    uls.toggle();
+                } else if (kind === "show"){
+                    uls.show();
+                } else {
+                    uls.hide();
+                }
+                
+                var H = $(elem).html();
+                var c;
+                if(H.includes('+')){
+                    c = "-";
+                } else {
+                    c = "+";
+                }
+                
+                $(elem).html(H.replace(/[+-]/,c));
+            }
+            
+            function toggleall(){
+                if($('#toggleall').text().includes("Expand")){
+                    $('.expandable').each(function(){toggleelement(this,"show");});
+                    $('#toggleall').html('<strong>[Collapse all]</strong>');
+                } else {
+                    $('.expandable').not('#root > .expandable').each(function(){toggleelement(this,"hide");});
+                    $('#toggleall').html('<strong>[Expand all]</strong>');
+                }
+            }
         </script>
 	</body>
 </html>
