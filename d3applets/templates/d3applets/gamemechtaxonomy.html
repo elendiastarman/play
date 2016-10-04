@@ -17,6 +17,9 @@
                 cursor: pointer;
                 color: #00B;
             }
+            .attr {
+                color: #800;
+            }
 		</style>
 	</head>
 	
@@ -25,20 +28,13 @@
 		<h1>Taxonomy of Game Mechanics</h1>
 		<p id="desc">An ongoing attempt to boil down game mechanics to their core fundamentals.</p>
 		
-		This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest.
+		This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest. Independent attributes are <span class="attr">colored</span> to set them apart.
         
         <ul id="root">
             <li>
-                <div class="expandable"><strong>Space</strong> &ndash; a collection of game states <em>Note: many of these attributes are independent, so they can be mixed and matched at will. Exceptions are noted in [brackets].</em></div>
+                <div class="expandable"><strong>Space</strong> &ndash; a collection of game states <em>Note: exceptions to the independence of attributes are noted in [brackets].</em></div>
             
                 <ul>
-                    <li><div class="expandable"><strong>Granularity</strong> &ndash; the level of detail present in the coordinate system</div>
-                        <ul>
-                            <li><strong>Discrete</strong> &ndash; there is a clear discontinuity between two coordinates as close together as possible</li>
-                            <li><strong>Continuous</strong> &ndash; for every point P, there is at least one other point in an arbitrarily small neighborhood centered on P</li>
-                        </ul>
-                    </li>
-                    
                     <li><div class="expandable"><strong>Layout</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
                         <ul>
                             <li><div class="expandable"><strong>Grid-based</strong> &ndash; coordinates are located relative to each other in a regular, repeated pattern</div>
@@ -54,7 +50,14 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable"><strong>Connectedness</strong> &ndash; the global nature</div>
+                    <li><div class="expandable attr"><strong>Granularity</strong> &ndash; the level of detail present in the coordinate system</div>
+                        <ul>
+                            <li><strong>Discrete</strong> &ndash; there is a clear discontinuity between two coordinates as close together as possible</li>
+                            <li><strong>Continuous</strong> &ndash; for every point P, there is at least one other point in an arbitrarily small neighborhood centered on P</li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature</div>
                         <ul>
                             <li><strong>Without holes [grid-based]</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
                             <li><strong>With holes [grid-based]</strong> &ndash; At least one point that is in the space and within the boundary (if it exists) is not playable</li>
@@ -62,7 +65,7 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the playable portion of the space</div>
+                    <li><div class="expandable attr"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the playable portion of the space</div>
                         <ul>
                             <li><strong>Bounded</strong> &ndash; the playable area is finite</li>
                             <li><strong>Partially bounded</strong> &ndash; the playable area is infinite in one or more directions</li>
@@ -71,7 +74,7 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable"><strong>Curvature [grid-based]</strong> &ndash; referring to Gaussian curvature</div>
+                    <li><div class="expandable attr"><strong>Curvature [grid-based]</strong> &ndash; referring to Gaussian curvature</div>
                         <ul>
                             <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
                             <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
@@ -82,7 +85,7 @@
                 </ul>
             </li>
             
-            <li><div class="expandable"><strong>Actor</strong> &ndash; an entity that performs actions <em>Note: decision-making process and friendliness are independent of each other.</em></div>
+            <li><div class="expandable"><strong>Actor</strong> &ndash; an entity that performs actions</div>
                 <ul>
                     <li><div class="expandable"><strong>Decision-making process</strong> &ndash; how the actor makes decisions</div>
                         <ul>
@@ -102,7 +105,7 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable"><strong>Friendliness</strong> &ndash; the relation of one actor towards another insofar as pursuing the same goal</div>
+                    <li><div class="expandable attr"><strong>Friendliness</strong> &ndash; the relation of one actor towards another insofar as pursuing the same goal</div>
                         <ul>
                             <li><strong>Allied</strong> &ndash; helps the actor</li>
                             <li><strong>Neutral</strong> &ndash; neither helps nor hurts the actor</li>
@@ -115,7 +118,35 @@
             
             <li><strong>Action</strong> &ndash; causes one or more transitions between game states</li>
             
-            <li><strong>Transition</strong> &ndash; a rule determining how to get from one game state to another</li>
+            <li><div class="expandable"><strong>Transition</strong> &ndash; a rule determining how to get from one game state to another</div>
+                <ul>
+                    <li><div class="expandable"><strong>Movement</strong> &ndash; an actor goes from one game space coordinate to another</div>
+                        <ul>
+                            <li><div class="expandable"><strong>Continuity</strong> &ndash; whether the path taken has gaps</div>
+                                <ul>
+                                    <li><strong>Connected</strong> &ndash; each coordinate visited is "adjacent" to the previous and next ones</li>
+                                    <li><strong>Disconnected</strong> &ndash; there are "jumps" between non-adjacent coordinates</li>
+                                </ul>
+                            </li>
+                            
+                            <li><div class="expandable attr"><strong>Range</strong> &ndash; how far apart the initial and ending coordinates can be</div>
+                                <ul>
+                                    <li><strong>Bounded</strong> &ndash; distance of travel in any direction is finite</li>
+                                    <li><strong>Semi-bounded</strong> &ndash; distance of travel in at least one direction, but not all, is infinite</li>
+                                    <li><strong>Unbounded</strong> &ndash; distance of travel in all directions is infinite</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable attr"><strong>Speed</strong> &ndash; how quickly the transition happens</div>
+                        <ul>
+                            <li><strong>Instantaneous</strong> &ndash; happens immediately</li>
+                            <li><strong>Stepped</strong> &ndash; happens in increments</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
             
             <li><strong>Interaction</strong> &ndash; a rule for how actors affect each other</li>
             
@@ -131,7 +162,23 @@
             
             <li><strong>Discovery</strong> &ndash; a rule determining how information moves from mystery to knowledge (or vice versa)</li>
             
-            <li><strong>Goal</strong> &ndash; the aim of the game</li>
+            <li><div class="expandable"><strong>Goal</strong> &ndash; the aim of the game</div>
+                <ul>
+                    <li><div class="expandable"><strong>Winning Method</strong> &ndash; how to determine the winner</div>
+                        <ul>
+                            <li><strong>First to finish</strong> &ndash; the winner achieves fulfills the win conditions first</li>
+                            <li><strong>Survivor</strong> &ndash; everyone else loses first</li>
+                            <li><div class="expandable"><strong>Situational</strong> &ndash; the winner is determined by the current/final game state</div>
+                                <ul>
+                                    <li><strong>Endless</strong> &ndash; the game never ends and the winner may change at any time</li>
+                                    <li><strong>Time limit</strong> &ndash; the game ends after a certain amount of time</li>
+                                    <li><strong>Resource exhaustion</strong> &ndash; the game ends when it cannot be played any further</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
         </ul>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
