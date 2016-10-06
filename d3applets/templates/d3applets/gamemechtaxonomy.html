@@ -34,12 +34,12 @@
         
         <ul id="root">
             <li>
-                <div class="expandable"><strong>Space</strong> &ndash; a collection of game states <em>Note: exceptions to the independence of attributes are noted in [brackets].</em></div>
+                <div class="expandable"><strong>Space</strong> &ndash; where objects may be placed without regard to what's actually playable <em>Note: exceptions to the independence of attributes are noted in [brackets].</em></div>
             
                 <ul>
                     <li><div class="expandable"><strong>Layout</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
                         <ul>
-                            <li><div class="expandable"><strong>Grid-based</strong> &ndash; coordinates are located relative to each other in a regular, repeated pattern</div>
+                            <li><div class="expandable"><strong>Grid-based</strong> &ndash; coordinates are located relative to each other in a regular, repeated pattern, in any number of dimensions</div>
                                 <ul>
                                     <li><strong>Linear</strong> &ndash; equivalent to the number line</li>
                                     <li><strong>Rectangular/cubical</strong> &ndash; two or more orthogonal axes, set at 90 degrees relative to each other</li>
@@ -59,6 +59,21 @@
                         </ul>
                     </li>
                     
+                    <li><div class="expandable attr"><strong>Curvature [grid-based]</strong> &ndash; referring to <a href="https://en.wikipedia.org/wiki/Gaussian_curvature" target="_blank">Gaussian curvature</a></div>
+                        <ul>
+                            <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
+                            <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
+                            <li><strong>Hyperbolic</strong> &ndash; negative curvature like a saddle; hard to visualize, very rare</li>
+                            <li><strong>Other</strong> &ndash; some combination of the above, like a torus, which has both positive and negative curvature</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            
+            <li>
+                <div class="expandable"><strong>Locations</strong> &ndash; the subset of the space that is reachable or achievable during the game</div>
+                
+                <ul>
                     <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature</div>
                         <ul>
                             <li><strong>Without holes [grid-based]</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
@@ -75,15 +90,6 @@
                             <li><strong>Unbounded</strong> &ndash; the playable area is infinite in all directions</li>
                         </ul>
                     </li>
-                    
-                    <li><div class="expandable attr"><strong>Curvature [grid-based]</strong> &ndash; referring to Gaussian curvature</div>
-                        <ul>
-                            <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
-                            <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
-                            <li><strong>Hyperbolic</strong> &ndash; negative curvature like a saddle; hard to visualize, very rare</li>
-                            <li><strong>Other</strong> &ndash; some combination of the above, like a torus, which has both positive and negative curvature</li>
-                        </ul>
-                    </li>
                 </ul>
             </li>
             
@@ -95,7 +101,12 @@
                             <li><strong>Computer</strong> &ndash; A computer/AI player of any level of intelligence</li>
                         </ul>
                     </li>
-                    <li><strong>Random</strong> &ndash; a random-number generator</li>
+                    <li><div class="expandable"><strong>Non-sentient</strong> &ndash; an entity that does not use the information available to it</div>
+                        <ul>
+                            <li><strong>Dumb</strong> &ndash; makes the same choice or pattern of choices repeatedly</li>
+                            <li><strong>Random</strong> &ndash; makes random choices</li>
+                        </ul>
+                    </li>
                     
                     <li><div class="expandable attr"><strong>Friendliness</strong> &ndash; the relation of one player towards another insofar as pursuing the same goal</div>
                         <ul>
@@ -115,7 +126,13 @@
                 </ul>
             </li>
             
-            <li><strong>Action</strong> &ndash; causes one or more transitions between game states</li>
+            <li><div class="expandable"><strong>Action</strong> &ndash; causes one or more transitions between game states</div>
+                <ul>
+                    <li><div class="attr"><strong>Delay</strong> &ndash; the amount of time before the action takes effect</div></li>
+                    <li><div class="attr"><strong>Duration</strong> &ndash; the amount of time the action persists</div></li>
+                    <li><div class="attr"><strong>Cooldown</strong> &ndash; the amount of time before the action can be taken</div></li>
+                </ul>
+            </li>
             
             <li><div class="expandable"><strong>Transition</strong> &ndash; a rule determining how to get from one game state to another</div>
                 <ul>
@@ -137,13 +154,6 @@
                             </li>
                         </ul>
                     </li>
-                    
-                    <li><div class="expandable attr"><strong>Speed</strong> &ndash; how quickly the transition happens</div>
-                        <ul>
-                            <li><strong>Instantaneous</strong> &ndash; happens immediately</li>
-                            <li><strong>Stepped</strong> &ndash; happens in increments</li>
-                        </ul>
-                    </li>
                 </ul>
             </li>
             
@@ -161,21 +171,25 @@
             
             <li><strong>Discovery</strong> &ndash; a rule determining how information moves from mystery to knowledge (or vice versa)</li>
             
-            <li><div class="expandable"><strong>Goal</strong> &ndash; the aim of the game</div>
+            <li><div class="expandable"><strong>Goal</strong> &ndash; the aim of the game <em>Note: winning and ending spaces are independent, and reaching an ending space that is not a winning space means losing.</em></div>
                 <ul>
-                    <li><div class="expandable"><strong>Winning Method</strong> &ndash; how to determine the winner</div>
+                    <li><div class="expandable"><strong>Ending space</strong> &ndash; what ends the game, preventing further play</div>
                         <ul>
-                            <li><strong>First to finish</strong> &ndash; the winner achieves fulfills the win conditions first</li>
-                            <li><strong>Survivor</strong> &ndash; everyone else loses first</li>
-                            <li><div class="expandable"><strong>Situational</strong> &ndash; the winner is determined by the current/final game state</div>
-                                <ul>
-                                    <li><strong>Endless</strong> &ndash; the game never ends and the winner may change at any time</li>
-                                    <li><strong>Time limit</strong> &ndash; the game ends after a certain amount of time</li>
-                                    <li><strong>Resource exhaustion</strong> &ndash; the game ends when it cannot be played any further</li>
-                                </ul>
-                            </li>
+                            <li><strong>Endless</strong> &ndash; the game never ends</li>
+                            <li><strong>Time limit</strong> &ndash; the game ends after a certain amount of time</li>
+                            <li><strong>Resource exhaustion</strong> &ndash; the game ends when no more actions can be taken</li>
                         </ul>
                     </li>
+                    
+                    <li><div class="expandable"><strong>Winning space</strong> &ndash; how a player wins the game</div>
+                        <ul>
+                            <li><strong>Survivor</strong> &ndash; the winner is the last player still playing</li>
+                            <li><strong>First to finish</strong> &ndash; the winner is the first to reach the ending space</li>
+                            <li><strong>Best score</strong> &ndash; the winner has the highest/lowest/best score</li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="attr"><strong>Subject</strong> &ndash; whether the ending/winning space applies to the player or the game</div></li>
                 </ul>
             </li>
         </ul>
