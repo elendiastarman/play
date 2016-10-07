@@ -34,7 +34,7 @@
         
         <ul id="root">
             <li>
-                <div class="expandable"><strong>Space</strong> &ndash; where objects may be placed without regard to what's actually playable <em>Note: exceptions to the independence of attributes are noted in [brackets].</em></div>
+                <div class="expandable"><strong>Space</strong> &ndash; the set of all possible locations for objects <em>Note: exceptions to the independence of attributes are noted in [brackets]. Also, a game may have multiple component spaces with varying degrees of independence.</em></div>
             
                 <ul>
                     <li><div class="expandable"><strong>Layout</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
@@ -71,10 +71,10 @@
             </li>
             
             <li>
-                <div class="expandable"><strong>Locations</strong> &ndash; the subset of the space that is reachable or achievable during the game</div>
+                <div class="expandable"><strong>Map</strong> &ndash; the subset of the space that is reachable or achievable during the game</div>
                 
                 <ul>
-                    <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature</div>
+                    <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature of the map</div>
                         <ul>
                             <li><strong>Without holes [grid-based]</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
                             <li><strong>With holes [grid-based]</strong> &ndash; At least one point that is in the space and within the boundary (if it exists) is not playable</li>
@@ -82,7 +82,7 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable attr"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the playable portion of the space</div>
+                    <li><div class="expandable attr"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the map's extent</div>
                         <ul>
                             <li><strong>Bounded</strong> &ndash; the playable area is finite</li>
                             <li><strong>Partially bounded</strong> &ndash; the playable area is infinite in one or more directions</li>
@@ -171,7 +171,7 @@
             
             <li><strong>Discovery</strong> &ndash; a rule determining how information moves from mystery to knowledge (or vice versa)</li>
             
-            <li><div class="expandable"><strong>Goal</strong> &ndash; the aim of the game <em>Note: winning and ending spaces are independent, and reaching an ending space that is not a winning space means losing.</em></div>
+            <li><div class="expandable"><strong>Goal</strong> &ndash; the aim of the game <em>Note: winning and losing spaces are independent of ending spaces.</em></div>
                 <ul>
                     <li><div class="expandable"><strong>Ending space</strong> &ndash; what ends the game, preventing further play</div>
                         <ul>
@@ -188,6 +188,8 @@
                             <li><strong>Best score</strong> &ndash; the winner has the highest/lowest/best score</li>
                         </ul>
                     </li>
+                    
+                    <li><strong>Losing space</strong> &ndash; how a player loses the game</li>
                     
                     <li><div class="attr"><strong>Subject</strong> &ndash; whether the ending/winning space applies to the player or the game</div></li>
                 </ul>
