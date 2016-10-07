@@ -30,14 +30,16 @@
 		
 		<p>This taxonomy is patterned after the taxonomic ranks used in biology: domain, kingdom, phylum, class, family, genus, species, in order from largest and most inclusive to smallest and narrowest. Independent attributes are <span class="attr">colored</span> to set them apart.</p>
         
+        <h2>Taxonomy</h2>
+        
         <p id="toggleall" style="color:#00B; cursor:pointer;" onclick="toggleall()"><strong>[Expand all]</strong></p>
         
         <ul id="root">
             <li>
-                <div class="expandable"><strong>Space</strong> &ndash; the set of all possible locations for objects <em>Note: exceptions to the independence of attributes are noted in [brackets]. Also, a game may have multiple component spaces with varying degrees of independence.</em></div>
+                <div class="expandable"><strong>Space</strong> &ndash; the set of all playable locations for objects <em>Note: exceptions to the independence of attributes are noted in [brackets]. Also, a game may have multiple component spaces with varying degrees of independence.</em></div>
             
                 <ul>
-                    <li><div class="expandable"><strong>Layout</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
+                    <li><div class="expandable"><strong>Structure</strong> &ndash; how the coordinates of the space relate to one another</strong></div>
                         <ul>
                             <li><div class="expandable"><strong>Grid-based</strong> &ndash; coordinates are located relative to each other in a regular, repeated pattern, in any number of dimensions</div>
                                 <ul>
@@ -59,22 +61,7 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable attr"><strong>Curvature [grid-based]</strong> &ndash; referring to <a href="https://en.wikipedia.org/wiki/Gaussian_curvature" target="_blank">Gaussian curvature</a></div>
-                        <ul>
-                            <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
-                            <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
-                            <li><strong>Hyperbolic</strong> &ndash; negative curvature like a saddle; hard to visualize, very rare</li>
-                            <li><strong>Other</strong> &ndash; some combination of the above, like a torus, which has both positive and negative curvature</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            
-            <li>
-                <div class="expandable"><strong>Map</strong> &ndash; the subset of the space that is reachable or achievable during the game</div>
-                
-                <ul>
-                    <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature of the map</div>
+                    <li><div class="expandable attr"><strong>Connectedness</strong> &ndash; the global nature of the space</div>
                         <ul>
                             <li><strong>Without holes [grid-based]</strong> &ndash; All points that are in the space and within the boundary (if it exists) are playable</li>
                             <li><strong>With holes [grid-based]</strong> &ndash; At least one point that is in the space and within the boundary (if it exists) is not playable</li>
@@ -82,12 +69,21 @@
                         </ul>
                     </li>
                     
-                    <li><div class="expandable attr"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the map's extent</div>
+                    <li><div class="expandable attr"><strong>Bounds</strong> &ndash; the limitations (or lack thereof) on the space's extent</div>
                         <ul>
                             <li><strong>Bounded</strong> &ndash; the playable area is finite</li>
                             <li><strong>Partially bounded</strong> &ndash; the playable area is infinite in one or more directions</li>
                             <li><strong>Toroidal</strong> &ndash; areas adjacent to the boundary are joined to non-adjacent areas</li>
                             <li><strong>Unbounded</strong> &ndash; the playable area is infinite in all directions</li>
+                        </ul>
+                    </li>
+                    
+                    <li><div class="expandable attr"><strong>Curvature [grid-based]</strong> &ndash; referring to <a href="https://en.wikipedia.org/wiki/Gaussian_curvature" target="_blank">Gaussian curvature</a></div>
+                        <ul>
+                            <li><strong>Euclidean</strong> &ndash; zero curvature, flat like a sheet of paper; the most common type</li>
+                            <li><strong>Elliptical</strong> &ndash; positive curvature, round like a ball</li>
+                            <li><strong>Hyperbolic</strong> &ndash; negative curvature like a saddle; hard to visualize, very rare</li>
+                            <li><strong>Other</strong> &ndash; some combination of the above, like a torus, which has both positive and negative curvature</li>
                         </ul>
                     </li>
                 </ul>
@@ -189,11 +185,30 @@
                         </ul>
                     </li>
                     
-                    <li><strong>Losing space</strong> &ndash; how a player loses the game</li>
+                    <li><div class="expandable"><strong>Losing space</strong> &ndash; how a player loses the game</div>
+                        <ul>
+                            <li><strong>Knock out</strong> &ndash; the loser gets eliminated in some manner</li>
+                        </ul>
+                    </li>
                     
                     <li><div class="attr"><strong>Subject</strong> &ndash; whether the ending/winning space applies to the player or the game</div></li>
                 </ul>
             </li>
+        </ul>
+        
+        <br/>
+        
+        <h2>Additional Terminology</h2>
+        
+        <ul>
+            <li><div class="expandable"><strong>Similarity</strong> &ndash; how similar two games are to each other</div>
+                <ul>
+                    <li><strong>Identical</strong> &ndash; the game state graphs, all of the game rules, and implementation details are exactly the same</li>
+                    <li><strong>Same</strong> &ndash; the game state graphs and all of the game rules are exactly the same</li>
+                    <li><strong>Equivalent</strong> &ndash; the game state graphs are exactly the same</li>
+                </ul>
+            </li>
+            <li><strong>Universe</strong> &ndash; the collection of all possible game states</li>
         </ul>
 	
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
