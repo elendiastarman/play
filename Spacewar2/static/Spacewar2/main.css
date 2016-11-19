@@ -1,0 +1,59 @@
+html {
+	font-family: "Gadugi", "Constantia", "Arial", sans-serif;
+}
+
+body {
+	margin: 10px;
+	margin-top: -10px;
+	padding: 0px;
+}
+
+table {
+	text-align: center;
+	border-collapse: collapse;
+}
+td {
+	margin: 5px;
+}
+
+.redAction {
+	background-color: red;
+	color: white;
+}
+.blueAction {
+	background-color: blue;
+	color: white;
+}
+
+#userbot > pre {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.codeinput {
+	margin: 0px;
+	margin-left: 28px;
+	margin-top: 8px;
+	padding: 0px;
+}
+
+#playfield {
+	outline: none;
+}
+
+.redHighlight {
+	fill: "red";
+}
+.blueHighlight {
+	fill: "blue";
+}
+.yellowHighlight {
+	fill: "yellow";
+}
+.picked {
+	fill: "white";
+}
+
+#selectGrid, #action-table {
+	float: left;
+}
+br { clear: both; }
