@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    
+    {% load staticfiles %}
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/dotandcross.css' %}" /> -->
+    <style>
+      path: {fill: none;}
+    </style>
+  </head>
+  
+  <body style="margin-left: 20px">
+    
+    <h1>Hyperbolic Geometry</h1>
+    <p id="desc">Simulates triheptagonal (hyperbolic) tessellation.</p>
+    
+    <svg id="main" tabindex="1">
+      <rect stroke="black" id="background"/>
+      <g id="field">
+        <circle cx="0" cy="0" r="5" style="fill:red"/>
+        <g id="vertices"></g>
+        <g id="edges"></g>
+      </g>
+    </svg>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="{% static 'd3applets/hyperbolicgeometry.js' %}"></script>
+    
+  </body>
+</html>
