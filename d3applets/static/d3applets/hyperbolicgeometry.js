@@ -6,24 +6,29 @@ var gw = 600;
 var gh = 600;
 var bgcolor = '#FFFFFF';
 var fgcolor = '#000000';
+var wrongButAwesome = false;
 
-var svg = d3.select('svg');
-svg.attr('width', gw).attr('height', gh);
+var canvas = $('#main');
+canvas.attr('width', gw).attr('height', gh);
 
-svg.select('#background')
-  .attr('width', gw)
-  .attr('height', gh)
-  .style('fill', bgcolor);
+var ctx = canvas[0].getContext("2d");
+ctx.translate(gw/2, gh/2);
+ctx.strokeRect(10,10, 50,50);
 
-svg.select('#field')
-  .attr('transform', 'translate('+gw/2+', '+gh/2+')');
+// svg.select('#background')
+//   .attr('width', gw)
+//   .attr('height', gh)
+//   .style('fill', bgcolor);
 
-svg.select('#bgcircle1')
-  .attr('r', R)
-  .style('fill', fgcolor);
-svg.select('#bgcircle2')
-  .attr('r', innerR)
-  .style('fill', bgcolor);
+// svg.select('#field')
+//   .attr('transform', 'translate('+gw/2+', '+gh/2+')');
+
+// svg.select('#bgcircle1')
+//   .attr('r', R)
+//   .style('fill', fgcolor);
+// svg.select('#bgcircle2')
+//   .attr('r', innerR)
+//   .style('fill', bgcolor);
 
 var vertices = [];
 var boundaries = [];
@@ -47,8 +52,8 @@ var renderLoop;
 $(document).ready(function () {
   init(N, K);
   setRenderLoopInterval();
-  draw();
-  draw();
+  // draw();
+  // draw();
   $('#main').focus();
   $('#main').bind("keydown", handleInput);
   $('#main').bind("keyup", handleInput);
@@ -400,6 +405,8 @@ function move() {
 }
 
 function draw() {
+  ctx.clearRect(-gw/2, -gh/2, gw, gh);
+
   // vertices
   var points = [];
 
@@ -419,13 +426,18 @@ function draw() {
     }
   });
 
-  var verts = svg.select('#vertices').selectAll('circle').data(points);
-  verts.enter().append('circle')
-    .attr('r', 2)
-    .style('fill', fgcolor);
-  verts.exit().remove();
-  verts.attr('cx', function(v){ return R * v.tu; })
-    .attr('cy', function(v){ return R * v.tv; });
+  // var verts = svg.select('#vertices').selectAll('circle').data(points);
+  // verts.enter().append('circle')
+  //   .attr('r', 2)
+  //   .style('fill', fgcolor);
+  // verts.exit().remove();
+  // verts.attr('cx', function(v){ return R * v.tu; })
+  //   .attr('cy', function(v){ return R * v.tv; });
+  points.forEach(function(p) {
+    ctx.beginPath();
+    ctx.arc(R*p.tu, R*p.tv, 3, 0, 2*Math.PI);
+    ctx.fill();
+  });
 
   // edges
   var edges = [];
@@ -444,9 +456,13 @@ function draw() {
       var denom = u1*v2 - u2*v1;
 
       if (Math.abs(denom) < 0.001) {
-        var line = "M "+R*u1+" "+R*v1;
-        line += "L "+R*u2+" "+R*v2;
-        edges.push(line);
+        // var line = "M "+R*u1+" "+R*v1;
+        // line += "L "+R*u2+" "+R*v2;
+        // edges.push(line);
+        ctx.beginPath();
+        ctx.moveTo(R*u1, R*v1);
+        ctx.lineTo(R*u2, R*v2);
+        ctx.stroke();
       } else {
         var f = (1 + u1*u1 + v1*v1)/2,
             g = (1 + u2*u2 + v2*v2)/2,
@@ -470,20 +486,38 @@ function draw() {
           v2 = tempv;
         }
 
-        var arc = "M "+R*u1+" "+R*v1;
-        arc += " A "+R*rad+" "+R*rad+" 0, 0, 0, ";
-        arc += R*u2+" "+R*v2;
-        edges.push(arc);
+        var ang1 = Math.atan2(v1-k, u1-h);
+        var ang2 = Math.atan2(v2-k, u2-h);
+        // edges.push([R*h, R*k, R*rad, ang1, ang2])
+        if (wrongButAwesome) {
+          ctx.beginPath();
+          ctx.arc(R*h, R*k, R*rad, ang1, ang1+2*Math.PI);
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.arc(R*h, R*k, R*rad, ang2, ang1);
+          ctx.stroke();
+        }
+
+        // var arc = "M "+R*u1+" "+R*v1;
+        // arc += " A "+R*rad+" "+R*rad+" 0, 0, 0, ";
+        // arc += R*u2+" "+R*v2;
+        // edges.push(arc);
       }
     });
   });
 
-  var lines = svg.select('#edges').selectAll('path').data(edges);
-  lines.enter().append('path')
-    .style('stroke', fgcolor)
-    .style('fill', "none");
-  lines.exit().remove();
-  lines.attr('d', function(d){ return d; });
+  // edges.forEach(function(e) {
+  //   ctx.beginPath()
+  //   ctx.arc(e)
+  // });
+
+  // var lines = svg.select('#edges').selectAll('path').data(edges);
+  // lines.enter().append('path')
+  //   .style('stroke', fgcolor)
+  //   .style('fill', "none");
+  // lines.exit().remove();
+  // lines.attr('d', function(d){ return d; });
 }
 
 var keyd = false;
