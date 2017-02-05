@@ -13,22 +13,6 @@ canvas.attr('width', gw).attr('height', gh);
 
 var ctx = canvas[0].getContext("2d");
 ctx.translate(gw/2, gh/2);
-ctx.strokeRect(10,10, 50,50);
-
-// svg.select('#background')
-//   .attr('width', gw)
-//   .attr('height', gh)
-//   .style('fill', bgcolor);
-
-// svg.select('#field')
-//   .attr('transform', 'translate('+gw/2+', '+gh/2+')');
-
-// svg.select('#bgcircle1')
-//   .attr('r', R)
-//   .style('fill', fgcolor);
-// svg.select('#bgcircle2')
-//   .attr('r', innerR)
-//   .style('fill', bgcolor);
 
 var vertices = [];
 var boundaries = [];
@@ -52,7 +36,7 @@ var renderLoop;
 $(document).ready(function () {
   init(N, K);
   setRenderLoopInterval();
-  // draw();
+  draw();
   // draw();
   $('#main').focus();
   $('#main').bind("keydown", handleInput);
@@ -328,13 +312,10 @@ function move() {
   var tx = scroll_speed * ((keystates[65] || keystates[37] || 0) - (keystates[68] || keystates[39] || 0)); // right - left
   var ty = scroll_speed * ((keystates[83] || keystates[40] || 0) - (keystates[87] || keystates[38] || 0)) * mult; // down - up
 
-  if (keystates[81]) {
-    cam.orient = (cam.orient + cam.turnRate*mult + 2*Math.PI) % (2*Math.PI);
-    cam.vorient = (cam.vorient + cam.turnRate + 2*Math.PI) % (2*Math.PI);
-    active = 1;
-  } else if (keystates[69]) {
-    cam.orient = (cam.orient - cam.turnRate*mult + 2*Math.PI) % (2*Math.PI);
-    cam.vorient = (cam.vorient - cam.turnRate + 2*Math.PI) % (2*Math.PI);
+  var direc = (keystates[81] || 0) - (keystates[69] || 0);
+  if (direc) {
+    cam.orient = (cam.orient + direc*cam.turnRate*mult + 2*Math.PI) % (2*Math.PI);
+    cam.vorient = (cam.vorient + direc*cam.turnRate + 2*Math.PI) % (2*Math.PI);
     active = 1;
   }
 
@@ -406,6 +387,15 @@ function move() {
 
 function draw() {
   ctx.clearRect(-gw/2, -gh/2, gw, gh);
+  ctx.fillStyle = fgcolor;
+  ctx.beginPath();
+  ctx.arc(0, 0, R, 0, 2*Math.PI);
+  ctx.fill();
+  ctx.fillStyle = bgcolor;
+  ctx.beginPath();
+  ctx.arc(0, 0, innerR, 0, 2*Math.PI);
+  ctx.fill();
+  ctx.fillStyle = fgcolor;
 
   // vertices
   var points = [];
@@ -426,13 +416,6 @@ function draw() {
     }
   });
 
-  // var verts = svg.select('#vertices').selectAll('circle').data(points);
-  // verts.enter().append('circle')
-  //   .attr('r', 2)
-  //   .style('fill', fgcolor);
-  // verts.exit().remove();
-  // verts.attr('cx', function(v){ return R * v.tu; })
-  //   .attr('cy', function(v){ return R * v.tv; });
   points.forEach(function(p) {
     ctx.beginPath();
     ctx.arc(R*p.tu, R*p.tv, 3, 0, 2*Math.PI);
@@ -456,9 +439,6 @@ function draw() {
       var denom = u1*v2 - u2*v1;
 
       if (Math.abs(denom) < 0.001) {
-        // var line = "M "+R*u1+" "+R*v1;
-        // line += "L "+R*u2+" "+R*v2;
-        // edges.push(line);
         ctx.beginPath();
         ctx.moveTo(R*u1, R*v1);
         ctx.lineTo(R*u2, R*v2);
@@ -488,7 +468,7 @@ function draw() {
 
         var ang1 = Math.atan2(v1-k, u1-h);
         var ang2 = Math.atan2(v2-k, u2-h);
-        // edges.push([R*h, R*k, R*rad, ang1, ang2])
+
         if (wrongButAwesome) {
           ctx.beginPath();
           ctx.arc(R*h, R*k, R*rad, ang1, ang1+2*Math.PI);
@@ -498,26 +478,9 @@ function draw() {
           ctx.arc(R*h, R*k, R*rad, ang2, ang1);
           ctx.stroke();
         }
-
-        // var arc = "M "+R*u1+" "+R*v1;
-        // arc += " A "+R*rad+" "+R*rad+" 0, 0, 0, ";
-        // arc += R*u2+" "+R*v2;
-        // edges.push(arc);
       }
     });
   });
-
-  // edges.forEach(function(e) {
-  //   ctx.beginPath()
-  //   ctx.arc(e)
-  // });
-
-  // var lines = svg.select('#edges').selectAll('path').data(edges);
-  // lines.enter().append('path')
-  //   .style('stroke', fgcolor)
-  //   .style('fill', "none");
-  // lines.exit().remove();
-  // lines.attr('d', function(d){ return d; });
 }
 
 var keyd = false;
