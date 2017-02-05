@@ -1,6 +1,7 @@
 "use strict";
 
 var R = 250;
+var innerR = R-5;
 var gw = 600;
 var gh = 600;
 var bgcolor = '#FFFFFF';
@@ -8,15 +9,23 @@ var fgcolor = '#000000';
 
 var svg = d3.select('svg');
 svg.attr('width', gw).attr('height', gh);
+
 svg.select('#background')
   .attr('width', gw)
   .attr('height', gh)
   .style('fill', bgcolor);
+
 svg.select('#field')
   .attr('transform', 'translate('+gw/2+', '+gh/2+')');
 
+svg.select('#bgcircle1')
+  .attr('r', R)
+  .style('fill', fgcolor);
+svg.select('#bgcircle2')
+  .attr('r', innerR)
+  .style('fill', bgcolor);
+
 var vertices = [];
-var edges = [];
 var boundaries = [];
 var cam = {
   'id': 1,
@@ -72,8 +81,8 @@ function create_point(x, y, links=[], r=255,g=255,b=255, show=0, to_delete=0) {
   var tcoords = transform(x,y);
   new_vertex.u = tcoords[0];
   new_vertex.v = tcoords[1];
-  if (vertices.len) {
-    new_vertex.id = vertices[vertices.len - 1].id + 1;
+  if (vertices.length) {
+    new_vertex.id = vertices[vertices.length - 1].id + 1;
   } else {
     new_vertex.id = 1;
   }
@@ -227,8 +236,8 @@ function init(n, k) {
   var dis = Math.sqrt(Math.pow(numer/denom, 2) - 1);
   var rad = dis*( Math.sqrt(1+dis*dis)*(1 - Math.cos(phi))*Math.cos(theta/2) + Math.sin(phi)*Math.sin(theta/2) );
 
-  var distance_limit = Math.pow(50, 2);
-  var limit = 100;
+  var distance_limit = Math.pow(100, 2);
+  var limit = 100000;
   var tolerance = 0.1;
 
   var queue = [];
@@ -250,10 +259,6 @@ function init(n, k) {
     i += 1;
 
     center = queue[i];
-    // if (!center) {
-    //   break;
-    // }
-
     var angoff = ao[i];
 
     for (var j=1; j<n; j++) {
@@ -264,11 +269,18 @@ function init(n, k) {
       var nXY = translate(x2,y2, -center.x, -center.y);
 
       var coincide = 0;
-      for (var k=0; k<q; k++) {
+      for (var k=0; k<i; k++) {
         var p2 = queue[k];
 
         if (Math.abs(p2.x - nXY[1]) < tolerance && Math.abs(p2.y - nXY[2]) < tolerance) {
-          center.links.push(p2);
+          var linked = 0
+          p2.links.forEach(function(v) {
+            if (v.id == center.id) { linked = 1; }
+          });
+
+          if (!linked) {
+            center.links.push(p2);
+          }
           coincide = 1;
           break;
         }
@@ -302,7 +314,6 @@ function init(n, k) {
 }
 
 function move() {
-  // console.log('move');
   var active = 0;
 
   var scroll_speed = 0.10;
@@ -389,9 +400,9 @@ function move() {
 }
 
 function draw() {
-  // console.log('draw');
-
   // vertices
+  var points = [];
+
   vertices.forEach(function(v) {
     var tXY = translate(v.x, v.y, cam.x, cam.y);
     var mult = 1 - 2*cam.yparity;
@@ -402,20 +413,29 @@ function draw() {
 
     v.tu = tu*Math.cos(cam.orient * mult) - tv*Math.sin(cam.orient * mult);
     v.tv = tu*Math.sin(cam.orient * mult) + tv*Math.cos(cam.orient * mult);
+
+    if (R*Math.sqrt(tu*tu + tv*tv) < innerR) {
+      points.push(v);
+    }
   });
 
-  var verts = svg.select('#vertices').selectAll('circle').data(vertices);
+  var verts = svg.select('#vertices').selectAll('circle').data(points);
   verts.enter().append('circle')
-    .attr('r', function(){ return 3; })
-    .style('fill', function(){ return fgcolor; });
+    .attr('r', 2)
+    .style('fill', fgcolor);
+  verts.exit().remove();
   verts.attr('cx', function(v){ return R * v.tu; })
     .attr('cy', function(v){ return R * v.tv; });
 
   // edges
-  edges = [];
+  var edges = [];
 
   vertices.forEach(function(p1) {
     p1.links.forEach(function(p2) {
+      if (R*Math.sqrt(p1.tu*p1.tu + p1.tv*p1.tv) >= innerR && R*Math.sqrt(p2.tu*p2.tu + p2.tv*p2.tv) >= innerR) {
+        return;
+      }
+
       var u1 = p1.tu;
       var v1 = p1.tv;
       var u2 = p2.tu;
@@ -441,14 +461,14 @@ function draw() {
 
         var rad = Math.sqrt(h*h + k*k - 1);
 
-        // var angMin = Math.atan2(v1-k, u1-h);
-        // var angMax = Math.atan2(v2-k, u2-h);
-        // if (angMax < angMin) {
-        //   var temp = angMax;
-        //   angMax = angMin;
-        //   angMin = temp;
-        // }
-        // var angDiff = (angMax - angMin) % (2*Math.PI);
+        if (denom < 0) {
+          var tempu = u1;
+          u1 = u2;
+          u2 = tempu;
+          var tempv = v1;
+          v1 = v2;
+          v2 = tempv;
+        }
 
         var arc = "M "+R*u1+" "+R*v1;
         arc += " A "+R*rad+" "+R*rad+" 0, 0, 0, ";
@@ -462,11 +482,18 @@ function draw() {
   lines.enter().append('path')
     .style('stroke', fgcolor)
     .style('fill', "none");
+  lines.exit().remove();
   lines.attr('d', function(d){ return d; });
-    // .attr('transform', function(d){ return 'rotate('+d[3]+') translate('+d[1]+', '+d[2]+')'; });
 }
 
+var keyd = false;
+var moved_keys = [87, 65, 83, 68, 81, 69, 38, 37, 40, 39, 32];
 function update() {
+  keyd = false;
+  moved_keys.forEach(function(k) {
+    keyd = keyd || keystates[k];
+  });
+
   if (keyd) {
     keyd = false;
     if (move()) {
@@ -481,10 +508,8 @@ function setRenderLoopInterval() {
 }
 
 var keystates = {};
-var keyd = false;
 function handleInput(event) {
   if (event.target.id !== 'main') { return; }
-  keyd = true;
   
   if (event.which == 32 && event.type == 'keyup'){ //SPACEBAR key, resets field
     cam.x = cam.y = 0.01;
@@ -494,7 +519,7 @@ function handleInput(event) {
     draw();
   }
   
-  if (event.which == 191 || event.which == 32){ event.preventDefault(); };
+  if (event.which == 191 || event.which == 32 || event.which == 38 || event.which == 40){ event.preventDefault(); };
   
   if (event.type == 'keydown'){ keystates[event.which] = true;  }
   if (event.type == 'keyup')  { keystates[event.which] = false; }
