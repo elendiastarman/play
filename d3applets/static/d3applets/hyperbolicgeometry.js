@@ -21,7 +21,6 @@ var cam = {
   'x': 0, 'y': 0,
   'orient': 0,
   'turnRate': Math.PI/72,
-  'snap': null,
   'yparity': 0,
 
   // virtual camera that ignores boundaries
@@ -37,10 +36,12 @@ $(document).ready(function () {
   init(N, K);
   setRenderLoopInterval();
   draw();
-  // draw();
   $('#main').focus();
   $('#main').bind("keydown", handleInput);
   $('#main').bind("keyup", handleInput);
+  $('.nk').on('change', function(){
+    $('#redraw').prop('disabled', false);
+  });
   // $('#gravityCheck').on('change', function(){ gravityStrength = this.checked*5000; });
   // $('#showIntersections').on('change', function(){
   //   showIntersections = !showIntersections;
@@ -59,6 +60,22 @@ $(document).ready(function () {
   // });
   // loadFromPermalink();
 });
+
+function reset() {
+  N = $('#n').val();
+  K = $('#k').val();
+  if (2*N + 2*K < N*K) { // equivalent to 1/N + 1/K < 1/2
+    $('#not-hyperbolic').hide();
+  } else {
+    $('#not-hyperbolic').show();
+    return;
+  }
+
+  vertices = [];
+  boundaries = [];
+  init(N,K);
+  draw();
+}
 
 function create_point(x, y, links=[], r=255,g=255,b=255, show=0, to_delete=0) {
   var new_vertex = {
@@ -216,6 +233,12 @@ function hyperAng(x1, y1, x2, y2) {
 }
 
 function init(n, k) {
+  cam.x = cam.y = cam.vx = cam.vy = 0.01;
+  cam.orient = cam.vorient = 0;
+  cam.yparity = 0;
+
+  $('#redraw').prop('disabled', true);
+
   var theta = 2*Math.PI/n;
   var phi = 2*Math.PI/k;
 
@@ -239,11 +262,7 @@ function init(n, k) {
   ao.push(-Math.PI/2);
   ao.push(Math.PI/2);
 
-  cam.snap = queue[0];
-  cam.x = cam.y = 0.01;
-
   var i = -1;
-
   while (i < q) {
     i += 1;
 
