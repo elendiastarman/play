@@ -19,9 +19,9 @@ from d3applets.varlife_renderGif import createGif
 
 # Create your views here.
 def home_view(request, **kwargs):
-    context = RequestContext(request)
+    context = {}
 
-    if sys.platform == 'win32':
+    if sys.platform in ['win32', 'darwin']:
         path = os.path.join(os.getcwd(),"d3applets","templates","d3applets")
     elif sys.platform == 'linux':
         path = os.path.join("/home","elendia","webapps","play","play","d3applets","templates","d3applets/")
@@ -43,15 +43,15 @@ def home_view(request, **kwargs):
 
     context['applets'] = sorted(applets)
 
-    return render(request, 'd3applets/home.html', context_instance=context)
+    return render(request, 'd3applets/home.html', context)
 
 def other_view(request, **kwargs):
-    context = RequestContext(request)
+    context = {}
     
     if 'code' in kwargs:
         kwargs['name'] = 'varlife'
         
-        if sys.platform == 'win32':
+        if sys.platform in ['win32', 'darwin']:
             filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","shorturls",kwargs["code"]+'.txt')
         elif sys.platform == 'linux':
             filepath = os.path.join("/home","elendia","webapps","static","d3applets","shorturls",kwargs["code"]+'.txt')
@@ -64,16 +64,16 @@ def other_view(request, **kwargs):
             context['info'] = ''
 
     try:
-        return render(request, 'd3applets/'+kwargs['name']+'.html', context_instance=context)
+        return render(request, 'd3applets/'+kwargs['name']+'.html', context)
     except TemplateDoesNotExist:
         raise Http404
 
 @csrf_exempt
 def varlife_shortenURL(request, **kwargs):
-    context = RequestContext(request)
+    context = {}
     filename = ''.join(random.choice(string.ascii_letters) for _ in range(10))+'.txt'
     
-    if sys.platform == 'win32':
+    if sys.platform in ['win32', 'darwin']:
         filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","shorturls",filename)
     elif sys.platform == 'linux':
         filepath = os.path.join("/home","elendia","webapps","static","d3applets","shorturls",filename)
@@ -92,7 +92,7 @@ def varlife_shortenURL(request, **kwargs):
 @csrf_exempt
 def varlife_renderGif(request, **kwargs):
 
-    context = RequestContext(request)
+    context = {}
 
     gridData = ast.literal_eval(request.POST['gridData'])
     colorData = ast.literal_eval(request.POST['colorData'])
@@ -109,7 +109,7 @@ def varlife_renderGif(request, **kwargs):
         # f.write(str(colorData)+'\n')
         # f.write(str(width)+", "+str(height)+", "+str(cellSize)+"; "+str(frameDuration)+'\n')
 
-    if sys.platform == 'win32':
+    if sys.platform in ['win32', 'darwin']:
         filepath = os.path.join(os.getcwd(),"d3applets","static","d3applets","renders",filename)
     elif sys.platform == 'linux':
         filepath = os.path.join("/home","elendia","webapps","static","d3applets","renders",filename)

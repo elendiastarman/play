@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    
+    {% load staticfiles %}
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'd3applets/hyperbolicgeometry.css' %}" /> -->
+  </head>
+  
+  <body style="margin-left: 20px">
+    
+    <h1>Hyperbolic Geometry</h1>
+    <p id="desc">Simulates a regular hyperbolic tessellation of your choice.</p>
+    <p>
+      <input type="number" min="3" max="10" step="1" value="3" id="n" class="nk" />
+      polygons around each vertex where each polygon has
+      <input type="number" min="3" max="10" step="1" value="7" id="k" class="nk" />
+      sides.
+      <button onclick="reset()" id="redraw" disabled>Redraw</button>
+      <span style="color: #F00" id="not-hyperbolic" hidden>Not hyperbolic</span><br/>
+      <kbd>WASD</kbd> or arrow keys for movement and <kbd>QE</kbd> for rotation.
+    </p>
+    
+    <canvas id="main" tabindex="1"></canvas>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="{% static 'd3applets/hyperbolicgeometry.js' %}"></script>
+    
+  </body>
+</html>
