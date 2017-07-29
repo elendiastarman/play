@@ -24,7 +24,7 @@ function RAMwrite(addr, val) {
     
     if (val < 0) { val = (65535^-val)+1; }
     val = val & 65535; //16-bit words
-    if (addr === 0) { PC[1] = val; }
+    if (addr === 0) { PC[1] = val + 1; }
     
     RAM[addr][0] = val;
     RAM[addr][2]++;
