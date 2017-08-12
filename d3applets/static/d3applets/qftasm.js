@@ -176,7 +176,7 @@ function step_code() {
         vals.push(val);
     }
     
-    PC[1] = PC[1] + 1;
+    PC[1] = (PC[1] + 1) & 65535;
     PC[0] = PC[1];
     RAMwrite(0, PC[1], 0);
     
