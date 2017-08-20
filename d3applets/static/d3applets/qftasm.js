@@ -73,7 +73,7 @@ function XOR(val1, val2, dest){ RAMwrite(dest, val1^val2); }
 function ANT(val1, val2, dest){ RAMwrite(dest, val1&(val2^65535)); }
 function SL(val1, val2, dest){ RAMwrite(dest, val1<<val2); }
 function SRL(val1, val2, dest){ RAMwrite(dest, (val1&65535)>>val2); }
-function SRA(val1, val2, dest){ RAMwrite(dest, ((val1&65535)>>val2) + ((val1&65535) >= 32768 ? 32768 : 0)); }
+function SRA(val1, val2, dest){ RAMwrite(dest, ((val1&65535)>>val2) + ((val1&65535) >= 32768 ? ((1<<val2)-1)<<(16-val2) : 0)); }
 
 var opnames = ["MNZ","MLZ","ADD","SUB","AND","OR","XOR","ANT","SL","SRL","SRA"];
 
@@ -280,7 +280,7 @@ function set_display(){
         for(var j=0; j<16; j++){
             row.append('rect')
               .attr('class','rect'+j)
-              .attr('fill',val & (1<<j) ? '#000' : '#FFF')
+              .attr('fill',val & (1 << (15-j)) ? '#000' : '#FFF')
               .attr('x',offset+j*20)
               .attr('y',0)
               .attr('width',20)
@@ -376,6 +376,8 @@ function load_permalink() {
                 });
                 set_shortcode_refs(shortcode);
             }
+
+            set_RAMdisplay();
         },
         error: function(response) {
             console.log(response);
