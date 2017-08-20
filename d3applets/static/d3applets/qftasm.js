@@ -77,7 +77,10 @@ function SRA(val1, val2, dest){ RAMwrite(dest, ((val1&65535)>>val2) + ((val1&655
 
 var opnames = ["MNZ","MLZ","ADD","SUB","AND","OR","XOR","ANT","SL","SRL","SRA"];
 
-$(document).ready(function(){ set_code(); });
+$(document).ready(function(){
+    load_permalink();
+    set_code();
+});
 
 function set_code() {
     var code = $('#asm-code').val();
@@ -297,4 +300,86 @@ function update_display(addr){
         row.select('.rect'+j)
           .attr('fill',val & (1 << (15-j)) ? '#000' : '#FFF');
     }
+}
+
+var permalink_keys = [
+    'asm-code',
+    'tps', 'mspt',
+    'breakpoints-inst', 'breakpoints-read', 'breakpoints-write',
+    'directWriteVal', 'directWriteAddr', 'breakOnBlank',
+    'RAMdisplay',
+];
+function set_shortcode_refs(shortcode) {
+    if(shortcode) {
+        location.hash = '#' + shortcode;
+        $('#shortcode').val(shortcode);
+        $('#permalink-link').attr('href', location.hash);
+    }
+}
+
+function save_permalink() {
+    var values = {};
+    permalink_keys.forEach(function(key) {
+        console.log("key: " + key);
+        values[key] = $('#' + key).val();
+    });
+
+    console.log("values: " + JSON.stringify(values));
+
+    $.ajax({
+        url: '/qftasm/permalink',
+        type: 'post',
+        data: values,
+        dataType: 'html',
+        success: function(response) {
+            response = JSON.parse(response);
+            console.log(response);
+            set_shortcode_refs(response['shortcode'])
+        },
+        error: function(response) {
+            console.log(response);
+            $('#permalink-error').text('Could not save program. :(');
+        }
+    });
+}
+
+function load_permalink() {
+    var shortcode = "";
+
+    if(location.hash && location.hash != '#') {
+        shortcode = location.hash.slice(1);
+    }
+
+    shortcode_input = $('#shortcode').val();
+    if(shortcode_input) {
+        shortcode = shortcode_input;
+    }
+
+    if(shortcode === "") {
+        return;
+    }
+
+    $.ajax({
+        url: '/qftasm/permalink',
+        type: 'get',
+        data: {'shortcode': shortcode},
+        dataType: 'html',
+        success: function(response) {
+            response = JSON.parse(response);
+            console.log(response);
+
+            if(response['error']) {
+                $('#permalink-error').text(response['error']);
+            } else {
+                permalink_keys.forEach(function(key) {
+                    $('#' + key).val(response[key]);
+                });
+                set_shortcode_refs(shortcode);
+            }
+        },
+        error: function(response) {
+            console.log(response);
+            $('#permalink-error').text('Could not retrieve program. :(');
+        }
+    });
 }
