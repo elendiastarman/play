@@ -134,8 +134,9 @@ def qftasm_permalink(request, **kwargs):
     elif sys.platform == 'linux':
         client = MongoClient('localhost',
                              port=settings.MONGO_PORT,
-                             user=settings.MONGO_USER,
+                             username=settings.MONGO_USER,
                              password=settings.MONGO_PASSWORD,
+                             authSource='qftasm',
                              authMechanism='SCRAM-SHA-1')
 
     programs = client.qftasm.programs
