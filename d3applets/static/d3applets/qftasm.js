@@ -377,6 +377,7 @@ function load_permalink() {
                 set_shortcode_refs(shortcode);
             }
 
+            set_code();
             set_RAMdisplay();
         },
         error: function(response) {
