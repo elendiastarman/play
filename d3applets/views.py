@@ -24,11 +24,7 @@ from d3applets.varlife_renderGif import createGif
 # Create your views here.
 def home_view(request, **kwargs):
     context = {}
-
-    if sys.platform in ['win32', 'darwin']:
-        path = os.path.join(os.getcwd(), "d3applets", "templates", "d3applets")
-    elif sys.platform == 'linux':
-        path = os.path.join("/home", "elendia", "webapps", "play", "play", "d3applets", "templates", "d3applets/")
+    path = os.path.join(settings.BASE_DIR, "d3applets", "templates", "d3applets")
 
     applets = []
     for filename in os.listdir(path):
