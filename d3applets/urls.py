@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^varlife/(?P<code>\w*)$', other_view, name='other_code'),
     url(r'^qftasm/permalink$', qftasm_permalink, name='qftasm_permalink'),
     url(r'^(?P<name>\w*)/', other_view, name='other'),
-##    url(r'^dotandcross/', dotandcross_view, name='dotandcross'),
-##    url(r'^radians/', radiansDemo_view, name='radiansDemo'),
-##    url(r'^gravity/', gravity_view, name='gravity'),
+    # url(r'^dotandcross/', dotandcross_view, name='dotandcross'),
+    # url(r'^radians/', radiansDemo_view, name='radiansDemo'),
+    # url(r'^gravity/', gravity_view, name='gravity'),
 ]
