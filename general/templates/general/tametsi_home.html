@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/Dli/xhtml11.dli">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <title>Tametsi Puzzles</title>
+
+    {% load staticfiles %}
+  </head>
+  
+  <body>
+  
+    <h1>Tametsi Puzzles</h1>
+    <p>
+      I love the game <a href="https://store.steampowered.com/app/709920/Tametsi/" target="_blank">Tametsi</a> so much that I even made puzzles for it. <br/>
+      These puzzle files should be placed within the game's Steam data, e.g. within the folder <span style="font-family: monospace;">D:\SteamLibrary\steamapps\common\Tametsi\puzzles</span>. <br/>
+      <br/>
+      A <em>combination lock</em> puzzle is one where all tiles are covered at the start, there is only one color, and the only way to make progress is to use the column hints and the hints revealed when clearing tiles. <br/>
+      The "score" for combination lock puzzles is a rough measure of its difficulty that attempts to measure not only the difficulty of individual logic steps but also the consistency between subsequent logic steps. For example, two consecutive logic steps that are both medium difficulty scores higher than an easy step followed by a hard step or vice versa. <br/>
+      <br/>
+      There is a subreddit <a href="https://old.reddit.com/r/Tametsi/" target="_blank">r/Tametsi</a> and the code that I used can be found at my GitHub repository <a href="https://github.com/elendiastarman/Tametsi-level-generator" target="_blank">Tametsi-level-generator</a>. <br/>
+    </p>
+    
+    <h2>Puzzle sets</h2>
+    
+    {% for key, group in groups %}
+      <h3>{{key}}</h3>
+
+      Zip file: <a href="{% static 'general/tametsi/' + group.zip %}">{{group.zip}}</a>
+
+      <br/>
+
+      Contains: <br/>
+      {% for puzzle in group.puzzles %}
+        <a href="{% static 'general/tametsi/' %}{{ puzzle.0 }}">{{puzzle.0}}</a> <br/>
+      {% endfor %}
+    {% endfor %}
+    
+  </body>
+</html>
