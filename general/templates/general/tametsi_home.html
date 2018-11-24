@@ -27,7 +27,7 @@
     {% for key, group in groups %}
       <h3>{{key}}</h3>
 
-      Zip file: <a href="{% static 'general/tametsi/' + group.zip %}">{{group.zip}}</a>
+      Zip file: <a href="{% static 'general/tametsi/' %}{{ group.zip }}">{{group.zip}}</a>
 
       <br/>
 
